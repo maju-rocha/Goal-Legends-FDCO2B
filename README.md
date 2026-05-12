@@ -47,13 +47,30 @@ O jogador pode utilizar figurinhas repetidas para realizar trocas e completar o 
 
 ---
 
-## 🎮 Mini-games
-Mini-games disponíveis para ganhar moedas e novos pacotes:
+# 🎮 Mini-games
 
-- Pênaltis
-- Quiz da Copa
-- Desafios rápidos
+## 🧠 Quiz da Copa
+Modo de perguntas rápidas sobre a história das Copas do Mundo.
 
+Exemplos:
+- “Quem ganhou a Copa do Mundo de 2002?”
+- “Qual país sediou a Copa de 2014?”
+
+Ao acertar as perguntas, o jogador recebe figurinhas, moedas ou pacotes especiais como recompensa.
+
+---
+
+## ⚽ Pênalti
+Mini-game de disputa de pênaltis.
+
+O jogador escolhe a direção do chute enquanto o goleiro seleciona um lado aleatoriamente. Caso o jogador marque o gol, recebe recompensas como pacotes de figurinhas e moedas.
+
+---
+
+## 🧤 Pong Goleiro
+Mini-game inspirado em Pong.
+
+O jogador controla um goleiro e deve defender bolas que vêm em direção ao gol. Quanto mais tempo conseguir sobreviver defendendo os chutes, maiores serão as recompensas recebidas, como figurinhas, moedas e pacotes especiais.
 ---
 
 ## 📊 Estatísticas do Álbum
