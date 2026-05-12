@@ -71,6 +71,7 @@ O jogador escolhe a direção do chute enquanto o goleiro seleciona um lado alea
 Mini-game inspirado em Pong.
 
 O jogador controla um goleiro e deve defender bolas que vêm em direção ao gol. Quanto mais tempo conseguir sobreviver defendendo os chutes, maiores serão as recompensas recebidas, como figurinhas, moedas e pacotes especiais.
+
 ---
 
 ## 📊 Estatísticas do Álbum
