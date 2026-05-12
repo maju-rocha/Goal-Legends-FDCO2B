@@ -33,10 +33,7 @@ O jogador deve completar seu álbum de figurinhas da Copa do Mundo 2026 abrindo 
 As figurinhas possuem níveis de raridade:
 
 - Comum
-- Rara
-- Épica
-- Lendária
-- Holográfica
+- Especial
 
 ---
 
