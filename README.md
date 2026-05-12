@@ -1,6 +1,6 @@
 # Goal-Legends-FDCO2B
 
-# ⚽ Álbum de Figurinhas da Copa 2026 — FDCO2B
+# ⚽ Álbum de Figurinhas da Copa 2026 - Goal-Legends-FDCO2B
 
 ## 📝 Descrição
 Este projeto foi desenvolvido como parte da disciplina Fundamentos de Programação 2 (FDCO2B) do curso de Engenharia de Computação da UTFPR — Campus Apucarana. O sistema consiste em um jogo interativo de gerenciamento de Álbum de Figurinhas da Copa do Mundo 2026, desenvolvido em linguagem C, utilizando os conceitos estudados em sala de aula.
