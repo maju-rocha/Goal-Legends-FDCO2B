@@ -80,7 +80,7 @@ O sistema apresenta:
 - Percentual completo do álbum
 - Quantidade de figurinhas repetidas
 - Seleções completas
-- Quantidade de figurinhas raras obtidas
+- Quantidade de figurinhas especiais obtidas
 
 ---
 
@@ -92,9 +92,8 @@ O sistema apresenta:
   - stdio.h
   - stdlib.h
   - string.h
-  - time.h
-  - ctype.h
-  - stdbool.h
+  - raylib.h
+  
 
 - Formato de dados:
   - CSV (entrada e exportação)
