@@ -11,13 +11,17 @@ int main(){
     int total = 0;//variavel para contabilizar a quantidade
     
     Figurinha *figurinhas = malloc (981 * sizeof(Figurinha));//Cria vetor dinamico para as figurinhas 
+
+    Figurinha *inventario = malloc (981 * sizeof(Figurinha));//Cria vetor dinamico para o inventário
+
+    Figurinha *mochila = malloc (981 * sizeof(Figurinha));//Cria vetor dinamico para a mochila
     
     if (figurinhas == NULL){//testa se o malloc funcionou 
         printf("Erro de alocacao.\n"); 
         return 1;
     }
 
-    FILE *arquivo = fopen("figurinhas2026.csv","r");//cria e abre o arquivo para leitura de figurinhas
+    FILE *arquivo = fopen("figurinhas2026.csv","rb");//cria e abre o arquivo para leitura de figurinhas
         
     if (arquivo == NULL){//testa se o arquivo abriu 
         printf("Erro ao abrir o arquivo.\n"); 
@@ -38,6 +42,9 @@ int main(){
     
     abrirPacote(figurinhas, total);//chama funcao abrirPacote
     
-    free(figurinhas);//Libera a memória do vetor figurinhas 
-    
+    free(figurinhas);//Libera a memória do vetor figurinhas
+
+    free(inventario);//Libera a memória do vetor inventário
+
+    free(mochila);//Libera a memória do vetor mochila
     return 0; }
