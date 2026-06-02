@@ -1,6 +1,6 @@
-main: main.o abrirPacote.o listarAlbum.o listarMochila.o excluirAlbum.o excluirMochila.o pesquisar.o
+main: main.o abrirPacote.o listarAlbum.o listarMochila.o excluirAlbum.o excluirMochila.o pesquisar.o alterar.o
 	@echo "Gerando executavel..." 
-	gcc main.o abrirPacote.o listarAlbum.o listarMochila.o excluirAlbum.o excluirMochila.o pesquisar.o -o main
+	gcc main.o abrirPacote.o listarAlbum.o listarMochila.o excluirAlbum.o excluirMochila.o pesquisar.o alterar.o -o main 
 
 main.o: main.c biblioteca.h 
 	gcc -c main.c
@@ -22,6 +22,9 @@ excluirMochila.o: excluirMochila.c biblioteca.h
 
 pesquisar.o: pesquisar.c biblioteca.h
 	gcc -c pesquisar.c
+
+alterar.o: alterar.c biblioteca.h
+	gcc -c alterar.c
 
 clean: 
 	rm -f *.o main

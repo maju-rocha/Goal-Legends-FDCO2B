@@ -79,7 +79,8 @@ int main(){
         printf("4 - Excluir figurinha do album\n");
         printf("5 - Excluir figurinha da mochila\n");
         printf("6 - Pesquisar figurinha\n");
-        printf("7 - Sair do programa\n");
+        printf("7 - Alterar figurinha\n");
+        printf("8 - Sair do programa\n");
 
 
         if(scanf("%d", &opcao_inicial) != 1){
@@ -109,9 +110,12 @@ int main(){
 
         }else if(opcao_inicial == 6){
             pesquisarFigurinha(figurinhas, total);
+        
+        }else if(opcao_inicial == 7){
+            alterarFigurinha(figurinhas, total);
         }
 
-        else if(opcao_inicial != 7){
+        else if(opcao_inicial != 8){
             printf("Opcao invalida, por favor selecione uma opcao valida.\n");
         }
 

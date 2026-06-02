@@ -23,4 +23,6 @@ void excluirMochila(Figurinha *figurinhas, Figurinha *mochila, int *total_mochil
 
 void pesquisarFigurinha(Figurinha *vetor, int total);//cabeçalho da função pesquisar figurinha
 
+void alterarFigurinha(Figurinha *vetor, int total);//cabeçalho da função alterar figurinha
+
 #endif
