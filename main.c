@@ -119,7 +119,7 @@ int main(){
             printf("Opcao invalida, por favor selecione uma opcao valida.\n");
         }
 
-    }while(opcao_inicial != 7);//loop para manter o programa rodando até o usuário escolher sair, cada opção chama a função correspondente, caso a opção seja inválida informa o usuário e volta a solicitar uma opção válida
+    }while(opcao_inicial != 8);//loop para manter o programa rodando até o usuário escolher sair, cada opção chama a função correspondente, caso a opção seja inválida informa o usuário e volta a solicitar uma opção válida
 
     
     printf("Saindo do programa...\n");

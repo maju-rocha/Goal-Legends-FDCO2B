@@ -12,10 +12,17 @@ void alterarFigurinha(Figurinha *vetor, int total) {
     scanf(" %9[^\n]", codigoBusca);
 
     for (int i = 0; i < total; i++) {
-        if (strcmp(vetor[i].codigo, codigoBusca) == 0) {
+        char codigo_limpo[15]; 
+        
+        strcpy(codigo_limpo, vetor[i].codigo);
+
+        for(int k = strlen(codigo_limpo) - 1; k >= 0 && codigo_limpo[k] == ' '; k--) {
+            codigo_limpo[k] = '\0'; 
+        }//for
+
+        if (strcmp(codigo_limpo, codigoBusca) == 0) {
             printf("\nFigurinha Encontrada: %s - %s\n", vetor[i].codigo, vetor[i].titulo);
             
-            // Aqui você pede os novos dados. Você pode escolher quais campos podem ser alterados.
             printf("Digite o novo Titulo: ");
             scanf(" %49[^\n]", vetor[i].titulo);
             
@@ -28,10 +35,10 @@ void alterarFigurinha(Figurinha *vetor, int total) {
             printf("\n Figurinha alterada com sucesso!\n");
             encontrada = 1;
             break;
-        }
-    }
+        }//if
+    }//for
 
     if (!encontrada) {
         printf("\n Figurinha nao encontrada para alteracao.\n");
-    }
-}
+    }//if
+}//void
