@@ -1,3 +1,8 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "biblioteca.h"
+
 void alterarFigurinha(Figurinha *vetor, int total) {
     char codigoBusca[10];
     int encontrada = 0;
