@@ -3,27 +3,27 @@
 #include <string.h>
 #include "biblioteca.h"
 
-void pesquisarFigurinha(Figurinha *vetor, int total) {
+void pesquisarFigurinha(Figurinha *vetor, int total){
     
-    char codigo[10]; 
-    int encontrada = 0; 
+    char codigo[10];//variavel para armazenar o código da figurinha a ser pesquisada
+    int encontrada = 0;//variavel para indicar se a figurinha foi encontrada ou não
 
     printf("Digite o código da figurinha que deseja pesquisar (ex: MEX2): \n");
     fgets(codigo, sizeof(codigo), stdin);
     codigo[strcspn(codigo,"\n")] = '\0'; 
 
-    for (int i = 0; i < total; i++) {
+    for (int i = 0; i < total; i++){
 
-        char codigo_busca[15]; 
+        char codigo_busca[15];//variavel auxiliar para armazenar o código da figurinha sem espaços extras
 
         strcpy(codigo_busca, vetor[i].codigo);
 
-        for(int k = strlen(codigo_busca) - 1; k >= 0 && codigo_busca[k] == ' '; k--) {
+        for(int k = strlen(codigo_busca) - 1; k >= 0 && codigo_busca[k] == ' '; k--){//remove os espaços em branco do final do código
             codigo_busca[k] = '\0'; 
-        }
+        }//for
 
-        if (strcmp(codigo_busca, codigo) == 0) {
-            printf("\n Figurinha Encontrada!\n");
+        if (strcmp(codigo_busca, codigo) == 0){
+            printf("\n FIGURINHA ENCONTRADA!\n");
             
             printf("Codigo: %s\n", vetor[i].codigo);
             printf("Titulo: %s\n", vetor[i].titulo);
@@ -33,10 +33,10 @@ void pesquisarFigurinha(Figurinha *vetor, int total) {
             
             encontrada = 1;
             break; 
-        }
-    }
+        }//if
+    }//for
 
-    if (!encontrada) {
+    if (!encontrada){
         printf("\n Figurinha com o codigo '%s' nao foi encontrada.\n", codigo);
-    }
-}
+    }//if
+}//função para pesquisar figurinha

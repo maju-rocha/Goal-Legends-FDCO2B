@@ -25,4 +25,6 @@ void pesquisarFigurinha(Figurinha *vetor, int total);//cabeçalho da função pe
 
 void alterarFigurinha(Figurinha *vetor, int total);//cabeçalho da função alterar figurinha
 
+void resetarLista(Figurinha *vetor, int total);//cabeçalho da função resetar lista de figurinhas
+
 #endif

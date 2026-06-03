@@ -11,4 +11,4 @@ void listarFigurinhasMochila(Figurinha *mochila, int total_mochila){
 
     }//imprime cada figurinha da mochila com seus campos formatados
 
-}//função para listar as figurinhas, recebe o vetor de mochila e o total de figurinhas, percorre o vetor e imprime cada figurinha com seus campos formatados.
+}//função para listar as figurinhas

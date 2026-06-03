@@ -19,7 +19,7 @@ void excluirAlbum(Figurinha *figurinhas, Figurinha *album, int *total_album){
 
         for(int k = strlen(codigo_album) - 1; k >= 0 && codigo_album[k] == ' '; k--){
 
-            codigo_album[k] = '\0';//remove os espaços em branco do final do código, caso haja
+            codigo_album[k] = '\0';//remove os espaços em branco do final do código
 
         }//for
 
@@ -27,7 +27,7 @@ void excluirAlbum(Figurinha *figurinhas, Figurinha *album, int *total_album){
 
         if(strcmp(codigo, codigo_album) == 0){
 
-            printf("FIGURINHA ENCONTRADA!\n");
+            printf("\nFIGURINHA ENCONTRADA!\n");
 
             for (int j = i; j < *total_album - 1; j++){
 
@@ -39,7 +39,7 @@ void excluirAlbum(Figurinha *figurinhas, Figurinha *album, int *total_album){
 
             printf("Novo total: %d\n", *total_album);
 
-            FILE *arquivo = fopen("album.csv", "w");
+            FILE *arquivo = fopen("extras/album.csv", "w");
 
             if(arquivo != NULL){
 
@@ -58,6 +58,6 @@ void excluirAlbum(Figurinha *figurinhas, Figurinha *album, int *total_album){
         }//if
 
     }//for
-    printf("Figurinha com o código %s não encontrada.\n", codigo);
+    printf("\nFigurinha com o código %s não encontrada.\n", codigo);
 
-}//função para excluir uma figurinha do vetor album, recebe o vetor de album e o total de figurinhas lidas do arquivo, solicita ao usuário o código da figurinha a ser excluida, procura a figurinha no vetor e a remove se encontrada, caso contrário informa que a figurinha não foi encontrada.
+}//função para excluir uma figurinha do vetor album

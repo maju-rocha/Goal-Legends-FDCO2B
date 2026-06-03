@@ -1,33 +1,38 @@
-main: main.o abrirPacote.o listarAlbum.o listarMochila.o excluirAlbum.o excluirMochila.o pesquisar.o alterar.o
-	@echo "Gerando executavel..." 
-	gcc main.o abrirPacote.o listarAlbum.o listarMochila.o excluirAlbum.o excluirMochila.o pesquisar.o alterar.o -o main 
+CFLAGS = -Iheaders #Opção para incluir o diretório de cabeçalhos
 
-main.o: main.c biblioteca.h 
-	gcc -c main.c
+main: main.o abrirPacote.o listarAlbum.o listarMochila.o excluirAlbum.o excluirMochila.o pesquisar.o alterar.o resetarLista.o
+	@echo "Gerando executavel..."
+	gcc main.o abrirPacote.o listarAlbum.o listarMochila.o excluirAlbum.o excluirMochila.o pesquisar.o alterar.o resetarLista.o -o main
 
-abrirPacote.o: abrirPacote.c biblioteca.h 
-	gcc -c abrirPacote.c
+main.o: funcoes/main.c headers/biblioteca.h
+	gcc $(CFLAGS) -c funcoes/main.c
 
-listarAlbum.o: listarAlbum.c biblioteca.h 
-	gcc -c listarAlbum.c
+abrirPacote.o: funcoes/abrirPacote.c headers/biblioteca.h
+	gcc $(CFLAGS) -c funcoes/abrirPacote.c
 
-listarMochila.o: listarMochila.c biblioteca.h 
-	gcc -c listarMochila.c
+listarAlbum.o: funcoes/listarAlbum.c headers/biblioteca.h
+	gcc $(CFLAGS) -c funcoes/listarAlbum.c
 
-excluirAlbum.o: excluirAlbum.c biblioteca.h 
-	gcc -c excluirAlbum.c
+listarMochila.o: funcoes/listarMochila.c headers/biblioteca.h
+	gcc $(CFLAGS) -c funcoes/listarMochila.c
 
-excluirMochila.o: excluirMochila.c biblioteca.h
-	gcc -c excluirMochila.c
+excluirAlbum.o: funcoes/excluirAlbum.c headers/biblioteca.h
+	gcc $(CFLAGS) -c funcoes/excluirAlbum.c
 
-pesquisar.o: pesquisar.c biblioteca.h
-	gcc -c pesquisar.c
+excluirMochila.o: funcoes/excluirMochila.c headers/biblioteca.h
+	gcc $(CFLAGS) -c funcoes/excluirMochila.c
 
-alterar.o: alterar.c biblioteca.h
-	gcc -c alterar.c
+pesquisar.o: funcoes/pesquisar.c headers/biblioteca.h
+	gcc $(CFLAGS) -c funcoes/pesquisar.c
 
-clean: 
+alterar.o: funcoes/alterar.c headers/biblioteca.h
+	gcc $(CFLAGS) -c funcoes/alterar.c
+
+resetarLista.o: funcoes/resetarLista.c headers/biblioteca.h
+	gcc $(CFLAGS) -c funcoes/resetarLista.c
+
+clean:
 	rm -f *.o main
-	 
-run: main 
+
+run: main
 	./main

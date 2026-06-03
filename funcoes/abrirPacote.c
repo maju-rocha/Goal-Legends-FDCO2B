@@ -7,17 +7,17 @@ void abrirPacote(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, in
 
     char opcao[10];//variavel para armazenar a resposta do usuário sobre onde guardar a figurinha sorteada
 
-    FILE *arquivoalbum = fopen("album.csv", "a");//abre o arquivo album.csv para escrita, caso o arquivo não exista ele será criado
+    FILE *arquivoalbum = fopen("extras/album.csv", "a");//abre o arquivo album.csv para escrita, caso o arquivo não exista ele será criado
 
     if(arquivoalbum == NULL){
-        printf("Erro ao abrir album.csv\n");
+        printf("\nErro ao abrir album.csv\n");
         return;
     }//teste de abertura do arquivo album.csv
 
-    FILE *arquivomochila = fopen("mochila.csv", "a");
+    FILE *arquivomochila = fopen("extras/mochila.csv", "a");
 
     if(arquivomochila == NULL){
-        printf("Erro ao abrir mochila.csv\n");
+        printf("\nErro ao abrir mochila.csv\n");
         fclose(arquivoalbum);
         return;
     }//teste de abertura ddo arquivo mochila.csv

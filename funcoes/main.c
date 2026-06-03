@@ -8,6 +8,7 @@ int main(){
 
     char linha[300];//variavel com todos os bytes de uma linha
     int opcao_inicial;//variavel para armazenar a resposta do usuário sobre a opção desejada
+    int opcao_alterar;//variavel para armazenar a resposta do usuário sobre a opção de alteração desejada
     int total = 0;//variavel para contabilizar a quantidade
     int total_album = 0;//variavel para contabilizar a quantidade de figurinhas no album
     int total_mochila = 0;//variavel para contabilizar a quantidade de figurinhas na mochila
@@ -23,19 +24,19 @@ int main(){
         return 1;
     }//if
 
-    FILE *arquivo = fopen("figurinhas2026.csv","rb");//cria e abre o arquivo para leitura de figurinhas
+    FILE *arquivo = fopen("extras/figurinhas2026.csv","rb");//cria e abre o arquivo para leitura de figurinhas
         
     if (arquivo == NULL){//testa se o arquivo abriu 
         printf("Erro ao abrir o arquivo.\n"); 
         return 1; 
     }//if
 
-    FILE *arquivo_album = fopen("album.csv", "r");
+    FILE *arquivo_album = fopen("extras/album.csv", "r");
 
     if(arquivo_album != NULL){
 
         while(fscanf(arquivo_album," %9[^,],%49[^,],%49[^,],%49[^,],%49[^\n]", album[total_album].codigo, album[total_album].titulo, album[total_album].secao, album[total_album].grupo,album[total_album].tipo) == 5){
-            //le cada linha do arquivo album.csv, armazena os campos correspondentes em cada posição do vetor album e incrementa o total de figurinhas lidas, o loop continua até ler todas as figurinhas ou atingir o limite de 981 figurinhas
+            //le cada linha do arquivo album.csv
 
             total_album++;//incrementa o total de figurinhas do album
         }
@@ -44,12 +45,12 @@ int main(){
 
     }
 
-    FILE *arquivo_mochila = fopen("mochila.csv", "r");
+    FILE *arquivo_mochila = fopen("extras/mochila.csv", "r");
 
     if(arquivo_mochila != NULL){
 
         while(fscanf(arquivo_mochila, " %9[^,],%49[^,],%49[^,],%49[^,],%49[^\n]", mochila[total_mochila].codigo, mochila[total_mochila].titulo, mochila[total_mochila].secao, mochila[total_mochila].grupo, mochila[total_mochila].tipo) == 5){
-        //le cada linha do arquivo mochila.csv, armazena os campos correspondentes em cada posição do vetor mochila e incrementa o total de figurinhas lidas, o loop continua até ler todas as figurinhas ou atingir o limite de 981 figurinhas
+        //le cada linha do arquivo mochila.csv
         
             total_mochila++;//incrementa o total de figurinhas da mochila
         }
@@ -78,10 +79,20 @@ int main(){
         printf("3 - Ver mochila\n");
         printf("4 - Excluir figurinha do album\n");
         printf("5 - Excluir figurinha da mochila\n");
-        printf("6 - Sair do programa\n");
+        printf("6 - Pesquisar figurinha\n");
+        printf("7 - Alterar figurinha\n");
+        printf("8 - Sair do programa\n");
+        printf("Escolha: ");
 
-        scanf("%d", &opcao_inicial);
-        setbuf(stdin, NULL);
+
+
+        if(scanf("%d", &opcao_inicial) != 1){
+
+            opcao_inicial = 0;
+
+        }//if
+
+        while(getchar() != '\n');
 
         if(opcao_inicial == 1){
             abrirPacote(figurinhas, mochila, album, total, &total_mochila, &total_album);
@@ -100,11 +111,43 @@ int main(){
         }else if(opcao_inicial == 5){
             excluirMochila(figurinhas, mochila, &total_mochila);
 
-        }else if(opcao_inicial != 6){
+        }else if(opcao_inicial == 6){
+            pesquisarFigurinha(figurinhas, total);
+        
+        } else if (opcao_inicial == 7) {
+            do {
+                printf("\n1 - Alterar figurinha do album\n");
+                printf("2 - Resetar a lista de figurinhas\n");
+                printf("3 - Voltar ao menu inicial\n");
+                printf("Escolha: ");
+
+                // Verifica se a leitura falhou (ex: digitou letra)
+                if (scanf("%d", &opcao_alterar) != 1) {
+                    opcao_alterar = 0; 
+                }
+                
+                // Limpa o buffer do teclado (evita loop infinito se der erro)
+                while(getchar() != '\n'); 
+
+                // Agora sim, testa as opcoes corretamente
+                if (opcao_alterar == 1) {
+                    alterarFigurinha(figurinhas, total);
+                    
+                } else if (opcao_alterar == 2) {
+                    resetarLista(figurinhas, total);
+                    
+                } else if (opcao_alterar != 3) {
+                    printf("Opcao invalida, por favor selecione uma opcao valida.\n");
+                }
+                
+            } while (opcao_alterar != 3); // O loop quebra e volta pro menu principal se for 3
+        }
+
+        else if(opcao_inicial != 8){
             printf("Opcao invalida, por favor selecione uma opcao valida.\n");
         }
 
-    }while(opcao_inicial != 6);//loop para manter o programa rodando até o usuário escolher sair, cada opção chama a função correspondente, caso a opção seja inválida informa o usuário e volta a solicitar uma opção válida
+    }while(opcao_inicial != 8);//loop para manter o programa rodando até o usuário escolher sair, cada opção chama a função correspondente, caso a opção seja inválida informa o usuário e volta a solicitar uma opção válida
 
     
     printf("Saindo do programa...\n");

@@ -11,4 +11,4 @@ void listarFigurinhasAlbum(Figurinha *album, int total_album){
 
     }//imprime cada figurinha do album com seus campos formatados
 
-}//função para listar as figurinhas, recebe o vetor de album e o total de figurinhas, percorre o vetor e imprime cada figurinha com seus campos formatados.
+}//função para listar as figurinhas

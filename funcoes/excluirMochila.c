@@ -15,12 +15,12 @@ void excluirMochila(Figurinha *figurinhas, Figurinha *mochila, int *total_mochil
     for (int i = 0; i < *total_mochila; i++) {
         if(strcmp(codigo, mochila[i].codigo) == 0){
             //encontra a figurinha com o código correspondente e a exclui do vetor mochila
-            for (int j = i; j < *total_mochila - 1; j++) {
+            for (int j = i; j < *total_mochila - 1; j++){
                 mochila[j] = mochila[j + 1];
             }
             (*total_mochila)--; //decrementa o total de figurinhas da mochila
 
-            FILE *arquivo = fopen("mochila.csv", "w");
+            FILE *arquivo = fopen("extras/mochila.csv", "w");
 
             if(arquivo != NULL){
 
@@ -34,11 +34,11 @@ void excluirMochila(Figurinha *figurinhas, Figurinha *mochila, int *total_mochil
 
             }
 
-            printf("Figurinha excluida com sucesso.\n");
+            printf("\nFigurinha excluida com sucesso.\n");
             return;
         }//if
     }//for
 
     printf("Figurinha com o código %s não encontrada.\n", codigo);
 
-}//função para excluir uma figurinha do vetor mochila, recebe o vetor de mochila e o total de figurinhas lidas do arquivo, solicita ao usuário o código da figurinha a ser excluida, procura a figurinha no vetor e a remove se encontrada, caso contrário informa que a figurinha não foi encontrada.
+}//função para excluir uma figurinha do vetor mochila
