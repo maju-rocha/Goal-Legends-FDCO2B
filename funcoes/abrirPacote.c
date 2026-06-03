@@ -33,13 +33,13 @@ void abrirPacote(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, in
         printf("Grupo : %s\n", figurinhas[sorteada].grupo);
         printf("Tipo  : %s\n\n", figurinhas[sorteada].tipo);
 
-        printf("Guardar no album? (s/n): ");
+        printf("Guardar no album? (sim/nao): ");
         fgets(opcao, sizeof(opcao), stdin);
         opcao[strcspn(opcao, "\n")] = '\0';
 
         printf("Resposta lida = [%s]\n", opcao);
 
-        if(strcmp(opcao, "s") == 0){
+        if(strcmp(opcao, "sim") == 0){
 
             album[*total_album] = figurinhas[sorteada];//salva a figurinha no vetor album
 
@@ -52,11 +52,11 @@ void abrirPacote(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, in
 
         }else{
 
-            printf("Guardar na mochila? (s/n): ");
+            printf("Guardar na mochila? (sim/nao): ");
             fgets(opcao, sizeof(opcao), stdin);
             opcao[strcspn(opcao, "\n")] = '\0';
 
-            if(strcmp(opcao, "s") == 0){
+            if(strcmp(opcao, "sim") == 0){
 
                 mochila[*total_mochila] = figurinhas[sorteada];//salva a figurinha no vetor mochila
                 (*total_mochila)++;//incrementa a quantidade de figurinhas da mochila
