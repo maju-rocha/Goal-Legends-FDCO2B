@@ -1,8 +1,9 @@
 CFLAGS = -Iheaders #Opção para incluir o diretório de cabeçalhos
+LDflags = -lraylib -lm -lpthread -ldl -lrt -lX11 #Opção para linkar a biblioteca Raylib e outras dependências necessárias	
 
-main: main.o abrirPacote.o listarAlbum.o listarMochila.o excluirAlbum.o excluirMochila.o pesquisar.o alterar.o resetarLista.o
+main: main.o abrirPacote.o listarAlbum.o listarMochila.o excluirAlbum.o excluirMochila.o pesquisar.o alterar.o resetarLista.o quiz.o
 	@echo "Gerando executavel..."
-	gcc main.o abrirPacote.o listarAlbum.o listarMochila.o excluirAlbum.o excluirMochila.o pesquisar.o alterar.o resetarLista.o -o main
+	gcc main.o abrirPacote.o listarAlbum.o listarMochila.o excluirAlbum.o excluirMochila.o pesquisar.o alterar.o resetarLista.o quiz.o  -o main $(LDflags)	
 
 main.o: funcoes/main.c headers/biblioteca.h
 	gcc $(CFLAGS) -c funcoes/main.c
@@ -30,6 +31,9 @@ alterar.o: funcoes/alterar.c headers/biblioteca.h
 
 resetarLista.o: funcoes/resetarLista.c headers/biblioteca.h
 	gcc $(CFLAGS) -c funcoes/resetarLista.c
+
+quiz.o: funcoes/quiz.c headers/biblioteca.h
+	gcc $(CFLAGS) -c funcoes/quiz.c
 
 clean:
 	rm -f *.o main

@@ -81,7 +81,8 @@ int main(){
         printf("5 - Excluir figurinha da mochila\n");
         printf("6 - Pesquisar figurinha\n");
         printf("7 - Alterar figurinha\n");
-        printf("8 - Sair do programa\n");
+        printf("8 - Jogar quiz da copa\n");
+        printf("9 - Sair do programa\n");
         printf("Escolha: ");
 
 
@@ -143,11 +144,15 @@ int main(){
             } while (opcao_alterar != 3); // O loop quebra e volta pro menu principal se for 3
         }
 
-        else if(opcao_inicial != 8){
+        else if (opcao_inicial == 8) {
+            jogarQuiz(figurinhas, mochila, album, total, &total_mochila, &total_album);
+        }
+
+        else if(opcao_inicial != 9){
             printf("Opcao invalida, por favor selecione uma opcao valida.\n");
         }
 
-    }while(opcao_inicial != 8);//loop para manter o programa rodando até o usuário escolher sair, cada opção chama a função correspondente, caso a opção seja inválida informa o usuário e volta a solicitar uma opção válida
+    }while(opcao_inicial != 9);//loop para manter o programa rodando até o usuário escolher sair, cada opção chama a função correspondente, caso a opção seja inválida informa o usuário e volta a solicitar uma opção válida
 
     
     printf("Saindo do programa...\n");
