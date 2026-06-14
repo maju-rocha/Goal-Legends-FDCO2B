@@ -3,7 +3,10 @@
 #include <string.h> 
 #include <time.h> 
 #include <raylib.h>
-#include "biblioteca.h"
+#include "../headers/biblioteca.h" 
+
+// Define os estados do menu
+typedef enum { MENU_PRINCIPAL, MENU_INVENTARIO, MENU_EXCLUIR, MENU_MINIGAMES } EstadoMenu;
 
 int main(){
 
@@ -21,7 +24,6 @@ int main(){
         return 1;
     }
 
-    // Leitura dos arquivos (mantida exatamente como a sua)
     FILE *arquivo = fopen("extras/figurinhas2026.csv","rb");
     if (arquivo == NULL){
         printf("Erro ao abrir o arquivo figurinhas2026.csv.\n"); 
@@ -44,7 +46,7 @@ int main(){
         fclose(arquivo_mochila);
     }
 
-    fgets(linha, sizeof(linha), arquivo); // ignora cabecalho
+    fgets(linha, sizeof(linha), arquivo); 
     while (total < 981 && fscanf(arquivo, " %9[^,],%49[^,],%49[^,],%49[^,],%49[^\n]", figurinhas[total].codigo, figurinhas[total].titulo, figurinhas[total].secao, figurinhas[total].grupo, figurinhas[total].tipo) == 5){
         total++;
     }
@@ -53,29 +55,38 @@ int main(){
     srand(time(NULL));
 
     // ==========================================
-    // CONFIGURAÇÃO DA INTERFACE GRÁFICA (RAYLIB)
+    // CONFIGURAÇÃO DA INTERFACE GRÁFICA
     // ==========================================
     InitWindow(1000, 800, "Album de Figurinhas - Copa do Mundo");
     SetTargetFPS(60);
 
-    const char *textosBotoes[] = {
-        "1. Abrir Pacote",
-        "2. Ver Album",
-        "3. Ver Mochila",
-        "4. Excluir do Album",
-        "5. Excluir da Mochila",
-        "6. Pesquisar Figurinha",
-        "7. Alterar Figurinha (Menu Terminal)",
-        "8. Jogar Quiz da Copa",
-        "9. Jogo do Goleiro"
-    };
+    EstadoMenu estadoAtual = MENU_PRINCIPAL;
 
-    Rectangle botoes[9];
-    for (int i = 0; i < 9; i++) {
-        botoes[i] = (Rectangle){ 250, 180 + (i * 55), 500, 45 };
+    // Textos do Menu Principal (agora reduzido para 6 opções)
+    const char *textosPrincipal[] = {
+        "1. Abrir Pacote",
+        "2. Ver Inventario",
+        "3. Excluir do Inventario",
+        "4. Pesquisar Figurinha",
+        "5. Alterar Figurinha (Menu Terminal)",
+        "6. Area de Minigames"
+    };
+    Rectangle botoesPrincipal[6];
+    for (int i = 0; i < 6; i++) {
+        botoesPrincipal[i] = (Rectangle){ 250, 220 + (i * 70), 500, 50 };
     }
 
-    // Cores temáticas da Copa
+    // Textos dos Submenus
+    const char *textosInventario[] = { "1. Ver Album", "2. Ver Mochila", "3. Voltar ao Menu" };
+    const char *textosExcluir[] = { "1. Excluir do Album", "2. Excluir da Mochila", "3. Voltar ao Menu" };
+    const char *textosMinigames[] = { "1. Jogar Quiz da Copa", "2. Jogo do Goleiro", "3. Voltar ao Menu" };
+
+    // Layout padrão para todos os submenus (3 botões espaçados)
+    Rectangle botoesSubmenu[3];
+    for (int i = 0; i < 3; i++) {
+        botoesSubmenu[i] = (Rectangle){ 250, 300 + (i * 80), 500, 55 };
+    }
+
     Color verdeCampo = (Color){ 34, 139, 34, 255 };
     Color amareloBrasil = (Color){ 255, 215, 0, 255 };
     Color azulBrasil = (Color){ 0, 39, 118, 255 };
@@ -84,65 +95,131 @@ int main(){
         Vector2 mousePoint = GetMousePosition();
         int acaoEscolhida = 0;
 
-        // Lógica de clique
+        // ==========================================
+        // Lógica de Cliques
+        // ==========================================
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-            for (int i = 0; i < 9; i++) {
-                if (CheckCollisionPointRec(mousePoint, botoes[i])) {
-                    acaoEscolhida = i + 1; // Guarda qual botão foi clicado (1 a 9)
+            if (estadoAtual == MENU_PRINCIPAL) {
+                for (int i = 0; i < 6; i++) {
+                    if (CheckCollisionPointRec(mousePoint, botoesPrincipal[i])) {
+                        if (i == 0) acaoEscolhida = 1; // Abrir pacote
+                        else if (i == 1) estadoAtual = MENU_INVENTARIO;
+                        else if (i == 2) estadoAtual = MENU_EXCLUIR;
+                        else if (i == 3) acaoEscolhida = 6; // Pesquisar
+                        else if (i == 4) acaoEscolhida = 7; // Alterar
+                        else if (i == 5) estadoAtual = MENU_MINIGAMES;
+                    }
+                }
+            } 
+            else if (estadoAtual == MENU_INVENTARIO) {
+                for (int i = 0; i < 3; i++) {
+                    if (CheckCollisionPointRec(mousePoint, botoesSubmenu[i])) {
+                        if (i == 0) acaoEscolhida = 2; // Ver Album
+                        else if (i == 1) acaoEscolhida = 3; // Ver Mochila
+                        else if (i == 2) estadoAtual = MENU_PRINCIPAL;
+                    }
+                }
+            }
+            else if (estadoAtual == MENU_EXCLUIR) {
+                for (int i = 0; i < 3; i++) {
+                    if (CheckCollisionPointRec(mousePoint, botoesSubmenu[i])) {
+                        if (i == 0) acaoEscolhida = 4; // Excluir Album
+                        else if (i == 1) acaoEscolhida = 5; // Excluir Mochila
+                        else if (i == 2) estadoAtual = MENU_PRINCIPAL;
+                    }
+                }
+            }
+            else if (estadoAtual == MENU_MINIGAMES) {
+                for (int i = 0; i < 3; i++) {
+                    if (CheckCollisionPointRec(mousePoint, botoesSubmenu[i])) {
+                        if (i == 0) acaoEscolhida = 8; // Quiz da Copa
+                        else if (i == 1) acaoEscolhida = 9; // Jogo do Goleiro
+                        else if (i == 2) estadoAtual = MENU_PRINCIPAL;
+                    }
                 }
             }
         }
 
-        // Desenho do Menu
+        // ==========================================
+        // Lógica de Desenho
+        // ==========================================
         BeginDrawing();
         ClearBackground(verdeCampo);
 
-        // Títulos
-        DrawText("ALBUM DE FIGURINHAS DA COPA", 220, 50, 32, WHITE);
-        DrawText("Selecione uma opcao abaixo:", 340, 110, 22, amareloBrasil);
+        if (estadoAtual == MENU_PRINCIPAL) {
+            DrawText("ALBUM DE FIGURINHAS DA COPA", 220, 60, 32, WHITE);
+            DrawText("Selecione uma opcao abaixo:", 340, 120, 22, amareloBrasil);
 
-        // Desenha os botões
-        for (int i = 0; i < 9; i++) {
-            bool mouseEmCima = CheckCollisionPointRec(mousePoint, botoes[i]);
-            DrawRectangleRec(botoes[i], mouseEmCima ? LIGHTGRAY : amareloBrasil);
-            DrawRectangleLinesEx(botoes[i], 2, mouseEmCima ? azulBrasil : DARKGRAY);
+            for (int i = 0; i < 6; i++) {
+                bool mouseEmCima = CheckCollisionPointRec(mousePoint, botoesPrincipal[i]);
+                DrawRectangleRec(botoesPrincipal[i], mouseEmCima ? LIGHTGRAY : amareloBrasil);
+                DrawRectangleLinesEx(botoesPrincipal[i], 2, mouseEmCima ? azulBrasil : DARKGRAY);
+                
+                int textWidth = MeasureText(textosPrincipal[i], 22);
+                DrawText(textosPrincipal[i], botoesPrincipal[i].x + (botoesPrincipal[i].width / 2) - (textWidth / 2), botoesPrincipal[i].y + 14, 22, azulBrasil);
+            }
+        } 
+        else { // Lógica de desenho reaproveitada para todos os submenus
+            const char *titulo;
+            const char *subtitulo;
+            const char **textosBotoes;
+
+            // Define os textos baseados no estado atual
+            if (estadoAtual == MENU_INVENTARIO) {
+                titulo = "MEU INVENTARIO";
+                subtitulo = "Qual colecao voce quer visualizar?";
+                textosBotoes = textosInventario;
+            } else if (estadoAtual == MENU_EXCLUIR) {
+                titulo = "EXCLUIR FIGURINHAS";
+                subtitulo = "De onde voce quer remover figurinhas?";
+                textosBotoes = textosExcluir;
+            } else { // MENU_MINIGAMES
+                titulo = "AREA DE MINIGAMES";
+                subtitulo = "Escolha seu desafio:";
+                textosBotoes = textosMinigames;
+            }
+
+            int titleWidth = MeasureText(titulo, 36);
+            DrawText(titulo, 500 - (titleWidth / 2), 100, 36, WHITE);
             
-            int textWidth = MeasureText(textosBotoes[i], 20);
-            DrawText(textosBotoes[i], botoes[i].x + (botoes[i].width / 2) - (textWidth / 2), botoes[i].y + 10, 20, azulBrasil);
+            int subtitleWidth = MeasureText(subtitulo, 24);
+            DrawText(subtitulo, 500 - (subtitleWidth / 2), 180, 24, amareloBrasil);
+
+            for (int i = 0; i < 3; i++) {
+                bool mouseEmCima = CheckCollisionPointRec(mousePoint, botoesSubmenu[i]);
+                DrawRectangleRec(botoesSubmenu[i], mouseEmCima ? LIGHTGRAY : amareloBrasil);
+                DrawRectangleLinesEx(botoesSubmenu[i], 2, mouseEmCima ? azulBrasil : DARKGRAY);
+                
+                int textWidth = MeasureText(textosBotoes[i], 22);
+                DrawText(textosBotoes[i], botoesSubmenu[i].x + (botoesSubmenu[i].width / 2) - (textWidth / 2), botoesSubmenu[i].y + 16, 22, azulBrasil);
+            }
         }
 
         DrawText("Feche a janela (X) ou aperte ESC para sair do programa", 180, 740, 20, LIGHTGRAY);
 
         EndDrawing();
 
+        // ==========================================
         // Execução da Ação Escolhida
+        // ==========================================
         if (acaoEscolhida != 0) {
-            CloseWindow(); // Fecha a interface gráfica para liberar o terminal
+            CloseWindow(); 
 
             printf("\n=========================================\n");
             
-            // Chama as funções originais do seu projeto
-            if (acaoEscolhida == 1) {
-                abrirPacote(figurinhas, mochila, album, total, &total_mochila, &total_album);
-            } 
-            else if (acaoEscolhida == 2){
+            if (acaoEscolhida == 1) abrirPacote(figurinhas, mochila, album, total, &total_mochila, &total_album);
+            else if (acaoEscolhida == 2) {
                 printf("Total album: %d\n", total_album);
                 listarFigurinhasAlbum(album, total_album);
             } 
-            else if (acaoEscolhida == 3){
+            else if (acaoEscolhida == 3) {
                 printf("Total mochila: %d\n", total_mochila);
                 listarFigurinhasMochila(mochila, total_mochila);
             } 
-            else if (acaoEscolhida == 4){
-                excluirAlbum(figurinhas, album, &total_album);
-            } 
-            else if (acaoEscolhida == 5){
-                excluirMochila(figurinhas, mochila, &total_mochila);
-            } 
-            else if (acaoEscolhida == 6){
-                pesquisarFigurinha(figurinhas, total);
-            } 
-            else if (acaoEscolhida == 7){
+            else if (acaoEscolhida == 4) excluirAlbum(figurinhas, album, &total_album);
+            else if (acaoEscolhida == 5) excluirMochila(figurinhas, mochila, &total_mochila);
+            else if (acaoEscolhida == 6) pesquisarFigurinha(figurinhas, total);
+            else if (acaoEscolhida == 7) {
                 int opcao_alterar;
                 do {
                     printf("\n--- MENU DE ALTERACAO ---\n");
@@ -160,21 +237,19 @@ int main(){
                     
                 } while (opcao_alterar != 3);
             } 
-            else if (acaoEscolhida == 8){
-                jogarQuiz(figurinhas, mochila, album, total, &total_mochila, &total_album);
-            }
-            else if (acaoEscolhida == 9){
-                jogarGoleiro();
-            }
+            else if (acaoEscolhida == 8) jogarQuiz(figurinhas, mochila, album, total, &total_mochila, &total_album);
+            else if (acaoEscolhida == 9) jogarGoleiro();
 
             printf("\n=========================================\n");
             printf("Pressione ENTER para voltar ao menu grafico...");
             
-            // Pausa para o usuário ler o terminal antes de reabrir o gráfico
             int c;
-            while ((c = getchar()) != '\n' && c != EOF); // Limpa o buffer caso tenha sobrado lixo
-            getchar(); // Aguarda o ENTER real
+            while ((c = getchar()) != '\n' && c != EOF);
+            getchar(); 
 
+            // Restaura o estado para o Menu Principal ao voltar
+            estadoAtual = MENU_PRINCIPAL;
+            
             // Reabre a janela gráfica
             InitWindow(1000, 800, "Album de Figurinhas - Copa do Mundo");
             SetTargetFPS(60);
