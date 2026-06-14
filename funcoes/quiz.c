@@ -272,6 +272,8 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
             } else {
                 DrawRectangleRounded((Rectangle){ btnContinuar.x + 3, btnContinuar.y + 3, btnContinuar.width, btnContinuar.height }, 0.15f, 4, sombraUI);
             }
+            int widthRec = MeasureText(msgRecompensa, 30);
+            DrawText(msgRecompensa, 500 - (widthRec / 2), 350, 30, corRecompensa);
 
             Rectangle btnAnimado = { btnContinuar.x, btnContinuar.y + offsetAnimacao, btnContinuar.width, btnContinuar.height };
             DrawRectangleRounded(btnAnimado, 0.15f, 4, corFundoBtn);
