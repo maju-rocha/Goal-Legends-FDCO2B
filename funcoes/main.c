@@ -2,164 +2,187 @@
 #include <stdlib.h> 
 #include <string.h> 
 #include <time.h> 
-#include "biblioteca.h" 
+#include <raylib.h>
+#include "biblioteca.h"
 
 int main(){
 
-    char linha[300];//variavel com todos os bytes de uma linha
-    int opcao_inicial;//variavel para armazenar a resposta do usuário sobre a opção desejada
-    int opcao_alterar;//variavel para armazenar a resposta do usuário sobre a opção de alteração desejada
-    int total = 0;//variavel para contabilizar a quantidade
-    int total_album = 0;//variavel para contabilizar a quantidade de figurinhas no album
-    int total_mochila = 0;//variavel para contabilizar a quantidade de figurinhas na mochila
+    char linha[300];
+    int total = 0;
+    int total_album = 0;
+    int total_mochila = 0;
     
-    Figurinha *figurinhas = malloc(981 * sizeof(Figurinha));//Cria vetor dinamico para as figurinhas 
-
-    Figurinha *album = malloc(981 * sizeof(Figurinha));//Cria vetor dinamico para o album
-
-    Figurinha *mochila = malloc(981 * sizeof(Figurinha));//Cria vetor dinamico para a mochila
+    Figurinha *figurinhas = malloc(981 * sizeof(Figurinha));
+    Figurinha *album = malloc(981 * sizeof(Figurinha));
+    Figurinha *mochila = malloc(981 * sizeof(Figurinha));
     
-    if (figurinhas == NULL){//testa se o malloc funcionou 
+    if (figurinhas == NULL || album == NULL || mochila == NULL){
         printf("Erro de alocacao.\n"); 
         return 1;
-    }//if
+    }
 
-    FILE *arquivo = fopen("extras/figurinhas2026.csv","rb");//cria e abre o arquivo para leitura de figurinhas
-        
-    if (arquivo == NULL){//testa se o arquivo abriu 
-        printf("Erro ao abrir o arquivo.\n"); 
+    // Leitura dos arquivos (mantida exatamente como a sua)
+    FILE *arquivo = fopen("extras/figurinhas2026.csv","rb");
+    if (arquivo == NULL){
+        printf("Erro ao abrir o arquivo figurinhas2026.csv.\n"); 
         return 1; 
-    }//if
+    }
 
     FILE *arquivo_album = fopen("extras/album.csv", "r");
-
     if(arquivo_album != NULL){
-
         while(fscanf(arquivo_album," %9[^,],%49[^,],%49[^,],%49[^,],%49[^\n]", album[total_album].codigo, album[total_album].titulo, album[total_album].secao, album[total_album].grupo,album[total_album].tipo) == 5){
-            //le cada linha do arquivo album.csv
-
-            total_album++;//incrementa o total de figurinhas do album
+            total_album++;
         }
-
-        fclose(arquivo_album);//fecha arquivo album.csv
-
+        fclose(arquivo_album);
     }
 
     FILE *arquivo_mochila = fopen("extras/mochila.csv", "r");
-
     if(arquivo_mochila != NULL){
-
         while(fscanf(arquivo_mochila, " %9[^,],%49[^,],%49[^,],%49[^,],%49[^\n]", mochila[total_mochila].codigo, mochila[total_mochila].titulo, mochila[total_mochila].secao, mochila[total_mochila].grupo, mochila[total_mochila].tipo) == 5){
-        //le cada linha do arquivo mochila.csv
-        
-            total_mochila++;//incrementa o total de figurinhas da mochila
+            total_mochila++;
         }
-        
-        fclose(arquivo_mochila);//fecha arquivo mochila.csv
-    
-    }//if teste de abertura do arquivo mochila.csv
+        fclose(arquivo_mochila);
+    }
 
-
-
-    fgets(linha, sizeof(linha), arquivo);//ignora a primeira linha do arquivo figurinhas2026.csv
-    
+    fgets(linha, sizeof(linha), arquivo); // ignora cabecalho
     while (total < 981 && fscanf(arquivo, " %9[^,],%49[^,],%49[^,],%49[^,],%49[^\n]", figurinhas[total].codigo, figurinhas[total].titulo, figurinhas[total].secao, figurinhas[total].grupo, figurinhas[total].tipo) == 5){
-    
         total++;
-    }//le cada linha do arquivo figurinhas2026.csv, armazena os campos correspondentes em cada posição do vetor figurinhas e incrementa o total de figurinhas lidas, o loop continua até ler todas as figurinhas ou atingir o limite de 981 figurinhas
+    }
+    fclose(arquivo);
     
-    fclose(arquivo);//fecha arquivo
-    
-    srand(time(NULL));//libera aleatoriedade para funcao abrirPacote 
+    srand(time(NULL));
 
-    do{
-        printf("\nSelecione a opcao desejada:\n");
-        printf("1 - Abrir pacote\n");
-        printf("2 - Ver album\n");
-        printf("3 - Ver mochila\n");
-        printf("4 - Excluir figurinha do album\n");
-        printf("5 - Excluir figurinha da mochila\n");
-        printf("6 - Pesquisar figurinha\n");
-        printf("7 - Alterar figurinha\n");
-        printf("8 - Jogar quiz da copa\n");
-        printf("9 - Sair do programa\n");
-        printf("Escolha: ");
+    // ==========================================
+    // CONFIGURAÇÃO DA INTERFACE GRÁFICA (RAYLIB)
+    // ==========================================
+    InitWindow(800, 600, "Album de Figurinhas - Copa do Mundo");
+    SetTargetFPS(60);
 
+    const char *textosBotoes[] = {
+        "1. Abrir Pacote",
+        "2. Ver Album",
+        "3. Ver Mochila",
+        "4. Excluir do Album",
+        "5. Excluir da Mochila",
+        "6. Pesquisar Figurinha",
+        "7. Alterar Figurinha (Menu Terminal)",
+        "8. Jogar Quiz da Copa"
+    };
 
+    Rectangle botoes[8];
+    for (int i = 0; i < 8; i++) {
+        // Cria 8 retângulos alinhados no centro da tela
+        botoes[i] = (Rectangle){ 200, 140 + (i * 50), 400, 40 };
+    }
 
-        if(scanf("%d", &opcao_inicial) != 1){
+    // Cores temáticas da Copa
+    Color verdeCampo = (Color){ 34, 139, 34, 255 };
+    Color amareloBrasil = (Color){ 255, 215, 0, 255 };
+    Color azulBrasil = (Color){ 0, 39, 118, 255 };
 
-            opcao_inicial = 0;
+    while (!WindowShouldClose()) {
+        Vector2 mousePoint = GetMousePosition();
+        int acaoEscolhida = 0;
 
-        }//if
-
-        while(getchar() != '\n');
-
-        if(opcao_inicial == 1){
-            abrirPacote(figurinhas, mochila, album, total, &total_mochila, &total_album);
-
-        }else if(opcao_inicial == 2){
-            printf("Total album: %d\n", total_album);
-            listarFigurinhasAlbum(album, total_album);
-
-        }else if(opcao_inicial == 3){
-            printf("Total mochila: %d\n", total_mochila);
-            listarFigurinhasMochila(mochila, total_mochila);
-
-        }else if(opcao_inicial == 4){
-            excluirAlbum(figurinhas, album, &total_album);
-
-        }else if(opcao_inicial == 5){
-            excluirMochila(figurinhas, mochila, &total_mochila);
-
-        }else if(opcao_inicial == 6){
-            pesquisarFigurinha(figurinhas, total);
-        
-        } else if (opcao_inicial == 7) {
-            do {
-                printf("\n1 - Alterar figurinha do album\n");
-                printf("2 - Resetar a lista de figurinhas\n");
-                printf("3 - Voltar ao menu inicial\n");
-                printf("Escolha: ");
-
-                // Verifica se a leitura falhou (ex: digitou letra)
-                if (scanf("%d", &opcao_alterar) != 1) {
-                    opcao_alterar = 0; 
+        // Lógica de clique
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+            for (int i = 0; i < 8; i++) {
+                if (CheckCollisionPointRec(mousePoint, botoes[i])) {
+                    acaoEscolhida = i + 1; // Guarda qual botão foi clicado (1 a 8)
                 }
-                
-                // Limpa o buffer do teclado (evita loop infinito se der erro)
-                while(getchar() != '\n'); 
+            }
+        }
 
-                // Agora sim, testa as opcoes corretamente
-                if (opcao_alterar == 1) {
-                    alterarFigurinha(figurinhas, total);
+        // Desenho do Menu
+        BeginDrawing();
+        ClearBackground(verdeCampo);
+
+        // Títulos
+        DrawText("ALBUM DE FIGURINHAS DA COPA", 140, 40, 32, WHITE);
+        DrawText("Selecione uma opcao abaixo:", 260, 90, 20, amareloBrasil);
+
+        // Desenha os botões
+        for (int i = 0; i < 8; i++) {
+            bool mouseEmCima = CheckCollisionPointRec(mousePoint, botoes[i]);
+            DrawRectangleRec(botoes[i], mouseEmCima ? LIGHTGRAY : amareloBrasil);
+            DrawRectangleLinesEx(botoes[i], 2, mouseEmCima ? azulBrasil : DARKGRAY);
+            
+            int textWidth = MeasureText(textosBotoes[i], 20);
+            DrawText(textosBotoes[i], botoes[i].x + (botoes[i].width / 2) - (textWidth / 2), botoes[i].y + 10, 20, azulBrasil);
+        }
+
+        DrawText("Feche a janela (X) ou aperte ESC para sair do programa", 130, 560, 20, LIGHTGRAY);
+
+        EndDrawing();
+
+        // Execução da Ação Escolhida
+        if (acaoEscolhida != 0) {
+            CloseWindow(); // Fecha a interface gráfica para liberar o terminal
+
+            printf("\n=========================================\n");
+            
+            // Chama as funções originais do seu projeto
+            if (acaoEscolhida == 1) {
+                abrirPacote(figurinhas, mochila, album, total, &total_mochila, &total_album);
+            } 
+            else if (acaoEscolhida == 2) {
+                printf("Total album: %d\n", total_album);
+                listarFigurinhasAlbum(album, total_album);
+            } 
+            else if (acaoEscolhida == 3) {
+                printf("Total mochila: %d\n", total_mochila);
+                listarFigurinhasMochila(mochila, total_mochila);
+            } 
+            else if (acaoEscolhida == 4) {
+                excluirAlbum(figurinhas, album, &total_album);
+            } 
+            else if (acaoEscolhida == 5) {
+                excluirMochila(figurinhas, mochila, &total_mochila);
+            } 
+            else if (acaoEscolhida == 6) {
+                pesquisarFigurinha(figurinhas, total);
+            } 
+            else if (acaoEscolhida == 7) {
+                int opcao_alterar;
+                do {
+                    printf("\n--- MENU DE ALTERACAO ---\n");
+                    printf("1 - Alterar figurinha do album\n");
+                    printf("2 - Resetar a lista de figurinhas\n");
+                    printf("3 - Voltar ao menu principal\n");
+                    printf("Escolha: ");
+
+                    if (scanf("%d", &opcao_alterar) != 1) opcao_alterar = 0;
+                    while(getchar() != '\n'); 
+
+                    if (opcao_alterar == 1) alterarFigurinha(figurinhas, total);
+                    else if (opcao_alterar == 2) resetarLista(figurinhas, total);
+                    else if (opcao_alterar != 3) printf("Opcao invalida.\n");
                     
-                } else if (opcao_alterar == 2) {
-                    resetarLista(figurinhas, total);
-                    
-                } else if (opcao_alterar != 3) {
-                    printf("Opcao invalida, por favor selecione uma opcao valida.\n");
-                }
-                
-            } while (opcao_alterar != 3); // O loop quebra e volta pro menu principal se for 3
+                } while (opcao_alterar != 3);
+            } 
+            else if (acaoEscolhida == 8) {
+                jogarQuiz(figurinhas, mochila, album, total, &total_mochila, &total_album);
+            }
+
+            printf("\n=========================================\n");
+            printf("Pressione ENTER para voltar ao menu grafico...");
+            
+            // Pausa para o usuário ler o terminal antes de reabrir o gráfico
+            int c;
+            while ((c = getchar()) != '\n' && c != EOF); // Limpa o buffer caso tenha sobrado lixo
+            getchar(); // Aguarda o ENTER real
+
+            // Reabre a janela gráfica
+            InitWindow(800, 600, "Album de Figurinhas - Copa do Mundo");
+            SetTargetFPS(60);
         }
+    }
 
-        else if (opcao_inicial == 8) {
-            jogarQuiz(figurinhas, mochila, album, total, &total_mochila, &total_album);
-        }
-
-        else if(opcao_inicial != 9){
-            printf("Opcao invalida, por favor selecione uma opcao valida.\n");
-        }
-
-    }while(opcao_inicial != 9);//loop para manter o programa rodando até o usuário escolher sair, cada opção chama a função correspondente, caso a opção seja inválida informa o usuário e volta a solicitar uma opção válida
-
-    
     printf("Saindo do programa...\n");
 
-    free(figurinhas);//Libera a memória do vetor figurinhas
-    free(album);//Libera a memória do vetor album
-    free(mochila);//Libera a memória do vetor mochila
+    free(figurinhas);
+    free(album);
+    free(mochila);
 
     return 0; 
-}//main
+}
