@@ -1,10 +1,8 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-<<<<<<< HEAD
 #include <math.h> 
-=======
->>>>>>> 0a5acdb (códigos atualizados)
 #include <raylib.h>
 #include "../headers/biblioteca.h"
 
@@ -59,7 +57,6 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
         sorteadas[i] = p_idx;
     }
 
-<<<<<<< HEAD
     SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_VSYNC_HINT);
     InitWindow(1000, 800, "Minijogo: Quiz da Copa - Edicao Canarinho");
     
@@ -71,11 +68,6 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
     Texture2D cursorBola = LoadTextureFromImage(imagemBola); 
     UnloadImage(imagemBola); 
     
-=======
-    // Inicializa o Raylib com 1000x800
-    InitWindow(1000, 800, "Minijogo: Quiz da Copa");
-    Font fonteCopa = LoadFont("extras/PressStart2P-Regular.ttf"); // Carrega a fonte
->>>>>>> 0a5acdb (códigos atualizados)
     SetTargetFPS(60);
 
     EstadoQuiz estado = TELA_PERGUNTA;
@@ -142,7 +134,6 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
         }
 
         if (estado == TELA_PERGUNTA) {
-<<<<<<< HEAD
             Rectangle hudPlacar = { 35, 30, 260, 50 };
             DrawRectangleRounded((Rectangle){hudPlacar.x + 4, hudPlacar.y + 4, hudPlacar.width, hudPlacar.height}, 0.2f, 4, sombraUI); 
             DrawRectangleRounded(hudPlacar, 0.2f, 4, azulBrasil);
@@ -155,22 +146,13 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
             DrawRectangleRounded((Rectangle){cardPergunta.x + 8, cardPergunta.y + 8, cardPergunta.width, cardPergunta.height}, 0.08f, 6, sombraUI); 
             DrawRectangleRounded(cardPergunta, 0.08f, 6, azulBrasil);
             DrawRectangleRoundedLinesEx(cardPergunta, 0.08f, 6, 2.5f, amareloBrasil);
-=======
-            const char* numPergText = TextFormat("Pergunta %d de %d", pergunta_atual + 1, num_perguntas);
-            DrawTextEx(fonteCopa, numPergText, (Vector2){ 40, 40 }, 14, 2, LIGHTGRAY);
->>>>>>> 0a5acdb (códigos atualizados)
             
             const char* textoPergunta = banco[sorteadas[pergunta_atual]].pergunta;
-<<<<<<< HEAD
             int widthPergunta = MeasureTextEx(fonteCopa, textoPergunta, 13, 1).x;
             Vector2 posPergunta = { 500 - (widthPergunta / 2), 165 };
             if(widthPergunta > 760) posPergunta.x = 120; 
             
             DrawTextEx(fonteCopa, textoPergunta, posPergunta, 13, 1, WHITE); 
-=======
-            int widthPergunta = MeasureTextEx(fonteCopa, textoPergunta, 16, 2).x;
-            DrawTextEx(fonteCopa, textoPergunta, (Vector2){ 500 - (widthPergunta / 2), 120 }, 16, 2, WHITE);
->>>>>>> 0a5acdb (códigos atualizados)
 
             for (int i = 0; i < 4; i++) {
                 bool mouseEmCima = CheckCollisionPointRec(mousePoint, btnOpcoes[i]);
@@ -202,13 +184,8 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
                 DrawRectangleRoundedLinesEx(btnAnimado, 0.15f, 4, 2.0f, corBordaBtn);
                 
                 const char* textoOpcao = banco[sorteadas[pergunta_atual]].opcoes[i];
-<<<<<<< HEAD
                 int widthOpcao = MeasureTextEx(fonteCopa, textoOpcao, 12, 1).x;
                 DrawTextEx(fonteCopa, textoOpcao, (Vector2){ btnAnimado.x + (btnAnimado.width / 2) - (widthOpcao / 2), btnAnimado.y + 22 }, 12, 1, corTextoBtn);
-=======
-                int widthOpcao = MeasureTextEx(fonteCopa, textoOpcao, 14, 2).x;
-                DrawTextEx(fonteCopa, textoOpcao, (Vector2){ btnOpcoes[i].x + (btnOpcoes[i].width / 2) - (widthOpcao / 2), btnOpcoes[i].y + 22 }, 14, 2, azulBrasil);
->>>>>>> 0a5acdb (códigos atualizados)
             }
         } 
         else if (estado == TELA_FEEDBACK) {
@@ -222,7 +199,6 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
             DrawRectangleRounded(cardFeedback, 0.05f, 6, azulBrasil);
             DrawRectangleRoundedLinesEx(cardFeedback, 0.05f, 6, 3.0f, corDestaque); 
 
-<<<<<<< HEAD
             const char* msg = acertou ? "CORRETO! VITORIA!" : "RESPOSTA INCORRETA";
             float textSize = 22 + sin(tempo * 6.0f) * 2; 
             int widthMsg = MeasureTextEx(fonteCopa, msg, textSize, 2).x;
@@ -239,20 +215,9 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
                 const char* textoCerta = "+1 PONTO COMPUTADO";
                 int widthCerta = MeasureTextEx(fonteCopa, textoCerta, 12, 1).x;
                 DrawTextEx(fonteCopa, textoCerta, (Vector2){ 500 - (widthCerta / 2), 360 }, 12, 1, Fade(WHITE, 0.7f));
-=======
-            int widthMsg = MeasureTextEx(fonteCopa, msg, 28, 2).x;
-            DrawTextEx(fonteCopa, msg, (Vector2){ 500 - (widthMsg / 2), 250 }, 28, 2, corMsg);
-            
-            if (!acertou) {
-                int certa = banco[sorteadas[pergunta_atual]].correta;
-                const char* textoCerta = TextFormat("A resposta certa era: %s", banco[sorteadas[pergunta_atual]].opcoes[certa]);
-                int widthCerta = MeasureTextEx(fonteCopa, textoCerta, 14, 2).x;
-                DrawTextEx(fonteCopa, textoCerta, (Vector2){ 500 - (widthCerta / 2), 350 }, 14, 2, WHITE);
->>>>>>> 0a5acdb (códigos atualizados)
             }
 
             bool mouseEmCima = CheckCollisionPointRec(mousePoint, btnContinuar);
-<<<<<<< HEAD
             int offsetAnimacao = 0;
             Color corFundoBtn = amareloBrasil;
 
@@ -279,20 +244,6 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
             DrawRectangleRounded((Rectangle){cardFim.x + 10, cardFim.y + 10, cardFim.width, cardFim.height}, 0.05f, 6, sombraUI);
             DrawRectangleRounded(cardFim, 0.05f, 6, azulBrasil);
             DrawRectangleRoundedLinesEx(cardFim, 0.05f, 6, 3.0f, amareloBrasil);
-=======
-            DrawRectangleRec(btnContinuar, mouseEmCima ? LIGHTGRAY : amareloBrasil);
-            int widthCont = MeasureTextEx(fonteCopa, "Continuar", 16, 2).x;
-            DrawTextEx(fonteCopa, "Continuar", (Vector2){ btnContinuar.x + (btnContinuar.width / 2) - (widthCont / 2), btnContinuar.y + 22 }, 16, 2, azulBrasil);
-        }
-        else if (estado == TELA_FIM) {
-            const char* msgFim = "--- FIM DO QUIZ ---";
-            int widthFim = MeasureTextEx(fonteCopa, msgFim, 28, 2).x;
-            DrawTextEx(fonteCopa, msgFim, (Vector2){ 500 - (widthFim / 2), 150 }, 28, 2, WHITE);
-            
-            const char* msgScore = TextFormat("Voce acertou %d de %d!", score, num_perguntas);
-            int widthScore = MeasureTextEx(fonteCopa, msgScore, 20, 2).x;
-            DrawTextEx(fonteCopa, msgScore, (Vector2){ 500 - (widthScore / 2), 250 }, 20, 2, amareloBrasil);
->>>>>>> 0a5acdb (códigos atualizados)
 
             const char* msgFim = "--- FIM DO QUIZ ---";
             int widthFim = MeasureTextEx(fonteCopa, msgFim, 24, 2).x;
@@ -325,20 +276,12 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
             int widthRec = MeasureTextEx(fonteCopa, msgRecompensa, 14, 2).x;
             DrawTextEx(fonteCopa, msgRecompensa, (Vector2){ 500 - (widthRec / 2), 350 }, 14, 2, corRecompensa);
 
-<<<<<<< HEAD
             Rectangle btnAnimado = { btnContinuar.x, btnContinuar.y + offsetAnimacao, btnContinuar.width, btnContinuar.height };
             DrawRectangleRounded(btnAnimado, 0.15f, 4, corFundoBtn);
             DrawRectangleRoundedLinesEx(btnAnimado, 0.15f, 4, 2.0f, azulBrasil);
             
             int widthSair = MeasureTextEx(fonteCopa, "SAIR DO JOGO", 12, 1).x;
             DrawTextEx(fonteCopa, "SAIR DO JOGO", (Vector2){ btnAnimado.x + (btnAnimado.width / 2) - (widthSair / 2), btnAnimado.y + 22 }, 12, 1, azulBrasil);
-=======
-            // Botão sair
-            bool mouseEmCima = CheckCollisionPointRec(mousePoint, btnContinuar);
-            DrawRectangleRec(btnContinuar, mouseEmCima ? LIGHTGRAY : amareloBrasil);
-            int widthSair = MeasureTextEx(fonteCopa, "Sair", 16, 2).x;
-            DrawTextEx(fonteCopa, "Sair", (Vector2){ btnContinuar.x + (btnContinuar.width / 2) - (widthSair / 2), btnContinuar.y + 22 }, 16, 2, azulBrasil);
->>>>>>> 0a5acdb (códigos atualizados)
         }
 
         // ==========================================
@@ -349,12 +292,8 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
         EndDrawing();
     }
 
-<<<<<<< HEAD
     UnloadTexture(cursorBola);
     UnloadFont(fonteCopa);
-=======
-    UnloadFont(fonteCopa); // Libera a memória da fonte
->>>>>>> 0a5acdb (códigos atualizados)
     CloseWindow();
 
     if (score > 0) {
