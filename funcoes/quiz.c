@@ -39,26 +39,31 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
         sorteadas[i] = p_idx;
     }
 
-    // Inicializa o Raylib
+    // Inicializa o Raylib com 1000x800
     InitWindow(1000, 800, "Minijogo: Quiz da Copa");
     SetTargetFPS(60);
 
     EstadoQuiz estado = TELA_PERGUNTA;
 
-    // Retângulos para os botões das opções
+    // Cores tematicas
+    Color verdeCampo = (Color){ 34, 139, 34, 255 };
+    Color amareloBrasil = (Color){ 255, 215, 0, 255 };
+    Color azulBrasil = (Color){ 0, 39, 118, 255 };
+
+    // Retângulos centralizados na tela de 1000px de largura
     Rectangle btnOpcoes[4] = {
-        { 100, 200, 600, 60 },
-        { 100, 280, 600, 60 },
-        { 100, 360, 600, 60 },
-        { 100, 440, 600, 60 }
+        { 200, 250, 600, 60 },
+        { 200, 330, 600, 60 },
+        { 200, 410, 600, 60 },
+        { 200, 490, 600, 60 }
     };
 
-    Rectangle btnContinuar = { 300, 500, 200, 50 };
+    Rectangle btnContinuar = { 300, 600, 400, 60 };
 
     while (!WindowShouldClose()) {
-        // Lógica de Atualização
         Vector2 mousePoint = GetMousePosition();
 
+        // Lógica de Atualização
         if (estado == TELA_PERGUNTA) {
             if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
                 for (int i = 0; i < 4; i++) {
@@ -82,67 +87,91 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
                         opcao_selecionada = -1;
                     }
                 } else if (estado == TELA_FIM) {
-                    break; // Sai do loop do Raylib para voltar ao terminal
+                    break;
                 }
             }
         }
 
         // Lógica de Desenho
         BeginDrawing();
-        ClearBackground(RAYWHITE);
+        ClearBackground(verdeCampo);
 
         if (estado == TELA_PERGUNTA) {
-            DrawText(TextFormat("Pergunta %d de %d", pergunta_atual + 1, num_perguntas), 20, 20, 20, DARKGRAY);
-            DrawText(banco[sorteadas[pergunta_atual]].pergunta, 100, 100, 25, BLACK);
+            DrawText(TextFormat("Pergunta %d de %d", pergunta_atual + 1, num_perguntas), 40, 40, 20, LIGHTGRAY);
+            
+            // Centraliza o texto da pergunta
+            const char* textoPergunta = banco[sorteadas[pergunta_atual]].pergunta;
+            int widthPergunta = MeasureText(textoPergunta, 30);
+            DrawText(textoPergunta, 500 - (widthPergunta / 2), 120, 30, WHITE);
 
             for (int i = 0; i < 4; i++) {
-                Color btnColor = CheckCollisionPointRec(mousePoint, btnOpcoes[i]) ? LIGHTGRAY : GRAY;
-                DrawRectangleRec(btnOpcoes[i], btnColor);
-                DrawText(banco[sorteadas[pergunta_atual]].opcoes[i], btnOpcoes[i].x + 20, btnOpcoes[i].y + 20, 20, WHITE);
+                bool mouseEmCima = CheckCollisionPointRec(mousePoint, btnOpcoes[i]);
+                DrawRectangleRec(btnOpcoes[i], mouseEmCima ? LIGHTGRAY : amareloBrasil);
+                DrawRectangleLinesEx(btnOpcoes[i], 2, mouseEmCima ? azulBrasil : DARKGRAY);
+                
+                const char* textoOpcao = banco[sorteadas[pergunta_atual]].opcoes[i];
+                int widthOpcao = MeasureText(textoOpcao, 25);
+                DrawText(textoOpcao, btnOpcoes[i].x + (btnOpcoes[i].width / 2) - (widthOpcao / 2), btnOpcoes[i].y + 17, 25, azulBrasil);
             }
         } 
         else if (estado == TELA_FEEDBACK) {
             bool acertou = (opcao_selecionada == banco[sorteadas[pergunta_atual]].correta);
             const char* msg = acertou ? ">>> CORRETO! <<<" : ">>> INCORRETO! <<<";
-            Color corMsg = acertou ? GREEN : RED;
+            Color corMsg = acertou ? amareloBrasil : RED;
 
-            DrawText(msg, 250, 200, 30, corMsg);
+            int widthMsg = MeasureText(msg, 40);
+            DrawText(msg, 500 - (widthMsg / 2), 250, 40, corMsg);
             
             if (!acertou) {
                 int certa = banco[sorteadas[pergunta_atual]].correta;
-                DrawText(TextFormat("A resposta certa era: %s", banco[sorteadas[pergunta_atual]].opcoes[certa]), 150, 300, 20, DARKGRAY);
+                const char* textoCerta = TextFormat("A resposta certa era: %s", banco[sorteadas[pergunta_atual]].opcoes[certa]);
+                int widthCerta = MeasureText(textoCerta, 25);
+                DrawText(textoCerta, 500 - (widthCerta / 2), 350, 25, WHITE);
             }
 
             // Botão continuar
-            DrawRectangleRec(btnContinuar, CheckCollisionPointRec(mousePoint, btnContinuar) ? DARKBLUE : BLUE);
-            DrawText("Continuar", btnContinuar.x + 50, btnContinuar.y + 15, 20, WHITE);
+            bool mouseEmCima = CheckCollisionPointRec(mousePoint, btnContinuar);
+            DrawRectangleRec(btnContinuar, mouseEmCima ? LIGHTGRAY : amareloBrasil);
+            int widthCont = MeasureText("Continuar", 25);
+            DrawText("Continuar", btnContinuar.x + (btnContinuar.width / 2) - (widthCont / 2), btnContinuar.y + 17, 25, azulBrasil);
         }
         else if (estado == TELA_FIM) {
-            DrawText("--- FIM DO QUIZ ---", 250, 150, 30, BLACK);
-            DrawText(TextFormat("Voce acertou %d de %d!", score, num_perguntas), 250, 250, 30, DARKGRAY);
+            const char* msgFim = "--- FIM DO QUIZ ---";
+            int widthFim = MeasureText(msgFim, 40);
+            DrawText(msgFim, 500 - (widthFim / 2), 150, 40, WHITE);
+            
+            const char* msgScore = TextFormat("Voce acertou %d de %d!", score, num_perguntas);
+            int widthScore = MeasureText(msgScore, 35);
+            DrawText(msgScore, 500 - (widthScore / 2), 250, 35, amareloBrasil);
 
+            const char* msgRecompensa;
+            Color corRecompensa;
             if (score > 0) {
-                DrawText("Voce ganhou pacotes de recompensa!", 150, 350, 25, GREEN);
+                msgRecompensa = "Voce ganhou pacotes de recompensa!";
+                corRecompensa = amareloBrasil;
             } else {
-                DrawText("Sem recompensas desta vez. Tente novamente!", 120, 350, 25, RED);
+                msgRecompensa = "Sem recompensas desta vez. Tente novamente!";
+                corRecompensa = RED;
             }
+            int widthRec = MeasureText(msgRecompensa, 30);
+            DrawText(msgRecompensa, 500 - (widthRec / 2), 350, 30, corRecompensa);
 
             // Botão sair
-            DrawRectangleRec(btnContinuar, CheckCollisionPointRec(mousePoint, btnContinuar) ? DARKBLUE : BLUE);
-            DrawText("Sair", btnContinuar.x + 80, btnContinuar.y + 15, 20, WHITE);
+            bool mouseEmCima = CheckCollisionPointRec(mousePoint, btnContinuar);
+            DrawRectangleRec(btnContinuar, mouseEmCima ? LIGHTGRAY : amareloBrasil);
+            int widthSair = MeasureText("Sair", 25);
+            DrawText("Sair", btnContinuar.x + (btnContinuar.width / 2) - (widthSair / 2), btnContinuar.y + 17, 25, azulBrasil);
         }
 
         EndDrawing();
     }
 
-    // Fecha a janela gráfica
     CloseWindow();
 
-    // Volta ao terminal para dar a recompensa
     if (score > 0) {
         printf("\n[Quiz Finalizado] Parabens! Voce acertou %d perguntas!\n", score);
         printf("Pressione ENTER para abrir sua recompensa...\n");
-        getchar(); // Pausa para o usuário ler
+        getchar();
         abrirPacote(figurinhas, mochila, album, total, total_mochila, total_album);
     } else {
         printf("\n[Quiz Finalizado] Voce nao acertou nenhuma, sem recompensas.\n");
