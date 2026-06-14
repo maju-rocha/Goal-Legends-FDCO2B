@@ -55,7 +55,7 @@ int main(){
     // ==========================================
     // CONFIGURAÇÃO DA INTERFACE GRÁFICA (RAYLIB)
     // ==========================================
-    InitWindow(800, 600, "Album de Figurinhas - Copa do Mundo");
+    InitWindow(1000, 800, "Album de Figurinhas - Copa do Mundo");
     SetTargetFPS(60);
 
     const char *textosBotoes[] = {
@@ -66,13 +66,13 @@ int main(){
         "5. Excluir da Mochila",
         "6. Pesquisar Figurinha",
         "7. Alterar Figurinha (Menu Terminal)",
-        "8. Jogar Quiz da Copa"
+        "8. Jogar Quiz da Copa",
+        "9. Jogo do Goleiro"
     };
 
-    Rectangle botoes[8];
-    for (int i = 0; i < 8; i++) {
-        // Cria 8 retângulos alinhados no centro da tela
-        botoes[i] = (Rectangle){ 200, 140 + (i * 50), 400, 40 };
+    Rectangle botoes[9];
+    for (int i = 0; i < 9; i++) {
+        botoes[i] = (Rectangle){ 250, 180 + (i * 55), 500, 45 };
     }
 
     // Cores temáticas da Copa
@@ -86,9 +86,9 @@ int main(){
 
         // Lógica de clique
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-            for (int i = 0; i < 8; i++) {
+            for (int i = 0; i < 9; i++) {
                 if (CheckCollisionPointRec(mousePoint, botoes[i])) {
-                    acaoEscolhida = i + 1; // Guarda qual botão foi clicado (1 a 8)
+                    acaoEscolhida = i + 1; // Guarda qual botão foi clicado (1 a 9)
                 }
             }
         }
@@ -98,11 +98,11 @@ int main(){
         ClearBackground(verdeCampo);
 
         // Títulos
-        DrawText("ALBUM DE FIGURINHAS DA COPA", 140, 40, 32, WHITE);
-        DrawText("Selecione uma opcao abaixo:", 260, 90, 20, amareloBrasil);
+        DrawText("ALBUM DE FIGURINHAS DA COPA", 220, 50, 32, WHITE);
+        DrawText("Selecione uma opcao abaixo:", 340, 110, 22, amareloBrasil);
 
         // Desenha os botões
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 9; i++) {
             bool mouseEmCima = CheckCollisionPointRec(mousePoint, botoes[i]);
             DrawRectangleRec(botoes[i], mouseEmCima ? LIGHTGRAY : amareloBrasil);
             DrawRectangleLinesEx(botoes[i], 2, mouseEmCima ? azulBrasil : DARKGRAY);
@@ -111,7 +111,7 @@ int main(){
             DrawText(textosBotoes[i], botoes[i].x + (botoes[i].width / 2) - (textWidth / 2), botoes[i].y + 10, 20, azulBrasil);
         }
 
-        DrawText("Feche a janela (X) ou aperte ESC para sair do programa", 130, 560, 20, LIGHTGRAY);
+        DrawText("Feche a janela (X) ou aperte ESC para sair do programa", 180, 740, 20, LIGHTGRAY);
 
         EndDrawing();
 
@@ -125,24 +125,24 @@ int main(){
             if (acaoEscolhida == 1) {
                 abrirPacote(figurinhas, mochila, album, total, &total_mochila, &total_album);
             } 
-            else if (acaoEscolhida == 2) {
+            else if (acaoEscolhida == 2){
                 printf("Total album: %d\n", total_album);
                 listarFigurinhasAlbum(album, total_album);
             } 
-            else if (acaoEscolhida == 3) {
+            else if (acaoEscolhida == 3){
                 printf("Total mochila: %d\n", total_mochila);
                 listarFigurinhasMochila(mochila, total_mochila);
             } 
-            else if (acaoEscolhida == 4) {
+            else if (acaoEscolhida == 4){
                 excluirAlbum(figurinhas, album, &total_album);
             } 
-            else if (acaoEscolhida == 5) {
+            else if (acaoEscolhida == 5){
                 excluirMochila(figurinhas, mochila, &total_mochila);
             } 
-            else if (acaoEscolhida == 6) {
+            else if (acaoEscolhida == 6){
                 pesquisarFigurinha(figurinhas, total);
             } 
-            else if (acaoEscolhida == 7) {
+            else if (acaoEscolhida == 7){
                 int opcao_alterar;
                 do {
                     printf("\n--- MENU DE ALTERACAO ---\n");
@@ -160,8 +160,11 @@ int main(){
                     
                 } while (opcao_alterar != 3);
             } 
-            else if (acaoEscolhida == 8) {
+            else if (acaoEscolhida == 8){
                 jogarQuiz(figurinhas, mochila, album, total, &total_mochila, &total_album);
+            }
+            else if (acaoEscolhida == 9){
+                jogarGoleiro();
             }
 
             printf("\n=========================================\n");
@@ -173,7 +176,7 @@ int main(){
             getchar(); // Aguarda o ENTER real
 
             // Reabre a janela gráfica
-            InitWindow(800, 600, "Album de Figurinhas - Copa do Mundo");
+            InitWindow(1000, 800, "Album de Figurinhas - Copa do Mundo");
             SetTargetFPS(60);
         }
     }
