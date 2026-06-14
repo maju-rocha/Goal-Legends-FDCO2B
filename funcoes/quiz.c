@@ -40,7 +40,7 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
     }
 
     // Inicializa o Raylib
-    InitWindow(800, 600, "Minijogo: Quiz da Copa");
+    InitWindow(1000, 800, "Minijogo: Quiz da Copa");
     SetTargetFPS(60);
 
     EstadoQuiz estado = TELA_PERGUNTA;
