@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 CC = gcc
 
 CFLAGS = -Iheaders -Iraylib/src
