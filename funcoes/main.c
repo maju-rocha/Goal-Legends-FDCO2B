@@ -3,7 +3,7 @@
 #include <string.h> 
 #include <time.h> 
 #include <raylib.h>
-#include "../headers/biblioteca.h" 
+#include "biblioteca.h" 
 
 // Define os estados do menu
 typedef enum { MENU_PRINCIPAL, MENU_INVENTARIO, MENU_EXCLUIR, MENU_MINIGAMES } EstadoMenu;
@@ -58,17 +58,18 @@ int main(){
     // CONFIGURAÇÃO DA INTERFACE GRÁFICA
     // ==========================================
     InitWindow(1000, 800, "Album de Figurinhas - Copa do Mundo");
+    Font fonteCopa = LoadFont("extras/PressStart2P-Regular.ttf");
     SetTargetFPS(60);
 
     EstadoMenu estadoAtual = MENU_PRINCIPAL;
 
-    // Textos do Menu Principal (agora reduzido para 6 opções)
+    // Textos do Menu Principal
     const char *textosPrincipal[] = {
         "1. Abrir Pacote",
         "2. Ver Inventario",
         "3. Excluir do Inventario",
         "4. Pesquisar Figurinha",
-        "5. Alterar Figurinha (Menu Terminal)",
+        "5. Alterar Figurinha",
         "6. Area de Minigames"
     };
     Rectangle botoesPrincipal[6];
@@ -78,12 +79,12 @@ int main(){
 
     // Textos dos Submenus
     const char *textosInventario[] = { "1. Ver Album", "2. Ver Mochila", "3. Voltar ao Menu" };
-    const char *textosExcluir[] = { "1. Excluir do Album", "2. Excluir da Mochila", "3. Voltar ao Menu" };
-    const char *textosMinigames[] = { "1. Jogar Quiz da Copa", "2. Jogo do Goleiro", "3. Voltar ao Menu" };
+    const char *textosExcluir[] = { "1. Excluir Album", "2. Excluir Mochila", "3. Voltar ao Menu" };
+    const char *textosMinigames[] = { "1. Quiz da Copa", "2. Jogo do Goleiro", "3. Penalti", "4. Voltar ao Menu" };
 
-    // Layout padrão para todos os submenus (3 botões espaçados)
-    Rectangle botoesSubmenu[3];
-    for (int i = 0; i < 3; i++) {
+    // Layout padrão para todos os submenus (agora suporta até 4 botões)
+    Rectangle botoesSubmenu[4];
+    for (int i = 0; i < 4; i++) {
         botoesSubmenu[i] = (Rectangle){ 250, 300 + (i * 80), 500, 55 };
     }
 
@@ -102,11 +103,11 @@ int main(){
             if (estadoAtual == MENU_PRINCIPAL) {
                 for (int i = 0; i < 6; i++) {
                     if (CheckCollisionPointRec(mousePoint, botoesPrincipal[i])) {
-                        if (i == 0) acaoEscolhida = 1; // Abrir pacote
+                        if (i == 0) acaoEscolhida = 1;
                         else if (i == 1) estadoAtual = MENU_INVENTARIO;
                         else if (i == 2) estadoAtual = MENU_EXCLUIR;
-                        else if (i == 3) acaoEscolhida = 6; // Pesquisar
-                        else if (i == 4) acaoEscolhida = 7; // Alterar
+                        else if (i == 3) acaoEscolhida = 6;
+                        else if (i == 4) acaoEscolhida = 7;
                         else if (i == 5) estadoAtual = MENU_MINIGAMES;
                     }
                 }
@@ -114,8 +115,8 @@ int main(){
             else if (estadoAtual == MENU_INVENTARIO) {
                 for (int i = 0; i < 3; i++) {
                     if (CheckCollisionPointRec(mousePoint, botoesSubmenu[i])) {
-                        if (i == 0) acaoEscolhida = 2; // Ver Album
-                        else if (i == 1) acaoEscolhida = 3; // Ver Mochila
+                        if (i == 0) acaoEscolhida = 2;
+                        else if (i == 1) acaoEscolhida = 3;
                         else if (i == 2) estadoAtual = MENU_PRINCIPAL;
                     }
                 }
@@ -123,18 +124,19 @@ int main(){
             else if (estadoAtual == MENU_EXCLUIR) {
                 for (int i = 0; i < 3; i++) {
                     if (CheckCollisionPointRec(mousePoint, botoesSubmenu[i])) {
-                        if (i == 0) acaoEscolhida = 4; // Excluir Album
-                        else if (i == 1) acaoEscolhida = 5; // Excluir Mochila
+                        if (i == 0) acaoEscolhida = 4;
+                        else if (i == 1) acaoEscolhida = 5;
                         else if (i == 2) estadoAtual = MENU_PRINCIPAL;
                     }
                 }
             }
             else if (estadoAtual == MENU_MINIGAMES) {
-                for (int i = 0; i < 3; i++) {
+                for (int i = 0; i < 4; i++) { // Loop verifica os 4 botões
                     if (CheckCollisionPointRec(mousePoint, botoesSubmenu[i])) {
-                        if (i == 0) acaoEscolhida = 8; // Quiz da Copa
-                        else if (i == 1) acaoEscolhida = 9; // Jogo do Goleiro
-                        else if (i == 2) estadoAtual = MENU_PRINCIPAL;
+                        if (i == 0) acaoEscolhida = 8;
+                        else if (i == 1) acaoEscolhida = 9;
+                        else if (i == 2) acaoEscolhida = 10;
+                        else if (i == 3) estadoAtual = MENU_PRINCIPAL;
                     }
                 }
             }
@@ -147,24 +149,29 @@ int main(){
         ClearBackground(verdeCampo);
 
         if (estadoAtual == MENU_PRINCIPAL) {
-            DrawText("ALBUM DE FIGURINHAS DA COPA", 220, 60, 32, WHITE);
-            DrawText("Selecione uma opcao abaixo:", 340, 120, 22, amareloBrasil);
+            const char* title = "ALBUM DE FIGURINHAS DA COPA";
+            int titleWidth = MeasureTextEx(fonteCopa, title, 28, 2).x;
+            DrawTextEx(fonteCopa, title, (Vector2){ 500 - (titleWidth / 2), 60 }, 28, 2, WHITE);
+
+            const char* subtitle = "Selecione uma opcao abaixo:";
+            int subtitleWidth = MeasureTextEx(fonteCopa, subtitle, 16, 2).x;
+            DrawTextEx(fonteCopa, subtitle, (Vector2){ 500 - (subtitleWidth / 2), 120 }, 16, 2, amareloBrasil);
 
             for (int i = 0; i < 6; i++) {
                 bool mouseEmCima = CheckCollisionPointRec(mousePoint, botoesPrincipal[i]);
                 DrawRectangleRec(botoesPrincipal[i], mouseEmCima ? LIGHTGRAY : amareloBrasil);
                 DrawRectangleLinesEx(botoesPrincipal[i], 2, mouseEmCima ? azulBrasil : DARKGRAY);
                 
-                int textWidth = MeasureText(textosPrincipal[i], 22);
-                DrawText(textosPrincipal[i], botoesPrincipal[i].x + (botoesPrincipal[i].width / 2) - (textWidth / 2), botoesPrincipal[i].y + 14, 22, azulBrasil);
+                int textWidth = MeasureTextEx(fonteCopa, textosPrincipal[i], 14, 2).x;
+                DrawTextEx(fonteCopa, textosPrincipal[i], (Vector2){ botoesPrincipal[i].x + (botoesPrincipal[i].width / 2) - (textWidth / 2), botoesPrincipal[i].y + 18 }, 14, 2, azulBrasil);
             }
         } 
-        else { // Lógica de desenho reaproveitada para todos os submenus
+        else { 
             const char *titulo;
             const char *subtitulo;
             const char **textosBotoes;
+            int numBotoes = 3; // Padrão é 3 botões
 
-            // Define os textos baseados no estado atual
             if (estadoAtual == MENU_INVENTARIO) {
                 titulo = "MEU INVENTARIO";
                 subtitulo = "Qual colecao voce quer visualizar?";
@@ -173,29 +180,33 @@ int main(){
                 titulo = "EXCLUIR FIGURINHAS";
                 subtitulo = "De onde voce quer remover figurinhas?";
                 textosBotoes = textosExcluir;
-            } else { // MENU_MINIGAMES
+            } else { 
                 titulo = "AREA DE MINIGAMES";
                 subtitulo = "Escolha seu desafio:";
                 textosBotoes = textosMinigames;
+                numBotoes = 4; // Menu de minigames tem 4 botões!
             }
 
-            int titleWidth = MeasureText(titulo, 36);
-            DrawText(titulo, 500 - (titleWidth / 2), 100, 36, WHITE);
+            int titleWidth = MeasureTextEx(fonteCopa, titulo, 28, 2).x;
+            DrawTextEx(fonteCopa, titulo, (Vector2){ 500 - (titleWidth / 2), 100 }, 28, 2, WHITE);
             
-            int subtitleWidth = MeasureText(subtitulo, 24);
-            DrawText(subtitulo, 500 - (subtitleWidth / 2), 180, 24, amareloBrasil);
+            int subtitleWidth = MeasureTextEx(fonteCopa, subtitulo, 16, 2).x;
+            DrawTextEx(fonteCopa, subtitulo, (Vector2){ 500 - (subtitleWidth / 2), 180 }, 16, 2, amareloBrasil);
 
-            for (int i = 0; i < 3; i++) {
+            // Agora o loop roda a quantidade certa de botões
+            for (int i = 0; i < numBotoes; i++) {
                 bool mouseEmCima = CheckCollisionPointRec(mousePoint, botoesSubmenu[i]);
                 DrawRectangleRec(botoesSubmenu[i], mouseEmCima ? LIGHTGRAY : amareloBrasil);
                 DrawRectangleLinesEx(botoesSubmenu[i], 2, mouseEmCima ? azulBrasil : DARKGRAY);
                 
-                int textWidth = MeasureText(textosBotoes[i], 22);
-                DrawText(textosBotoes[i], botoesSubmenu[i].x + (botoesSubmenu[i].width / 2) - (textWidth / 2), botoesSubmenu[i].y + 16, 22, azulBrasil);
+                int textWidth = MeasureTextEx(fonteCopa, textosBotoes[i], 16, 2).x;
+                DrawTextEx(fonteCopa, textosBotoes[i], (Vector2){ botoesSubmenu[i].x + (botoesSubmenu[i].width / 2) - (textWidth / 2), botoesSubmenu[i].y + 20 }, 16, 2, azulBrasil);
             }
         }
 
-        DrawText("Feche a janela (X) ou aperte ESC para sair do programa", 180, 740, 20, LIGHTGRAY);
+        const char* footer = "Feche a janela (X) ou aperte ESC para sair";
+        int footerWidth = MeasureTextEx(fonteCopa, footer, 12, 2).x;
+        DrawTextEx(fonteCopa, footer, (Vector2){ 500 - (footerWidth / 2), 740 }, 12, 2, LIGHTGRAY);
 
         EndDrawing();
 
@@ -203,6 +214,7 @@ int main(){
         // Execução da Ação Escolhida
         // ==========================================
         if (acaoEscolhida != 0) {
+            UnloadFont(fonteCopa); 
             CloseWindow(); 
 
             printf("\n=========================================\n");
@@ -239,6 +251,10 @@ int main(){
             } 
             else if (acaoEscolhida == 8) jogarQuiz(figurinhas, mochila, album, total, &total_mochila, &total_album);
             else if (acaoEscolhida == 9) jogarGoleiro();
+            else if (acaoEscolhida == 10) {
+                // Se você já tiver a função jogarPenalti(); , basta substituir o printf abaixo
+                printf("O minigame de Penalti esta em construcao!\n");
+            }
 
             printf("\n=========================================\n");
             printf("Pressione ENTER para voltar ao menu grafico...");
@@ -247,16 +263,17 @@ int main(){
             while ((c = getchar()) != '\n' && c != EOF);
             getchar(); 
 
-            // Restaura o estado para o Menu Principal ao voltar
             estadoAtual = MENU_PRINCIPAL;
             
-            // Reabre a janela gráfica
             InitWindow(1000, 800, "Album de Figurinhas - Copa do Mundo");
+            fonteCopa = LoadFont("extras/PressStart2P-Regular.ttf");
             SetTargetFPS(60);
         }
     }
 
     printf("Saindo do programa...\n");
+
+    UnloadFont(fonteCopa); 
 
     free(figurinhas);
     free(album);
