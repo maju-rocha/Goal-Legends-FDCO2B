@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <raylib.h>
 #include "biblioteca.h"
 
@@ -41,6 +44,7 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
 
     // Inicializa o Raylib com 1000x800
     InitWindow(1000, 800, "Minijogo: Quiz da Copa");
+    Font fonteCopa = LoadFont("extras/PressStart2P-Regular.ttf"); // Carrega a fonte
     SetTargetFPS(60);
 
     EstadoQuiz estado = TELA_PERGUNTA;
@@ -97,12 +101,13 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
         ClearBackground(verdeCampo);
 
         if (estado == TELA_PERGUNTA) {
-            DrawText(TextFormat("Pergunta %d de %d", pergunta_atual + 1, num_perguntas), 40, 40, 20, LIGHTGRAY);
+            const char* numPergText = TextFormat("Pergunta %d de %d", pergunta_atual + 1, num_perguntas);
+            DrawTextEx(fonteCopa, numPergText, (Vector2){ 40, 40 }, 14, 2, LIGHTGRAY);
             
             // Centraliza o texto da pergunta
             const char* textoPergunta = banco[sorteadas[pergunta_atual]].pergunta;
-            int widthPergunta = MeasureText(textoPergunta, 30);
-            DrawText(textoPergunta, 500 - (widthPergunta / 2), 120, 30, WHITE);
+            int widthPergunta = MeasureTextEx(fonteCopa, textoPergunta, 16, 2).x;
+            DrawTextEx(fonteCopa, textoPergunta, (Vector2){ 500 - (widthPergunta / 2), 120 }, 16, 2, WHITE);
 
             for (int i = 0; i < 4; i++) {
                 bool mouseEmCima = CheckCollisionPointRec(mousePoint, btnOpcoes[i]);
@@ -110,8 +115,8 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
                 DrawRectangleLinesEx(btnOpcoes[i], 2, mouseEmCima ? azulBrasil : DARKGRAY);
                 
                 const char* textoOpcao = banco[sorteadas[pergunta_atual]].opcoes[i];
-                int widthOpcao = MeasureText(textoOpcao, 25);
-                DrawText(textoOpcao, btnOpcoes[i].x + (btnOpcoes[i].width / 2) - (widthOpcao / 2), btnOpcoes[i].y + 17, 25, azulBrasil);
+                int widthOpcao = MeasureTextEx(fonteCopa, textoOpcao, 14, 2).x;
+                DrawTextEx(fonteCopa, textoOpcao, (Vector2){ btnOpcoes[i].x + (btnOpcoes[i].width / 2) - (widthOpcao / 2), btnOpcoes[i].y + 22 }, 14, 2, azulBrasil);
             }
         } 
         else if (estado == TELA_FEEDBACK) {
@@ -119,30 +124,30 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
             const char* msg = acertou ? ">>> CORRETO! <<<" : ">>> INCORRETO! <<<";
             Color corMsg = acertou ? amareloBrasil : RED;
 
-            int widthMsg = MeasureText(msg, 40);
-            DrawText(msg, 500 - (widthMsg / 2), 250, 40, corMsg);
+            int widthMsg = MeasureTextEx(fonteCopa, msg, 28, 2).x;
+            DrawTextEx(fonteCopa, msg, (Vector2){ 500 - (widthMsg / 2), 250 }, 28, 2, corMsg);
             
             if (!acertou) {
                 int certa = banco[sorteadas[pergunta_atual]].correta;
                 const char* textoCerta = TextFormat("A resposta certa era: %s", banco[sorteadas[pergunta_atual]].opcoes[certa]);
-                int widthCerta = MeasureText(textoCerta, 25);
-                DrawText(textoCerta, 500 - (widthCerta / 2), 350, 25, WHITE);
+                int widthCerta = MeasureTextEx(fonteCopa, textoCerta, 14, 2).x;
+                DrawTextEx(fonteCopa, textoCerta, (Vector2){ 500 - (widthCerta / 2), 350 }, 14, 2, WHITE);
             }
 
             // Botão continuar
             bool mouseEmCima = CheckCollisionPointRec(mousePoint, btnContinuar);
             DrawRectangleRec(btnContinuar, mouseEmCima ? LIGHTGRAY : amareloBrasil);
-            int widthCont = MeasureText("Continuar", 25);
-            DrawText("Continuar", btnContinuar.x + (btnContinuar.width / 2) - (widthCont / 2), btnContinuar.y + 17, 25, azulBrasil);
+            int widthCont = MeasureTextEx(fonteCopa, "Continuar", 16, 2).x;
+            DrawTextEx(fonteCopa, "Continuar", (Vector2){ btnContinuar.x + (btnContinuar.width / 2) - (widthCont / 2), btnContinuar.y + 22 }, 16, 2, azulBrasil);
         }
         else if (estado == TELA_FIM) {
             const char* msgFim = "--- FIM DO QUIZ ---";
-            int widthFim = MeasureText(msgFim, 40);
-            DrawText(msgFim, 500 - (widthFim / 2), 150, 40, WHITE);
+            int widthFim = MeasureTextEx(fonteCopa, msgFim, 28, 2).x;
+            DrawTextEx(fonteCopa, msgFim, (Vector2){ 500 - (widthFim / 2), 150 }, 28, 2, WHITE);
             
             const char* msgScore = TextFormat("Voce acertou %d de %d!", score, num_perguntas);
-            int widthScore = MeasureText(msgScore, 35);
-            DrawText(msgScore, 500 - (widthScore / 2), 250, 35, amareloBrasil);
+            int widthScore = MeasureTextEx(fonteCopa, msgScore, 20, 2).x;
+            DrawTextEx(fonteCopa, msgScore, (Vector2){ 500 - (widthScore / 2), 250 }, 20, 2, amareloBrasil);
 
             const char* msgRecompensa;
             Color corRecompensa;
@@ -153,19 +158,20 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
                 msgRecompensa = "Sem recompensas desta vez. Tente novamente!";
                 corRecompensa = RED;
             }
-            int widthRec = MeasureText(msgRecompensa, 30);
-            DrawText(msgRecompensa, 500 - (widthRec / 2), 350, 30, corRecompensa);
+            int widthRec = MeasureTextEx(fonteCopa, msgRecompensa, 14, 2).x;
+            DrawTextEx(fonteCopa, msgRecompensa, (Vector2){ 500 - (widthRec / 2), 350 }, 14, 2, corRecompensa);
 
             // Botão sair
             bool mouseEmCima = CheckCollisionPointRec(mousePoint, btnContinuar);
             DrawRectangleRec(btnContinuar, mouseEmCima ? LIGHTGRAY : amareloBrasil);
-            int widthSair = MeasureText("Sair", 25);
-            DrawText("Sair", btnContinuar.x + (btnContinuar.width / 2) - (widthSair / 2), btnContinuar.y + 17, 25, azulBrasil);
+            int widthSair = MeasureTextEx(fonteCopa, "Sair", 16, 2).x;
+            DrawTextEx(fonteCopa, "Sair", (Vector2){ btnContinuar.x + (btnContinuar.width / 2) - (widthSair / 2), btnContinuar.y + 22 }, 16, 2, azulBrasil);
         }
 
         EndDrawing();
     }
 
+    UnloadFont(fonteCopa); // Libera a memória da fonte
     CloseWindow();
 
     if (score > 0) {
