@@ -12,6 +12,7 @@ MAR11 , Azzedine Ounahi             , Marrocos           , Grupo C, Comum
 COD15 , Meschak Elia                , RD Congo           , Grupo K, Comum
 ENG12 , Cole Palmer                 , Inglaterra         , Grupo L, Comum
 ENG8  , Dan Burn                    , Inglaterra         , Grupo L, Comum
+<<<<<<< HEAD
 BIH18 , Edin Dzeko                  , Bosnia             , Grupo B, Comum
 AUT3  , Patrick Pentz               , Austria            , Grupo J, Comum
 AUS11 , Jackson Irvine              , Australia          , Grupo D, Comum
@@ -32,3 +33,5 @@ JPN15 , Keito Nakamura              , Japao              , Grupo F, Comum
 CUW5  , Jurien Gaari                , Curacao            , Grupo E, Comum
 RSA18 , Iqraam Rayners              , Africa do Sul      , Grupo A, Comum
 CAN16 , Niko Sigur                  , Canada             , Grupo B, Comum
+=======
+>>>>>>> 0a5acdb (códigos atualizados)

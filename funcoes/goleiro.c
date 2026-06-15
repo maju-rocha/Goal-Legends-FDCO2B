@@ -15,6 +15,7 @@ void jogarGoleiro(){
     const int screenWidth = 1000;
     const int screenHeight = 800;
     InitWindow(screenWidth, screenHeight, "Minigame: Jogo do Goleiro");
+<<<<<<< HEAD
     Font fonteCopa = LoadFont("extras/PressStart2P-Regular.ttf");//Carrega a fonte
     
     // ==========================================
@@ -27,6 +28,9 @@ void jogarGoleiro(){
     UnloadImage(imagemBola); 
     // ==========================================
 
+=======
+    Font fonteCopa = LoadFont("extras/PressStart2P-Regular.ttf"); // Carrega a fonte
+>>>>>>> 0a5acdb (códigos atualizados)
     SetTargetFPS(60);
 
     //Variáveis
@@ -282,21 +286,33 @@ void jogarGoleiro(){
             const char* textoDefesas = TextFormat("Defesas: %i", defesas);
             DrawTextEx(fonteCopa, textoDefesas, (Vector2){ 20, 20 }, 18, 2, BLACK);
 
+<<<<<<< HEAD
             DrawTextEx(fonteCopa, TextFormat("Tempo: %.0f", tempoJogo), (Vector2){20, 60}, 18, 2, BLACK);//Texto do tempo de jogo
 
             DrawTextEx(fonteCopa, TextFormat("Nivel: %.1fx", multiplicadorDificuldade), (Vector2){20, 100}, 18, 2, BLACK);//Texto do nível de dificuldade
 
             const char* textoGols = TextFormat("Gols: %i", gols);
             DrawTextEx(fonteCopa, textoGols, (Vector2){ 20, 20 }, 24, 2, BLACK);
+=======
+<<<<<<< HEAD
+            DrawText(TextFormat("Gols: %i", gols), 10, 10, 40, BLACK);
+=======
+            const char* textoGols = TextFormat("Gols: %i", gols);
+            DrawTextEx(fonteCopa, textoGols, (Vector2){ 20, 20 }, 24, 2, BLACK);
+>>>>>>> 2664b94 (códigos atualizados)
+>>>>>>> 0a5acdb (códigos atualizados)
 
         EndDrawing();
     }
 
+<<<<<<< HEAD
     // ==========================================
     // CÓDIGO DO MOUSE (Limpeza)
     // ==========================================
     UnloadTexture(cursorBola);
 
+=======
+>>>>>>> 0a5acdb (códigos atualizados)
     UnloadFont(fonteCopa);
     CloseWindow();
     return;
