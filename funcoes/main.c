@@ -59,6 +59,14 @@ int main(){
     // ==========================================
     InitWindow(1000, 800, "Album de Figurinhas - Copa do Mundo");
     Font fonteCopa = LoadFont("extras/PressStart2P-Regular.ttf");
+    
+    // Configuração do Cursor
+    HideCursor(); 
+    Image imagemBola = LoadImage("extras/bola_cursor.png"); 
+    ImageResize(&imagemBola, 40, 40); 
+    Texture2D cursorBola = LoadTextureFromImage(imagemBola); 
+    UnloadImage(imagemBola); 
+
     SetTargetFPS(60);
 
     EstadoMenu estadoAtual = MENU_PRINCIPAL;
@@ -97,7 +105,7 @@ int main(){
         int acaoEscolhida = 0;
 
         // ==========================================
-        // Lógica de Cliques (Trocado para Released para o botão afundar)
+        // Lógica de Cliques
         // ==========================================
         if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
             if (estadoAtual == MENU_PRINCIPAL) {
@@ -238,12 +246,19 @@ int main(){
         DrawTextEx(fonteCopa, footer, (Vector2){ 500 - (footerWidth / 2) + 2, 740 + 2 }, 12, 2, BLACK); // Sombra do rodapé
         DrawTextEx(fonteCopa, footer, (Vector2){ 500 - (footerWidth / 2), 740 }, 12, 2, LIGHTGRAY);
 
+        // ==========================================
+        // DESENHO DO CURSOR PERSONALIZADO
+        // ==========================================
+        DrawTexture(cursorBola, (int)mousePoint.x - cursorBola.width/2, (int)mousePoint.y - cursorBola.height/2, WHITE);
+
         EndDrawing();
 
         // ==========================================
         // Execução da Ação Escolhida
         // ==========================================
         if (acaoEscolhida != 0) {
+            // Descarrega tudo antes de fechar a janela para o terminal
+            UnloadTexture(cursorBola);
             UnloadFont(fonteCopa); 
             CloseWindow(); 
 
@@ -294,14 +309,23 @@ int main(){
 
             estadoAtual = MENU_PRINCIPAL;
             
+            // Reabre a janela e recarrega os assets visuais
             InitWindow(1000, 800, "Album de Figurinhas - Copa do Mundo");
             fonteCopa = LoadFont("extras/PressStart2P-Regular.ttf");
+            
+            HideCursor();
+            Image imgBolaTemp = LoadImage("extras/bola_cursor.png"); 
+            ImageResize(&imgBolaTemp, 40, 40); 
+            cursorBola = LoadTextureFromImage(imgBolaTemp); 
+            UnloadImage(imgBolaTemp); 
+
             SetTargetFPS(60);
         }
     }
 
     printf("Saindo do programa...\n");
 
+    UnloadTexture(cursorBola);
     UnloadFont(fonteCopa); 
 
     free(figurinhas);

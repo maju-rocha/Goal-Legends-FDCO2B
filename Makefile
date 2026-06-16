@@ -44,6 +44,7 @@ quiz.o: funcoes/quiz.c headers/biblioteca.h
 goleiro.o: funcoes/goleiro.c headers/biblioteca.h
 	$(CC) $(CFLAGS) -c funcoes/goleiro.c
 
+
 run: main
 	./main
 
