@@ -105,7 +105,7 @@ int main(){
         int acaoEscolhida = 0;
 
         // ==========================================
-        // Lógica de Cliques (Trocado para Released para o botão afundar)
+        // Lógica de Cliques
         // ==========================================
         if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
             if (estadoAtual == MENU_PRINCIPAL) {
