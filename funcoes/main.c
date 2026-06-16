@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h> 
 #include <string.h> 
-
-
 #include <time.h> 
 #include <raylib.h>
 #include "../headers/biblioteca.h" 
@@ -107,7 +105,7 @@ int main(){
         int acaoEscolhida = 0;
 
         // ==========================================
-        // Lógica de Cliques
+        // Lógica de Cliques (Trocado para Released para o botão afundar)
         // ==========================================
         if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
             if (estadoAtual == MENU_PRINCIPAL) {
