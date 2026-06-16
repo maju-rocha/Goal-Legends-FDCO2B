@@ -28,10 +28,13 @@ void jogarGoleiro(){
     UnloadImage(imagemBola); 
     // ==========================================
 
+<<<<<<< HEAD
     Font fonteCopa = LoadFont("extras/PressStart2P-Regular.ttf"); // Carrega a fonte
 
     Font fonteCopa = LoadFont("extras/PressStart2P-Regular.ttf");//Carrega a fonte
 
+=======
+>>>>>>> 6f80856 (alteração do mouse)
     SetTargetFPS(60);
 
     //Variáveis
@@ -215,6 +218,7 @@ void jogarGoleiro(){
 
             DrawTextEx(fonteCopa, TextFormat("Nivel: %.1fx", multiplicadorDificuldade), (Vector2){20, 100}, 18, 2, BLACK);//Texto do nível de dificuldade
 
+<<<<<<< HEAD
             DrawText(TextFormat("Gols: %i", gols), 10, 10, 40, BLACK);
 
             const char* textoGols = TextFormat("Gols: %i", gols);
@@ -297,6 +301,12 @@ void jogarGoleiro(){
 
             const char* textoGols = TextFormat("Gols: %i", gols);
             DrawTextEx(fonteCopa, textoGols, (Vector2){ 20, 20 }, 24, 2, BLACK);
+=======
+            // ==========================================
+            // CÓDIGO DO MOUSE (Desenho)
+            // ==========================================
+            DrawTexture(cursorBola, (int)mousePoint.x - cursorBola.width/2, (int)mousePoint.y - cursorBola.height/2, WHITE);
+>>>>>>> 709c919 (alteração do mouse)
 
         EndDrawing();
     }
