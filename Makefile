@@ -5,7 +5,7 @@ LDFLAGS = -Lraylib/src -lraylib -lm -lpthread -ldl -lrt -lX11
 
 OBJ = main.o abrirPacote.o listarAlbum.o listarMochila.o \
     excluirAlbum.o excluirMochila.o pesquisar.o \
-    alterar.o resetarLista.o quiz.o goleiro.o
+    alterar.o resetarLista.o quiz.o goleiro.o penalti.o
 
 main: $(OBJ)
 	@echo "Gerando executavel..."
@@ -43,6 +43,9 @@ quiz.o: funcoes/quiz.c headers/biblioteca.h
 
 goleiro.o: funcoes/goleiro.c headers/biblioteca.h
 	$(CC) $(CFLAGS) -c funcoes/goleiro.c
+
+penalti.o: funcoes/penalti.c headers/biblioteca.h
+	$(CC) $(CFLAGS) -c funcoes/penalti.c
 
 
 run: main

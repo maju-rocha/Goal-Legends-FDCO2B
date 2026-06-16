@@ -296,9 +296,7 @@ int main(){
             } 
             else if (acaoEscolhida == 8) jogarQuiz(figurinhas, mochila, album, total, &total_mochila, &total_album);
             else if (acaoEscolhida == 9) jogarGoleiro();
-            else if (acaoEscolhida == 10) {
-                printf("O minigame de Penalti esta em construcao!\n");
-            }
+            else if (acaoEscolhida == 10) jogarPenalti(); // AQUI FOI ALTERADO PARA CHAMAR O JOGO
 
             printf("\n=========================================\n");
             printf("Pressione ENTER para voltar ao menu grafico...");
