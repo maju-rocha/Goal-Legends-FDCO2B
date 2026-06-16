@@ -27,4 +27,8 @@ void alterarFigurinha(Figurinha *vetor, int total);//cabeçalho da função alte
 
 void resetarLista(Figurinha *vetor, int total);//cabeçalho da função resetar lista de figurinhas
 
+void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int total, int *total_mochila, int *total_album); //cabeçalho da função do quiz
+
+void jogarGoleiro(); //cabeçalho da função do jogo do goleiro
+
 #endif
