@@ -16,6 +16,17 @@ void jogarGoleiro(){
     const int screenHeight = 800;
     InitWindow(screenWidth, screenHeight, "Minigame: Jogo do Goleiro");
     Font fonteCopa = LoadFont("extras/PressStart2P-Regular.ttf");//Carrega a fonte
+    
+    // ==========================================
+    // CÓDIGO DO MOUSE (Carregamento)
+    // ==========================================
+    HideCursor(); 
+    Image imagemBola = LoadImage("extras/bola_cursor.png"); 
+    ImageResize(&imagemBola, 40, 40); 
+    Texture2D cursorBola = LoadTextureFromImage(imagemBola); 
+    UnloadImage(imagemBola); 
+    // ==========================================
+
     SetTargetFPS(60);
 
     //Variáveis
@@ -43,6 +54,11 @@ void jogarGoleiro(){
 
     while (!WindowShouldClose())
     {
+        // ==========================================
+        // CÓDIGO DO MOUSE (Posição)
+        // ==========================================
+        Vector2 mousePoint = GetMousePosition();
+
         boxPosition.y += boxSpeed.y;//Move a bola verticalmente
         boxPosition.x += boxSpeed.x;//Move a bola horizontalmente
 
@@ -190,9 +206,18 @@ void jogarGoleiro(){
 
             DrawTextEx(fonteCopa, TextFormat("Nivel: %.1fx", multiplicadorDificuldade), (Vector2){20, 100}, 18, 2, BLACK);//Texto do nível de dificuldade
 
+            // ==========================================
+            // CÓDIGO DO MOUSE (Desenho)
+            // ==========================================
+            DrawTexture(cursorBola, (int)mousePoint.x - cursorBola.width/2, (int)mousePoint.y - cursorBola.height/2, WHITE);
 
         EndDrawing();
     }
+
+    // ==========================================
+    // CÓDIGO DO MOUSE (Limpeza)
+    // ==========================================
+    UnloadTexture(cursorBola);
 
     UnloadFont(fonteCopa);
     CloseWindow();
