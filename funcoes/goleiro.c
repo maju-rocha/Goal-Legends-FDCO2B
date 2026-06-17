@@ -15,7 +15,6 @@ void jogarGoleiro(){
     const int screenWidth = 1000;
     const int screenHeight = 800;
     InitWindow(screenWidth, screenHeight, "Minigame: Jogo do Goleiro");
-
     Font fonteCopa = LoadFont("extras/PressStart2P-Regular.ttf");//Carrega a fonte
     
     // ==========================================
@@ -27,10 +26,6 @@ void jogarGoleiro(){
     Texture2D cursorBola = LoadTextureFromImage(imagemBola); 
     UnloadImage(imagemBola); 
     // ==========================================
-
-    Font fonteCopa = LoadFont("extras/PressStart2P-Regular.ttf"); // Carrega a fonte
-
-    Font fonteCopa = LoadFont("extras/PressStart2P-Regular.ttf");//Carrega a fonte
 
     SetTargetFPS(60);
 
@@ -44,6 +39,10 @@ void jogarGoleiro(){
     float proximaAceleracao = 20.0f;
     float multiplicadorDificuldade = 1.0f;
     float velocidadeGoleiro = 8.0f;
+
+    Texture2D imagemCampo = LoadTexture("imagens/imagem_campogoleiro.png");
+    Texture2D imagemAtacante = LoadTexture("imagens/imagem_atacante.png");
+    Texture2D imagemGoleiro = LoadTexture("imagens/imagem_goleiro.png");
 
     srand(time(NULL));//inicia aleatoriedade para as direções da bola após defesa
     
@@ -138,52 +137,23 @@ void jogarGoleiro(){
         
 
         BeginDrawing();
-            ClearBackground(verdeCampo);
 
+            //Desenha o campo
+            DrawTexture(imagemCampo, 0, 0, WHITE);
+
+            //Desenha linha do campo
+            DrawRectangleRec((Rectangle){golHitbox.x - 25, golHitbox.y + 200, golHitbox.width + 50, golHitbox.height + 50}, WHITE);
+    
             //Se houve colisão
             DrawCircleV(boxPosition, 29, BLACK);//Contorno da bola
             DrawCircleV(boxPosition, 25, WHITE);//Cor da bola
-
-            //Desenha o goleiro
-            DrawRectangleRec(obstacleRec, BLUE);//Cor do goleiro
-            DrawRectangleLinesEx(obstacleRec, 4, BLACK);//Contorno do goleiro
-            
-            //Desenha os atacantes
-            for(int i = 0; i < qtdAtacantes; i++){
-                if(!atacantes[i].usado){
-                    DrawRectangleRec(atacantes[i].rec, RED);//Cor dos atancantes
-                    DrawRectangleLinesEx(atacantes[i].rec, 4, BLACK);//Contorno dos atacantes
-                }//if
-            }//for
-
-            //Texto de defesas
-            const char* textoDefesas = TextFormat("Defesas: %i", defesas);
-            DrawTextEx(fonteCopa, textoDefesas, (Vector2){ 20, 20 }, 18, 2, BLACK);
-
-            DrawTextEx(fonteCopa, TextFormat("Tempo: %.0f", tempoJogo), (Vector2){20, 60}, 18, 2, BLACK);//Texto do tempo de jogo
-
-            DrawTextEx(fonteCopa, TextFormat("Nivel: %.1fx", multiplicadorDificuldade), (Vector2){20, 100}, 18, 2, BLACK);//Texto do nível de dificuldade
-
-            DrawText(TextFormat("Gols: %i", gols), 10, 10, 40, BLACK);
-
-            const char* textoGols = TextFormat("Gols: %i", gols);
-            DrawTextEx(fonteCopa, textoGols, (Vector2){ 20, 20 }, 24, 2, BLACK);
-
-            //Se houve colisão
-            DrawCircleV(boxPosition, 29, BLACK);//Contorno da bola
-            DrawCircleV(boxPosition, 25, WHITE);//Cor da bola
-
-            //Desenha o goleiro
-            DrawRectangleRec(obstacleRec, BLUE);//Cor do goleiro
-            DrawRectangleLinesEx(obstacleRec, 4, BLACK);//Contorno do goleiro
-            
         
             //Formato do Gol (traves)
-            DrawRectangleRec((Rectangle){golHitbox.x - 4, golHitbox.y - 4, golHitbox.width + 8, golHitbox.height + 8}, BLACK); // contorno do gol
+            DrawRectangleRec((Rectangle){golHitbox.x - 4, golHitbox.y - 4, golHitbox.width + 8, golHitbox.height + 8}, BLACK); //contorno do gol
             DrawRectangleRec(golHitbox, WHITE);
             
             //Fundo do gol
-            DrawRectangleRec((Rectangle){golHitbox.x + 8, golHitbox.y + 8, golHitbox.width - 16, golHitbox.height - 16}, BLACK); // contorno do gol
+            DrawRectangleRec((Rectangle){golHitbox.x + 8, golHitbox.y + 8, golHitbox.width - 16, golHitbox.height - 16}, BLACK); //contorno do gol
             DrawRectangleRec((Rectangle){golHitbox.x + 12, golHitbox.y + 12, golHitbox.width - 24, golHitbox.height - 24}, verdeGol); // gol
 
             //Linhas verticais da rede
@@ -224,11 +194,15 @@ void jogarGoleiro(){
             DrawRectangleRec((Rectangle){golHitbox.x + 10, golHitbox.y + 62, 780, 2}, BLACK); 
             DrawRectangleRec((Rectangle){golHitbox.x + 10, golHitbox.y + 90, 780, 2}, BLACK); 
             
+            //Desenha o goleiro
+            DrawTexturePro(imagemGoleiro, (Rectangle){0, 0, obstacleRec.width, obstacleRec.height},obstacleRec, (Vector2){0, 0}, 0, WHITE);
+
             //Desenha os atacantes
             for(int i = 0; i < qtdAtacantes; i++){
                 if(!atacantes[i].usado){
-                    DrawRectangleRec(atacantes[i].rec, RED);//Cor dos atancantes
+                    DrawTexturePro(imagemAtacante,(Rectangle){0, 0, imagemAtacante.width, imagemAtacante.height}, atacantes[i].rec, (Vector2){0, 0}, 0, WHITE);
                     DrawRectangleLinesEx(atacantes[i].rec, 4, BLACK);//Contorno dos atacantes
+                    
                 }//if
             }//for
 
@@ -240,8 +214,10 @@ void jogarGoleiro(){
 
             DrawTextEx(fonteCopa, TextFormat("Nivel: %.1fx", multiplicadorDificuldade), (Vector2){20, 100}, 18, 2, BLACK);//Texto do nível de dificuldade
 
-            const char* textoGols = TextFormat("Gols: %i", gols);
-            DrawTextEx(fonteCopa, textoGols, (Vector2){ 20, 20 }, 24, 2, BLACK);
+            // ==========================================
+            // CÓDIGO DO MOUSE (Desenho)
+            // ==========================================
+            DrawTexture(cursorBola, (int)mousePoint.x - cursorBola.width/2, (int)mousePoint.y - cursorBola.height/2, WHITE);
 
         EndDrawing();
     }

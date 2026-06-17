@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -273,9 +272,6 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
             } else {
                 DrawRectangleRounded((Rectangle){ btnContinuar.x + 3, btnContinuar.y + 3, btnContinuar.width, btnContinuar.height }, 0.15f, 4, sombraUI);
             }
-            int widthRec = MeasureTextEx(fonteCopa, msgRecompensa, 14, 2).x;
-            DrawTextEx(fonteCopa, msgRecompensa, (Vector2){ 500 - (widthRec / 2) + 2, 350 + 2 }, 14, 2, BLACK); 
-            DrawTextEx(fonteCopa, msgRecompensa, (Vector2){ 500 - (widthRec / 2), 350 }, 14, 2, corRecompensa);
 
             Rectangle btnAnimado = { btnContinuar.x, btnContinuar.y + offsetAnimacao, btnContinuar.width, btnContinuar.height };
             DrawRectangleRounded(btnAnimado, 0.15f, 4, corFundoBtn);
