@@ -97,7 +97,7 @@ void jogarPenalti() {
                     }
                 } else {
                     // Adiciona curva
-                    if (IsKeyDown(KEY_LEFT)) {
+                    if (IsKeyDown(KEY_LEFT)){
                         velocidadeBola.x -= 0.45f;
                         intensidadeEfeito = -1.0f;
                         rotacaoBola -= 0.3f;
@@ -250,9 +250,9 @@ void jogarPenalti() {
                 if (bolaChutada && fabsf(intensidadeEfeito) > 0.1f) {
                     DrawText(intensidadeEfeito > 0 ? "EFEITO MAGNETICO >>>" : "<<< EFEITO MAGNETICO", 
                              (int)(posicaoBola.x - 110), (int)(posicaoBola.y + 25), 14, amareloBrasil);
-                }
+                }//if
 
-                if (!bolaChutada) {
+                if (!bolaChutada){
                     float miraX = posicaoBola.x + sinf(anguloMira) * -220.0f;
                     float miraY = posicaoBola.y - cosf(anguloMira) * 220.0f;
                     DrawLineBlurMode(posicaoBola, (Vector2){ miraX, miraY }, 4.0f, amareloBrasil);
