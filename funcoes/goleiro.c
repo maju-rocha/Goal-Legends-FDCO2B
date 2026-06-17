@@ -28,13 +28,10 @@ void jogarGoleiro(){
     UnloadImage(imagemBola); 
     // ==========================================
 
-<<<<<<< HEAD
     Font fonteCopa = LoadFont("extras/PressStart2P-Regular.ttf"); // Carrega a fonte
 
     Font fonteCopa = LoadFont("extras/PressStart2P-Regular.ttf");//Carrega a fonte
 
-=======
->>>>>>> 6f80856 (alteração do mouse)
     SetTargetFPS(60);
 
     //Variáveis
@@ -143,10 +140,6 @@ void jogarGoleiro(){
         BeginDrawing();
             ClearBackground(verdeCampo);
 
-            // Se houve colisão
-            DrawCircleV(boxPosition, 29, BLACK); // contorno
-            DrawCircleV(boxPosition, 25, WHITE); // bola
-
             //Se houve colisão
             DrawCircleV(boxPosition, 29, BLACK);//Contorno da bola
             DrawCircleV(boxPosition, 25, WHITE);//Cor da bola
@@ -154,53 +147,6 @@ void jogarGoleiro(){
             //Desenha o goleiro
             DrawRectangleRec(obstacleRec, BLUE);//Cor do goleiro
             DrawRectangleLinesEx(obstacleRec, 4, BLACK);//Contorno do goleiro
-            
-        
-            //Formato do Gol (traves)
-            DrawRectangleRec((Rectangle){golHitbox.x - 4, golHitbox.y - 4, golHitbox.width + 8, golHitbox.height + 8}, BLACK); // contorno do gol
-            DrawRectangleRec(golHitbox, WHITE);
-            
-            //Fundo do gol
-            DrawRectangleRec((Rectangle){golHitbox.x + 8, golHitbox.y + 8, golHitbox.width - 16, golHitbox.height - 16}, BLACK); // contorno do gol
-            DrawRectangleRec((Rectangle){golHitbox.x + 12, golHitbox.y + 12, golHitbox.width - 24, golHitbox.height - 24}, verdeGol); // gol
-
-            //Linhas verticais da rede
-            DrawRectangleRec((Rectangle){golHitbox.x + 50, golHitbox.y + 12, 2, 80}, BLACK); 
-            DrawRectangleRec((Rectangle){golHitbox.x + 100, golHitbox.y + 12, 2, 80}, BLACK); 
-            DrawRectangleRec((Rectangle){golHitbox.x + 150, golHitbox.y + 12, 2, 80}, BLACK); 
-            DrawRectangleRec((Rectangle){golHitbox.x + 200, golHitbox.y + 12, 2, 80}, BLACK); 
-            DrawRectangleRec((Rectangle){golHitbox.x + 250, golHitbox.y + 12, 2, 80}, BLACK);
-            DrawRectangleRec((Rectangle){golHitbox.x + 300, golHitbox.y + 12, 2, 80}, BLACK); 
-            DrawRectangleRec((Rectangle){golHitbox.x + 350, golHitbox.y + 12, 2, 80}, BLACK); 
-            DrawRectangleRec((Rectangle){golHitbox.x + 400, golHitbox.y + 12, 2, 80}, BLACK); 
-            DrawRectangleRec((Rectangle){golHitbox.x + 450, golHitbox.y + 12, 2, 80}, BLACK);
-            DrawRectangleRec((Rectangle){golHitbox.x + 500, golHitbox.y + 12, 2, 80}, BLACK); 
-            DrawRectangleRec((Rectangle){golHitbox.x + 550, golHitbox.y + 12, 2, 80}, BLACK); 
-            DrawRectangleRec((Rectangle){golHitbox.x + 600, golHitbox.y + 12, 2, 80}, BLACK); 
-            DrawRectangleRec((Rectangle){golHitbox.x + 650, golHitbox.y + 12, 2, 80}, BLACK); 
-            DrawRectangleRec((Rectangle){golHitbox.x + 700, golHitbox.y + 12, 2, 80}, BLACK); 
-            DrawRectangleRec((Rectangle){golHitbox.x + 750, golHitbox.y + 12, 2, 80}, BLACK); 
-            DrawRectangleRec((Rectangle){golHitbox.x + 25, golHitbox.y + 12, 2, 80}, BLACK); 
-            DrawRectangleRec((Rectangle){golHitbox.x + 75, golHitbox.y + 12, 2, 80}, BLACK); 
-            DrawRectangleRec((Rectangle){golHitbox.x + 125, golHitbox.y + 12, 2, 80}, BLACK); 
-            DrawRectangleRec((Rectangle){golHitbox.x + 175, golHitbox.y + 12, 2, 80}, BLACK);
-            DrawRectangleRec((Rectangle){golHitbox.x + 225, golHitbox.y + 12, 2, 80}, BLACK);
-            DrawRectangleRec((Rectangle){golHitbox.x + 275, golHitbox.y + 12, 2, 80}, BLACK); 
-            DrawRectangleRec((Rectangle){golHitbox.x + 325, golHitbox.y + 12, 2, 80}, BLACK); 
-            DrawRectangleRec((Rectangle){golHitbox.x + 375, golHitbox.y + 12, 2, 80}, BLACK); 
-            DrawRectangleRec((Rectangle){golHitbox.x + 425, golHitbox.y + 12, 2, 80}, BLACK); 
-            DrawRectangleRec((Rectangle){golHitbox.x + 475, golHitbox.y + 12, 2, 80}, BLACK); 
-            DrawRectangleRec((Rectangle){golHitbox.x + 525, golHitbox.y + 12, 2, 80}, BLACK); 
-            DrawRectangleRec((Rectangle){golHitbox.x + 575, golHitbox.y + 12, 2, 80}, BLACK); 
-            DrawRectangleRec((Rectangle){golHitbox.x + 625, golHitbox.y + 12, 2, 80}, BLACK); 
-            DrawRectangleRec((Rectangle){golHitbox.x + 675, golHitbox.y + 12, 2, 80}, BLACK); 
-            DrawRectangleRec((Rectangle){golHitbox.x + 725, golHitbox.y + 12, 2, 80}, BLACK); 
-            DrawRectangleRec((Rectangle){golHitbox.x + 775, golHitbox.y + 12, 2, 80}, BLACK); 
-
-            //Linhas horizontais da rede
-            DrawRectangleRec((Rectangle){golHitbox.x + 10, golHitbox.y + 35, 780, 2}, BLACK); 
-            DrawRectangleRec((Rectangle){golHitbox.x + 10, golHitbox.y + 62, 780, 2}, BLACK); 
-            DrawRectangleRec((Rectangle){golHitbox.x + 10, golHitbox.y + 90, 780, 2}, BLACK); 
             
             //Desenha os atacantes
             for(int i = 0; i < qtdAtacantes; i++){
@@ -218,16 +164,11 @@ void jogarGoleiro(){
 
             DrawTextEx(fonteCopa, TextFormat("Nivel: %.1fx", multiplicadorDificuldade), (Vector2){20, 100}, 18, 2, BLACK);//Texto do nível de dificuldade
 
-<<<<<<< HEAD
             DrawText(TextFormat("Gols: %i", gols), 10, 10, 40, BLACK);
 
             const char* textoGols = TextFormat("Gols: %i", gols);
             DrawTextEx(fonteCopa, textoGols, (Vector2){ 20, 20 }, 24, 2, BLACK);
 
-            // Se houve colisão
-            DrawCircleV(boxPosition, 29, BLACK); // contorno
-            DrawCircleV(boxPosition, 25, WHITE); // bola
-
             //Se houve colisão
             DrawCircleV(boxPosition, 29, BLACK);//Contorno da bola
             DrawCircleV(boxPosition, 25, WHITE);//Cor da bola
@@ -301,12 +242,6 @@ void jogarGoleiro(){
 
             const char* textoGols = TextFormat("Gols: %i", gols);
             DrawTextEx(fonteCopa, textoGols, (Vector2){ 20, 20 }, 24, 2, BLACK);
-=======
-            // ==========================================
-            // CÓDIGO DO MOUSE (Desenho)
-            // ==========================================
-            DrawTexture(cursorBola, (int)mousePoint.x - cursorBola.width/2, (int)mousePoint.y - cursorBola.height/2, WHITE);
->>>>>>> 709c919 (alteração do mouse)
 
         EndDrawing();
     }
