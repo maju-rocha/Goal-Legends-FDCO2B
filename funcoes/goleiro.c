@@ -17,9 +17,7 @@ void jogarGoleiro(){
     InitWindow(screenWidth, screenHeight, "Minigame: Jogo do Goleiro");
     Font fonteCopa = LoadFont("extras/PressStart2P-Regular.ttf");//Carrega a fonte
     
-    // ==========================================
-    // CÓDIGO DO MOUSE (Carregamento)
-    // ==========================================
+    //Mouse
     HideCursor(); 
     Image imagemBola = LoadImage("extras/bola_cursor.png"); 
     ImageResize(&imagemBola, 40, 40); 
@@ -31,6 +29,7 @@ void jogarGoleiro(){
 
     //Variáveis
     int defesas = 0;
+    int vidas = 3;
 
     Atacante atacantes[2];
     int qtdAtacantes = 0;
@@ -43,6 +42,8 @@ void jogarGoleiro(){
     Texture2D imagemCampo = LoadTexture("imagens/imagem_campogoleiro.png");
     Texture2D imagemAtacante = LoadTexture("imagens/imagem_atacante.png");
     Texture2D imagemGoleiro = LoadTexture("imagens/imagem_goleiro.png");
+    Texture2D imagemVida = LoadTexture("imagens/imagem_vida.png");
+    Texture2D imagemFundoPontuacao = LoadTexture("imagens/Imagem_fundomenu.png");
 
     srand(time(NULL));//inicia aleatoriedade para as direções da bola após defesa
     
@@ -58,9 +59,7 @@ void jogarGoleiro(){
 
     while (!WindowShouldClose())
     {
-        // ==========================================
-        // CÓDIGO DO MOUSE (Posição)
-        // ==========================================
+        //Mouse
         Vector2 mousePoint = GetMousePosition();
 
         boxPosition.y += boxSpeed.y;//Move a bola verticalmente
@@ -69,27 +68,27 @@ void jogarGoleiro(){
         //Ricocheteia a bola no retangulo
         if((boxPosition.y < 25) || (boxPosition.y > screenHeight -25)){
             boxSpeed.y *= -1;
-        }
+        }//if
         if((boxPosition.x < 25) || (boxPosition.x > screenWidth -25)){
             boxSpeed.x *= -1;
-        }
+        }//if
 
         Rectangle boxRec = { boxPosition.x -25, boxPosition.y -25, 50, 50 };
 
         bool collisionGoleiro = false;
         bool collisionGol = false;
 
-        if (CheckCollisionRecs(boxRec, obstacleRec)){
+        if(CheckCollisionRecs(boxRec, obstacleRec)){
             collisionGoleiro = true;
         }else{
             collisionGoleiro = false;
-        }if (CheckCollisionRecs(boxRec, golHitbox)){
+        }if(CheckCollisionRecs(boxRec, golHitbox)){
             collisionGol = true;
         }else{
             collisionGol = false;
         }
 
-        if (collisionGoleiro){
+        if(collisionGoleiro){
             defesas++;
             boxPosition = (Vector2){ 500, 27 };//Reseta a posição da bola
 
@@ -98,12 +97,12 @@ void jogarGoleiro(){
 
             qtdAtacantes = rand() % 3;//Spawna de 0 a 2 atacantes
 
-            for (int i = 0; i < qtdAtacantes; i++){
+            for(int i = 0; i < qtdAtacantes; i++){
                 atacantes[i].rec = (Rectangle){rand() % 750 + 50, rand() % 350 + 150, 150, 30};//Posição aleatória dos atacantes
 
                 atacantes[i].usado = false;
-            }
-        }
+            }//for
+        }//if
 
         for(int i = 0; i < qtdAtacantes; i++){
             if(!atacantes[i].usado && CheckCollisionRecs(boxRec, atacantes[i].rec)){
@@ -112,7 +111,7 @@ void jogarGoleiro(){
 
                 boxSpeed.x = (rand() % 11) - 5;
 
-                if (boxSpeed.x == 0){
+                if(boxSpeed.x == 0){
                     boxSpeed.x = 1;
                 }//if
             }//if
@@ -125,15 +124,15 @@ void jogarGoleiro(){
 
         tempoJogo += GetFrameTime();
 
-        if (tempoJogo >= proximaAceleracao){
+        if(tempoJogo >= proximaAceleracao){
             multiplicadorDificuldade += 0.1f;
             proximaAceleracao += 20.0f;
             velocidadeGoleiro += 0.5f;
         }//if
 
             //Teclas para o goleiro
-            if (IsKeyDown(KEY_RIGHT)) obstacleRec.x += velocidadeGoleiro;
-            if (IsKeyDown(KEY_LEFT)) obstacleRec.x -= velocidadeGoleiro;
+            if(IsKeyDown(KEY_RIGHT)) obstacleRec.x += velocidadeGoleiro;
+            if(IsKeyDown(KEY_LEFT)) obstacleRec.x -= velocidadeGoleiro;
         
 
         BeginDrawing();
@@ -214,17 +213,19 @@ void jogarGoleiro(){
 
             DrawTextEx(fonteCopa, TextFormat("Nivel: %.1fx", multiplicadorDificuldade), (Vector2){20, 100}, 18, 2, BLACK);//Texto do nível de dificuldade
 
-            // ==========================================
-            // CÓDIGO DO MOUSE (Desenho)
-            // ==========================================
+            //Desenha as vidas
+            DrawTexturePro(imagemFundoPontuacao, (Rectangle){0, 0, imagemFundoPontuacao.width, imagemFundoPontuacao.height}, (Rectangle){screenWidth - 185, 0, 200, 100}, (Vector2){0, 0}, 0, WHITE);
+            DrawTexturePro(imagemVida, (Rectangle){0, 0, imagemVida.width, imagemVida.height}, (Rectangle){screenWidth - 60, 20, 50, 50}, (Vector2){0, 0}, 0, WHITE);
+            DrawTexturePro(imagemVida, (Rectangle){0, 0, imagemVida.width, imagemVida.height}, (Rectangle){screenWidth - 110 , 20, 50, 50}, (Vector2){0, 0}, 0, WHITE);
+            DrawTexturePro(imagemVida, (Rectangle){0, 0, imagemVida.width, imagemVida.height}, (Rectangle){screenWidth - 160 , 20, 50, 50}, (Vector2){0, 0}, 0, WHITE);
+
+            //Mouse Desenho
             DrawTexture(cursorBola, (int)mousePoint.x - cursorBola.width/2, (int)mousePoint.y - cursorBola.height/2, WHITE);
 
         EndDrawing();
     }
 
-    // ==========================================
-    // CÓDIGO DO MOUSE (Limpeza)
-    // ==========================================
+    //Mouse limpeza
     UnloadTexture(cursorBola);
 
     UnloadFont(fonteCopa);
