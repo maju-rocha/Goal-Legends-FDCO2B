@@ -10,12 +10,29 @@ typedef struct{
     bool usado;
 }Atacante;
 
+//Funcao para contorno de texto
+void DrawTextOutline(const char *text, int x, int y, int fontSize, Color textColor, Color outlineColor){
+    
+    int offset = 2;
+
+    for (int dx = -offset; dx <= offset; dx++){
+        for (int dy = -offset; dy <= offset; dy++){
+            if (dx != 0 || dy != 0){
+                DrawText(text, x + dx, y + dy, fontSize, outlineColor);
+            }//if
+        }//for
+    }//for
+
+    DrawText(text, x, y, fontSize, textColor);
+}
+
 void jogarGoleiro(int *qtd_pacotes){
     
     //Inicialização da tela
     const int screenWidth = 1000;
     const int screenHeight = 800;
     InitWindow(screenWidth, screenHeight, "Minigame: Jogo do Goleiro");
+    SetExitKey(KEY_NULL);
     
     //Váriaveis das imagens
     Texture2D imagemCampo = LoadTexture("imagens/imagem_campogoleiro.png");
@@ -31,6 +48,8 @@ void jogarGoleiro(int *qtd_pacotes){
     Font fonteCopa = LoadFont("extras/PressStart2P-Regular.ttf");//Carrega a fonte
     
     bool jogarNovamente = true;
+    bool fecharPrograma = false;
+    bool mostrarExplicacao = true;
 
     //Opções fim de jogo
     Rectangle btnMenu = {300, 450, 400, 60};
@@ -38,7 +57,40 @@ void jogarGoleiro(int *qtd_pacotes){
     
     srand(time(NULL));//inicia aleatoriedade para as direções da bola após defesa
 
+    while(!WindowShouldClose() && mostrarExplicacao){
+
+        Color fundoexplicacao = (Color){98, 88, 237, 255};
+
+        BeginDrawing();
+        ClearBackground(fundoexplicacao);
+
+        DrawTextOutline("MINIGAME: GOLEIRO", 280, 100, 40, WHITE, BLACK);
+
+        DrawTextOutline("Defenda os chutes pressionando as setas do teclado | <- | -> |", 100, 220, 27, WHITE, BLACK);
+
+        DrawTextOutline("Voce tem 3 vidas", 100, 260, 27, WHITE, BLACK);
+
+        DrawTextOutline("Se receber um gol perde uma vida", 100, 300, 27, WHITE, BLACK);
+
+        DrawTextOutline("A cada 30 segundos percorridos = 1 pacote.", 100, 340, 27, WHITE, BLACK);
+
+        DrawTextOutline("Pressione qualquer tecla para comecar", 100, 450, 27, YELLOW, BLACK);
+
+        EndDrawing();
+
+        if(GetKeyPressed() != 0){
+            mostrarExplicacao = false;
+
+        }//if
+    
+    }//while
+
     while (jogarNovamente){
+        
+        if(fecharPrograma){
+            CloseWindow();
+            exit(0);
+        }//if
 
         SetTargetFPS(60);
 
@@ -65,10 +117,21 @@ void jogarGoleiro(int *qtd_pacotes){
         Vector2 boxSpeed = {((rand() % 11) - 5) * multiplicadorDificuldade, 7.0f * multiplicadorDificuldade};//Velocidade inicial da bola de acordo com a dificuldade
 
         //Colisões
-        Rectangle obstacleRec = {(screenWidth - 200) / 2, screenHeight - 140, 200, 30}; // Posição e tamanho do obstáculo
-        Rectangle golHitbox = {(screenWidth - 800) / 2, screenHeight - 100, 800, 100}; // Posição e tamanho do gol
+        Rectangle obstacleRec = {(screenWidth - 200) / 2, screenHeight - 140, 200, 30}; //Posição e tamanho do obstáculo
+        Rectangle golHitbox = {(screenWidth - 800) / 2, screenHeight - 100, 800, 100}; //Posição e tamanho do gol
 
-        while (!WindowShouldClose() && !fimdejogo){
+        while (!fimdejogo){
+
+            if (WindowShouldClose()) {
+                fecharPrograma = true;
+                
+                break;
+            }
+            if(IsKeyPressed(KEY_ESCAPE)){
+                jogarNovamente = false; 
+
+                break;
+            }
             //Mouse
             Vector2 mousePoint = GetMousePosition();
             
@@ -156,7 +219,7 @@ void jogarGoleiro(int *qtd_pacotes){
                 velocidadeGoleiro += 0.5f;
             }//if
 
-            // LOGICA DOS PACOTES CONSERTADA
+            //Pacotes
             if(tempoJogo >= proximoPacote){
                 if (qtd_pacotes != NULL) {
                     (*qtd_pacotes)++;
@@ -194,7 +257,9 @@ void jogarGoleiro(int *qtd_pacotes){
             DrawRectangleRec((Rectangle){golHitbox.x + 12, golHitbox.y + 12, golHitbox.width - 24, golHitbox.height - 24}, verdeGol); // gol
             
             //Linhas verticais da rede
+            DrawRectangleRec((Rectangle){golHitbox.x + 25, golHitbox.y + 12, 2, 80}, BLACK); 
             DrawRectangleRec((Rectangle){golHitbox.x + 50, golHitbox.y + 12, 2, 80}, BLACK); 
+            DrawRectangleRec((Rectangle){golHitbox.x + 75, golHitbox.y + 12, 2, 80}, BLACK); 
             DrawRectangleRec((Rectangle){golHitbox.x + 100, golHitbox.y + 12, 2, 80}, BLACK); 
             DrawRectangleRec((Rectangle){golHitbox.x + 150, golHitbox.y + 12, 2, 80}, BLACK); 
             DrawRectangleRec((Rectangle){golHitbox.x + 200, golHitbox.y + 12, 2, 80}, BLACK); 
@@ -209,8 +274,6 @@ void jogarGoleiro(int *qtd_pacotes){
             DrawRectangleRec((Rectangle){golHitbox.x + 650, golHitbox.y + 12, 2, 80}, BLACK); 
             DrawRectangleRec((Rectangle){golHitbox.x + 700, golHitbox.y + 12, 2, 80}, BLACK); 
             DrawRectangleRec((Rectangle){golHitbox.x + 750, golHitbox.y + 12, 2, 80}, BLACK); 
-            DrawRectangleRec((Rectangle){golHitbox.x + 25, golHitbox.y + 12, 2, 80}, BLACK); 
-            DrawRectangleRec((Rectangle){golHitbox.x + 75, golHitbox.y + 12, 2, 80}, BLACK); 
             DrawRectangleRec((Rectangle){golHitbox.x + 125, golHitbox.y + 12, 2, 80}, BLACK); 
             DrawRectangleRec((Rectangle){golHitbox.x + 175, golHitbox.y + 12, 2, 80}, BLACK);
             DrawRectangleRec((Rectangle){golHitbox.x + 225, golHitbox.y + 12, 2, 80}, BLACK);
@@ -249,10 +312,33 @@ void jogarGoleiro(int *qtd_pacotes){
                 }//if
             }//for
 
-            //Texto de Tempo / Dificuldade
+            //Fundo dos textos
             DrawTexturePro(imagemFundoPontuacao,(Rectangle){0, 0, imagemFundoPontuacao.width, imagemFundoPontuacao.height}, fundoMenuRec,(Vector2){0, 0}, 0,Fade(WHITE, 0.8f));
-            DrawTextEx(fonteCopa, TextFormat("Tempo: %.0f", tempoJogo), (Vector2){20, 50}, 14, 2, WHITE);//Texto do tempo de jogo
-            DrawTextEx(fonteCopa, TextFormat("Dificuldade: %.1fx", multiplicadorDificuldade), (Vector2){20, 30}, 14, 2, WHITE);
+            
+            //Texto tempo
+            const char *textoTempo = TextFormat("Tempo: %.0f", tempoJogo);
+
+            //Contorno preto
+            DrawTextEx(fonteCopa, textoTempo, (Vector2){18, 50}, 14, 2, BLACK);
+            DrawTextEx(fonteCopa, textoTempo, (Vector2){22, 50}, 14, 2, BLACK);
+            DrawTextEx(fonteCopa, textoTempo, (Vector2){20, 48}, 14, 2, BLACK);
+            DrawTextEx(fonteCopa, textoTempo, (Vector2){20, 52}, 14, 2, BLACK);
+
+            //Texto
+            DrawTextEx(fonteCopa, textoTempo, (Vector2){20, 50}, 14, 2, WHITE);
+
+
+            //Texto Dificuldade
+            const char *textoDificuldade = TextFormat("Dificuldade: %.1fx", multiplicadorDificuldade);
+
+            //Contorno preto
+            DrawTextEx(fonteCopa, textoDificuldade, (Vector2){18, 30}, 14, 2, BLACK);
+            DrawTextEx(fonteCopa, textoDificuldade, (Vector2){22, 30}, 14, 2, BLACK);
+            DrawTextEx(fonteCopa, textoDificuldade, (Vector2){20, 28}, 14, 2, BLACK);
+            DrawTextEx(fonteCopa, textoDificuldade, (Vector2){20, 32}, 14, 2, BLACK);
+
+            //Texto branco
+            DrawTextEx(fonteCopa, textoDificuldade, (Vector2){20, 30}, 14, 2, WHITE);
             
             //Desenha as vidas
             DrawTexturePro(imagemFundoPontuacao, (Rectangle){0, 0, imagemFundoPontuacao.width, imagemFundoPontuacao.height }, (Rectangle){screenWidth - 195, 0, 200, 100}, (Vector2){0, 0}, 0, Fade(WHITE, 0.8f));

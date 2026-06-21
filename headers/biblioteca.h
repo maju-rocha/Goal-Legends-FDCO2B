@@ -24,6 +24,7 @@ typedef enum{
     JOGAR_NOVAMENTE
 }Menu_FimdeJogo;
 
+
 extern int qntPacotes;
 extern int pacotes_fechados; 
 extern Menu_FimdeJogo estadoAtual;
