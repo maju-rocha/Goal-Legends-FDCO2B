@@ -68,16 +68,16 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
         InitAudioDevice();
         audioIniciadoAqui = true;
     }
-    Sound somAcerto = LoadSound("musica/correct.mp3");
-    Sound somErro = LoadSound("musica/false.mp3");
-    Music musicaFundo = LoadMusicStream("musica/music.mp3");
+    Sound somAcerto = LoadSound("audio/correct.mp3");
+    Sound somErro = LoadSound("audio/false.mp3");
+    Music musicaFundo = LoadMusicStream("audio/music.mp3");
     SetMusicVolume(musicaFundo, 0.3f); 
     PlayMusicStream(musicaFundo);      
 
     Font fonteCopa = LoadFont("extras/PressStart2P-Regular.ttf"); 
     
     HideCursor(); 
-    Image imagemBola = LoadImage("extras/bola_cursor.png"); 
+    Image imagemBola = LoadImage("imagens/bola_cursor.png"); 
     ImageResize(&imagemBola, 40, 40); 
     Texture2D cursorBola = LoadTextureFromImage(imagemBola); 
     UnloadImage(imagemBola); 

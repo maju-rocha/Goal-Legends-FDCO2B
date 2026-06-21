@@ -62,7 +62,7 @@ void menuPrincipal(void){
         
         // Configuração do Cursor
         HideCursor(); 
-        Image imagemBola = LoadImage("extras/bola_cursor.png"); 
+        Image imagemBola = LoadImage("imagens/bola_cursor.png"); 
         ImageResize(&imagemBola, 40, 40); 
         Texture2D cursorBola = LoadTextureFromImage(imagemBola); 
         UnloadImage(imagemBola); 
