@@ -272,20 +272,11 @@ void menuPrincipal(void){
                 UnloadFont(fonteCopa); 
                 CloseWindow(); 
                 
-                // LÓGICA DE ABRIR PACOTE SEGURA E MINIGAMES
+                // LÓGICA DE ABRIR PACOTE
                 if (acaoEscolhida == 1) {
-                    if (pacotes_fechados > 0) {
-                        printf("\n=========================================\n");
-                        printf(">>> Voce tem %d pacote(s) disponivel(is).\n", pacotes_fechados);
-                        printf(">>> Abrindo um pacote magico da Copa...\n\n");
-                        abrirPacote(figurinhas, mochila, album, total, &total_mochila, &total_album);
-                        pacotes_fechados--;
-                    } else {
-                        printf("\n=========================================\n");
-                        printf(">>> OPSSS! Voce nao tem pacotes fechados no inventario!\n");
-                        printf(">>> Jogue os Minigames da Copa para conquistar recompensas.\n");
-                    }
-                } 
+                    printf("\n=========================================\n");
+                    abrirPacote(figurinhas, mochila, album, total, &total_mochila, &total_album, &pacotes_fechados);
+                }
                 else if (acaoEscolhida == 2) {
                     printf("\n=========================================\n");
                     printf("Total album: %d\n", total_album);
@@ -329,14 +320,12 @@ void menuPrincipal(void){
                 } 
                 // CHAMADA DOS MINIGAMES
                 else if (acaoEscolhida == 8) jogarQuiz(figurinhas, mochila, album, total, &total_mochila, &total_album, &pacotes_fechados);
-                else if (acaoEscolhida == 9) jogarGoleiro();
+                else if (acaoEscolhida == 9) jogarGoleiro(&pacotes_fechados);
                 else if (acaoEscolhida == 10) jogarPenalti(); 
 
-                // =======================================================
-                // O SEGREDO DA TRANSIÇÃO PERFEITA ESTÁ AQUI:
-                // Só pausa e pede "ENTER" se a ação foi no terminal (1 a 7)
-                // Se for um minigame (8, 9, 10), ele ignora isso e reabre direto!
-                // =======================================================
+                // ==========================================
+                // CONTROLE DE RETORNO DO TERMINAL
+                // ==========================================
                 if (acaoEscolhida >= 1 && acaoEscolhida <= 7) {
                     printf("\n=========================================\n");
                     printf("Pressione ENTER para voltar ao menu grafico...");
@@ -348,7 +337,7 @@ void menuPrincipal(void){
 
                 estadoAtual = MENU_PRINCIPAL;
                 
-                // Reabre a janela e recarrega os assets visuais
+                // Reabre a janela gráfica e recarrega os assets
                 InitWindow(1000, 800, "Album de Figurinhas - Copa do Mundo");
                 fonteCopa = LoadFont("extras/PressStart2P-Regular.ttf");
                 
