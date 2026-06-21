@@ -40,6 +40,6 @@ void jogarGoleiro(); //cabeçalho da função do jogo do goleiro
 
 void jogarPenalti(); //cabeçalho da função do jogo do pênalti
 
-
+void menuPrincipal(void);//cabeçalho da função do menu
 
 #endif
