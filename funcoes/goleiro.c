@@ -34,6 +34,7 @@ void jogarGoleiro(){
     const int screenWidth = 1000;
     const int screenHeight = 800;
     InitWindow(screenWidth, screenHeight, "Minigame: Jogo do Goleiro");
+    InitAudioDevice();
     SetExitKey(KEY_NULL);
     
     //Váriaveis das imagens
@@ -47,6 +48,13 @@ void jogarGoleiro(){
     Texture2D imagemCabecaAtacante = LoadTexture("imagens/imagem_atacantecabeca.png");
     Texture2D imagemBola2026 = LoadTexture("imagens/imagem_bola2026.png");
 
+    //Váriaveis de audio
+    Sound somDefesa = LoadSound ("audio/som_defesagoleiro.mp3");
+    SetSoundVolume(somDefesa, 0.05f);
+    Sound somToque = LoadSound ("audio/som_toqueatacante.mp3");
+    SetSoundVolume(somToque, 0.3f);
+    Sound somMusica = LoadSound ("audio/som_musicagoleiro.mp3");
+    SetSoundVolume(somMusica, 0.02f);
     //Váriavel da fonte
     Font fonteCopa = LoadFont("extras/PressStart2P-Regular.ttf");
     
@@ -95,6 +103,8 @@ void jogarGoleiro(){
 
     while (jogarNovamente){
         
+        PlaySound(somMusica);//Musica do jogo
+
         if(fecharPrograma){
             CloseWindow();
             exit(0);
@@ -177,12 +187,15 @@ void jogarGoleiro(){
                 collisionGol = false;
             }
             
-
+            //Verificação da colisão e consequência da bola e gol
             if(collisionGoleiro){
+                PlaySound(somDefesa);//Som de defesa
+
                 boxPosition = (Vector2){ 500, 27 };//Reseta a posição da bola
                 
                 boxSpeed.y = (rand() % 5 + 7) * multiplicadorDificuldade;//Muda a velocidade da bola de acordo com a dificuldade
-                boxSpeed.x = (rand() % 11) - 5;//Muda a angulação da bola
+                boxSpeed.x = (rand() % 15) - 9;//Muda a angulação da bola
+
                 
                 //Spawna de 0 a 2 atacantes
                 qtdAtacantes = rand() % 3;
@@ -199,6 +212,8 @@ void jogarGoleiro(){
             for(int i = 0; i < qtdAtacantes; i++){
                 if(!atacantes[i].usado && CheckCollisionRecs(boxRec, atacantes[i].rec)){
                     
+                    PlaySound(somToque);//Som de toque
+
                     atacantes[i].usado = true;
                     
                     boxSpeed.x = (rand() % 11) - 5;
@@ -460,7 +475,9 @@ void jogarGoleiro(){
     UnloadTexture(imagemCabecaAtacante);
     UnloadTexture(imagemBola2026);
     UnloadFont(fonteCopa);
-
+    UnloadSound(somDefesa);
+    CloseAudioDevice();
+    
     //Fecha a janela do jogo
     CloseWindow();
     

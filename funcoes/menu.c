@@ -340,7 +340,7 @@ void menuPrincipal(void){
                 fonteCopa = LoadFont("extras/PressStart2P-Regular.ttf");
                 
                 HideCursor();
-                Image imgBolaTemp = LoadImage("extras/bola_cursor.png"); 
+                Image imgBolaTemp = LoadImage("imagens/bola_cursor.png"); 
                 ImageResize(&imgBolaTemp, 40, 40); 
                 cursorBola = LoadTextureFromImage(imgBolaTemp); 
                 UnloadImage(imgBolaTemp); 
