@@ -35,6 +35,7 @@ void abrirPacote(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, in
 
     // 4. Desconta os pacotes do saldo e calcula as figurinhas
     *pacotes_fechados -= qtd_abrir;
+    salvarPacotes();
     int total_figurinhas = qtd_abrir * 7;
 
     FILE *arquivoalbum = fopen("extras/album.csv", "a");

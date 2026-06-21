@@ -15,8 +15,6 @@ void menuPrincipal(void){
         // ==========================================
         // VARIÁVEL DE PACOTES ACUMULADOS
         // ==========================================
-        int pacotes_fechados = 0; 
-        
         Figurinha *figurinhas = malloc(981 * sizeof(Figurinha));
         Figurinha *album = malloc(981 * sizeof(Figurinha));
         Figurinha *mochila = malloc(981 * sizeof(Figurinha));
@@ -319,8 +317,8 @@ void menuPrincipal(void){
                     } while (opcao_alterar != 3);
                 } 
                 // CHAMADA DOS MINIGAMES
-                else if (acaoEscolhida == 8) jogarQuiz(figurinhas, mochila, album, total, &total_mochila, &total_album, &pacotes_fechados);
-                else if (acaoEscolhida == 9) jogarGoleiro(&pacotes_fechados);
+                else if (acaoEscolhida == 8) jogarQuiz(figurinhas, mochila, album, total, &total_mochila, &total_album);
+                else if (acaoEscolhida == 9) jogarGoleiro();
                 else if (acaoEscolhida == 10) jogarPenalti(); 
 
                 // ==========================================

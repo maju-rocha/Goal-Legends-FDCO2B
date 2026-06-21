@@ -32,7 +32,9 @@ OBJS = main.o \
        quiz.o \
        goleiro.o \
        penalti.o \
-	   global.o
+	   global.o \
+       salvarPacotes.o \
+       carregarPacotes.o
 
 # ==========================================
 # 3. REGRAS DE COMPILAÇÃO

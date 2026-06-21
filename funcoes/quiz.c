@@ -14,7 +14,7 @@ typedef struct {
 typedef enum { TELA_PERGUNTA, TELA_FEEDBACK, TELA_FIM } EstadoQuiz;
 
 // ATENÇÃO: Assinatura atualizada com o ponteiro *qtd_pacotes no final
-void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int total, int *total_mochila, int *total_album, int *qtd_pacotes) {
+void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int total, int *total_mochila, int *total_album) {
     PerguntaQuiz banco[20] = {
         {"Quem ganhou a Copa do Mundo de 2002?", {"Brasil", "Alemanha", "Italia", "Argentina"}, 0},
         {"Qual pais sediou a Copa de 2014?", {"Africa do Sul", "Brasil", "Russia", "Alemanha"}, 1},
@@ -142,10 +142,9 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
                     else if (score >= 6) pacotes_ganhos_rodada = 2;
                     else if (score >= 3) pacotes_ganhos_rodada = 1;
                     
-                    // Salva na variável do main.c
-                    if (qtd_pacotes != NULL) {
-                        *qtd_pacotes += pacotes_ganhos_rodada;
-                    }
+                    //Salva na variável do salvarPacotes.c
+                    pacotes_fechados += pacotes_ganhos_rodada;
+                    salvarPacotes();
 
                 } else {
                     estado = TELA_PERGUNTA;
@@ -307,7 +306,7 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
             DrawTextEx(fonteCopa, msgRodada, (Vector2){ 500 - (widthRodada / 2), 310 }, 14, 1, corRecompensa);
 
             // Mostra o total acumulado na carteira
-            int totalGuardado = (qtd_pacotes != NULL) ? *qtd_pacotes : 0;
+            int totalGuardado = pacotes_fechados;
             const char* msgAcumulado = TextFormat("SEU SALDO TOTAL GUARDADO: %d PACOTES", totalGuardado);
             int widthAcumulado = MeasureTextEx(fonteCopa, msgAcumulado, 12, 1).x;
             DrawTextEx(fonteCopa, msgAcumulado, (Vector2){ 500 - (widthAcumulado / 2), 360 }, 12, 1, Fade(WHITE, 0.8f));
@@ -355,7 +354,7 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
     CloseWindow();
 
     // Mensagem de log no terminal indicando que o jogador deve abrir os pacotes pelo menu
-    int saldo = (qtd_pacotes != NULL) ? *qtd_pacotes : 0;
+    int saldo = pacotes_fechados;
     printf("\n--- SESSAO DO QUIZ ENCERRADA ---\n");
     printf("Você tem um saldo total de %d pacote(s) aguardando para serem abertos!\n", saldo);
     printf("Vá até o menu principal e escolha a opção correspondente para abri-los.\n");
