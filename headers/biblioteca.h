@@ -18,7 +18,14 @@ typedef struct {
 
 } Figurinha;//struct Figurinha
 
+//Enum Fim de Jogo
+typedef enum{
+    MENU_FIM, 
+    JOGAR_NOVAMENTE
+}Menu_FimdeJogo;
+
 extern int qntPacotes;
+extern Menu_FimdeJogo estadoAtual;
 
 void abrirPacote(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int total, int *total_mochila, int *total_album);//cabeçalho da função abrirPacote
 

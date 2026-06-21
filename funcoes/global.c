@@ -1,4 +1,5 @@
 #include "biblioteca.h"
 
-int qntPacotes =  0;
+int qntPacotes;
 
+Menu_FimdeJogo estadoAtual = MENU_FIM;
