@@ -17,7 +17,7 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
     PerguntaQuiz banco[20] = {
         {"Quem ganhou a Copa do Mundo de 2002?", {"Brasil", "Alemanha", "Italia", "Argentina"}, 0},
         {"Qual pais sediou a Copa de 2014?", {"Africa do Sul", "Brasil", "Russia", "Alemanha"}, 1},
-        {"Quem e o maior artilheiro das Copas do Mundo?", {"Pele", "Ronaldo", "Miroslav Klose", "Messi"}, 3},
+        {"Quem e o maior artilheiro das Copas do Mundo?", {"Pele", "Ronaldo", "Miroslav Klose", "Messi"}, 2},
         {"Qual selecao ganhou a primeira Copa em 1930?", {"Brasil", "Argentina", "Uruguai", "Italia"}, 2},
         {"Qual jogador fez o gol 'A Mao de Deus'?", {"Pele", "Diego Maradona", "Zinedine Zidane", "Johan Cruyff"}, 1},
         {"Quem marcou o gol do titulo da Espanha em 2010?", {"Xavi", "Fernando Torres", "Andres Iniesta", "David Villa"}, 2},
@@ -254,7 +254,9 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
             DrawTextEx(fonteCopa, msgScore, (Vector2){ 500 - (widthScore / 2), 290 }, 16, 1, amareloBrasil);
 
             float alphaRec = 0.6f + sin(tempo * 5.0f) * 0.4f;
-            const char* msgRecompensa = (score > 0) ? "RECOMPENSAS LIBERADAS NO TERMINAL!" : "SEM RECOMPENSAS DESTA VEZ.";
+            
+            // Só exibe que tem recompensa na interface se acertar 3 ou mais
+            const char* msgRecompensa = (score >= 3) ? "RECOMPENSAS LIBERADAS NO TERMINAL!" : "SEM RECOMPENSAS DESTA VEZ.";
             int widthRec = MeasureTextEx(fonteCopa, msgRecompensa, 12, 1).x;
             DrawTextEx(fonteCopa, msgRecompensa, (Vector2){ 500 - (widthRec / 2), 370 }, 12, 1, Fade(WHITE, alphaRec));
 
@@ -293,12 +295,29 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
     UnloadFont(fonteCopa);
     CloseWindow();
 
-    if (score > 0) {
-        printf("\n[Quiz Finalizado] Parabens! Voce acertou %d perguntas!\n", score);
-        printf("Pressione ENTER para abrir sua recompensa...\n");
+    // ==========================================
+    // LÓGICA DE RECOMPENSAS PROGRESSIVAS
+    // ==========================================
+    int pacotesGanhos = 0;
+    
+    if (score == 7) {
+        pacotesGanhos = 3;
+    } else if (score >= 6) {
+        pacotesGanhos = 2;
+    } else if (score >= 3) {
+        pacotesGanhos = 1;
+    }
+
+    if (pacotesGanhos > 0) {
+        printf("\n[Quiz Finalizado] Parabens! Voce acertou %d perguntas e ganhou %d pacote(s) de figurinhas!\n", score, pacotesGanhos);
+        printf("Pressione ENTER para abrir suas recompensas...\n");
         getchar();
-        abrirPacote(figurinhas, mochila, album, total, total_mochila, total_album);
+        
+        for (int i = 0; i < pacotesGanhos; i++) {
+            printf("\n--- ABRINDO PACOTE %d DE %d ---\n", i + 1, pacotesGanhos);
+            abrirPacote(figurinhas, mochila, album, total, total_mochila, total_album);
+        }
     } else {
-        printf("\n[Quiz Finalizado] Voce nao acertou nenhuma, sem recompensas.\n");
+        printf("\n[Quiz Finalizado] Voce acertou %d perguntas. Precisa de pelo menos 3 acertos para ganhar recompensas.\n", score);
     }
 }

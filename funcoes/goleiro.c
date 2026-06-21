@@ -17,14 +17,7 @@ void jogarGoleiro(){
     InitWindow(screenWidth, screenHeight, "Minigame: Jogo do Goleiro");
     Font fonteCopa = LoadFont("extras/PressStart2P-Regular.ttf");//Carrega a fonte
     
-    //Mouse
-    HideCursor(); 
-    Image imagemBola = LoadImage("extras/bola_cursor.png"); 
-    ImageResize(&imagemBola, 40, 40); 
-    Texture2D cursorBola = LoadTextureFromImage(imagemBola); 
-    UnloadImage(imagemBola); 
-    // ==========================================
-
+   
     SetTargetFPS(60);
 
     //Variáveis
@@ -258,9 +251,7 @@ void jogarGoleiro(){
                 DrawTexturePro(imagemVida,(Rectangle){0,0,imagemVida.width,imagemVida.height},(Rectangle){screenWidth - 70, 20, 50, 50},(Vector2){0,0},0,WHITE);
             }//if
 
-            //Mouse Desenho
-            DrawTexture(cursorBola, (int)mousePoint.x - cursorBola.width/2, (int)mousePoint.y - cursorBola.height/2, WHITE);
-
+            
         EndDrawing();
     }
         if(fimdejogo){
@@ -304,8 +295,8 @@ void jogarGoleiro(){
 
 
 
-    //Mouse limpeza
-    UnloadTexture(cursorBola);
+    
+    
 
     UnloadFont(fonteCopa);
     CloseWindow();
