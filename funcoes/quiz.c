@@ -13,11 +13,12 @@ typedef struct {
 
 typedef enum { TELA_PERGUNTA, TELA_FEEDBACK, TELA_FIM } EstadoQuiz;
 
-void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int total, int *total_mochila, int *total_album) {
+// ATENÇÃO: Assinatura atualizada com o ponteiro *qtd_pacotes no final
+void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int total, int *total_mochila, int *total_album, int *qtd_pacotes) {
     PerguntaQuiz banco[20] = {
         {"Quem ganhou a Copa do Mundo de 2002?", {"Brasil", "Alemanha", "Italia", "Argentina"}, 0},
         {"Qual pais sediou a Copa de 2014?", {"Africa do Sul", "Brasil", "Russia", "Alemanha"}, 1},
-        {"Quem e o maior artilheiro das Copas do Mundo?", {"Pele", "Ronaldo", "Miroslav Klose", "Messi"}, 2},
+        {"Quem e o maior artilheiro das Copas do Mundo?", {"Pele", "Ronaldo", "Miroslav Klose", "Messi"}, 3},
         {"Qual selecao ganhou a primeira Copa em 1930?", {"Brasil", "Argentina", "Uruguai", "Italia"}, 2},
         {"Qual jogador fez o gol 'A Mao de Deus'?", {"Pele", "Diego Maradona", "Zinedine Zidane", "Johan Cruyff"}, 1},
         {"Quem marcou o gol do titulo da Espanha em 2010?", {"Xavi", "Fernando Torres", "Andres Iniesta", "David Villa"}, 2},
@@ -43,7 +44,9 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
     int score = 0;
     int pergunta_atual = 0;
     int opcao_selecionada = -1;
+    int pacotes_ganhos_rodada = 0;
     
+    // Sorteio inicial
     for(int i = 0; i < num_perguntas; i++) {
         int p_idx, repetida;
         do {
@@ -59,6 +62,18 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
     SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_VSYNC_HINT);
     InitWindow(1000, 800, "Minijogo: Quiz da Copa - Edicao Canarinho");
     
+    // Áudio
+    bool audioIniciadoAqui = false;
+    if (!IsAudioDeviceReady()) {
+        InitAudioDevice();
+        audioIniciadoAqui = true;
+    }
+    Sound somAcerto = LoadSound("musica/correct.mp3");
+    Sound somErro = LoadSound("musica/false.mp3");
+    Music musicaFundo = LoadMusicStream("musica/music.mp3");
+    SetMusicVolume(musicaFundo, 0.3f); 
+    PlayMusicStream(musicaFundo);      
+
     Font fonteCopa = LoadFont("extras/PressStart2P-Regular.ttf"); 
     
     HideCursor(); 
@@ -84,8 +99,14 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
     };
 
     Rectangle btnContinuar = { 320, 620, 360, 58 };
+    
+    // Novos botões para a tela final
+    Rectangle btnTentar = { 170, 460, 310, 58 };
+    Rectangle btnMenu = { 520, 460, 310, 58 };
 
     while (!WindowShouldClose()) {
+        UpdateMusicStream(musicaFundo);
+
         Vector2 mousePoint = GetMousePosition();
         float tempo = (float)GetTime();
 
@@ -97,24 +118,65 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
                 for (int i = 0; i < 4; i++) {
                     if (CheckCollisionPointRec(mousePoint, btnOpcoes[i])) {
                         opcao_selecionada = i;
+                        
                         if (opcao_selecionada == banco[sorteadas[pergunta_atual]].correta) {
                             score++;
+                            PlaySound(somAcerto);
+                        } else {
+                            PlaySound(somErro);
                         }
                         estado = TELA_FEEDBACK;
                     }
                 }
             }
-        } else if (estado == TELA_FEEDBACK || estado == TELA_FIM) {
+        } 
+        else if (estado == TELA_FEEDBACK) {
             if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(mousePoint, btnContinuar)) {
-                if (estado == TELA_FEEDBACK) {
-                    pergunta_atual++;
-                    if (pergunta_atual >= num_perguntas) {
-                        estado = TELA_FIM;
-                    } else {
-                        estado = TELA_PERGUNTA;
-                        opcao_selecionada = -1;
+                pergunta_atual++;
+                if (pergunta_atual >= num_perguntas) {
+                    estado = TELA_FIM;
+                    
+                    // --- CÁLCULO E ACÚMULO DE PACOTES ---
+                    pacotes_ganhos_rodada = 0;
+                    if (score == 7) pacotes_ganhos_rodada = 3;
+                    else if (score >= 6) pacotes_ganhos_rodada = 2;
+                    else if (score >= 3) pacotes_ganhos_rodada = 1;
+                    
+                    // Salva na variável do main.c
+                    if (qtd_pacotes != NULL) {
+                        *qtd_pacotes += pacotes_ganhos_rodada;
                     }
-                } else if (estado == TELA_FIM) {
+
+                } else {
+                    estado = TELA_PERGUNTA;
+                    opcao_selecionada = -1;
+                }
+            }
+        }
+        else if (estado == TELA_FIM) {
+            if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
+                // TENTAR NOVAMENTE
+                if (CheckCollisionPointRec(mousePoint, btnTentar)) {
+                    score = 0;
+                    pergunta_atual = 0;
+                    opcao_selecionada = -1;
+                    
+                    // Sorteia novas perguntas
+                    for(int i = 0; i < num_perguntas; i++) {
+                        int p_idx, repetida;
+                        do {
+                            repetida = 0;
+                            p_idx = rand() % total_no_banco;
+                            for(int j = 0; j < i; j++) {
+                                if(sorteadas[j] == p_idx) repetida = 1;
+                            }
+                        } while(repetida);
+                        sorteadas[i] = p_idx;
+                    }
+                    estado = TELA_PERGUNTA;
+                } 
+                // VOLTAR AO MENU PRINCIPAL
+                else if (CheckCollisionPointRec(mousePoint, btnMenu)) {
                     break;
                 }
             }
@@ -126,7 +188,6 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
         BeginDrawing();
         ClearBackground(verdeCampo);
 
-        // Background Dinâmico Animado
         float offsetBg = tempo * 40.0f; 
         for (int i = -1000; i < 2000; i += 80) {
             DrawLineEx((Vector2){ i + offsetBg, 0 }, (Vector2){ i - 1000 + offsetBg, 1500 }, 20.0f, Fade(WHITE, 0.05f));
@@ -161,24 +222,19 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
                 Color corTextoBtn = azulBrasil;
 
                 if (mouseEmCima) {
-                    if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
-                        offsetAnimacao = 4; 
-                    } else {
+                    if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) offsetAnimacao = 4; 
+                    else {
                         offsetAnimacao = -4; 
                         corFundoBtn = azulBrasil;
                         corBordaBtn = amareloBrasil;
                         corTextoBtn = WHITE;
-                        
-                        Rectangle shadow = { btnOpcoes[i].x + 6, btnOpcoes[i].y + 6, btnOpcoes[i].width, btnOpcoes[i].height };
-                        DrawRectangleRounded(shadow, 0.15f, 4, sombraUI);
+                        DrawRectangleRounded((Rectangle){ btnOpcoes[i].x + 6, btnOpcoes[i].y + 6, btnOpcoes[i].width, btnOpcoes[i].height }, 0.15f, 4, sombraUI);
                     }
                 } else {
-                    Rectangle shadow = { btnOpcoes[i].x + 3, btnOpcoes[i].y + 3, btnOpcoes[i].width, btnOpcoes[i].height };
-                    DrawRectangleRounded(shadow, 0.15f, 4, sombraUI);
+                    DrawRectangleRounded((Rectangle){ btnOpcoes[i].x + 3, btnOpcoes[i].y + 3, btnOpcoes[i].width, btnOpcoes[i].height }, 0.15f, 4, sombraUI);
                 }
 
                 Rectangle btnAnimado = { btnOpcoes[i].x, btnOpcoes[i].y + offsetAnimacao, btnOpcoes[i].width, btnOpcoes[i].height };
-
                 DrawRectangleRounded(btnAnimado, 0.15f, 4, corFundoBtn);
                 DrawRectangleRoundedLinesEx(btnAnimado, 0.15f, 4, 2.0f, corBordaBtn);
                 
@@ -189,8 +245,6 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
         } 
         else if (estado == TELA_FEEDBACK) {
             bool acertou = (opcao_selecionada == banco[sorteadas[pergunta_atual]].correta);
-            
-            // Alteração de cor dinâmica: Verde para acerto, Vermelho para erro
             Color corDestaque = acertou ? GREEN : RED; 
             
             Rectangle cardFeedback = { 150, 180, 700, 360 };
@@ -217,19 +271,12 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
             }
 
             bool mouseEmCima = CheckCollisionPointRec(mousePoint, btnContinuar);
-            int offsetAnimacao = 0;
-            Color corFundoBtn = amareloBrasil;
+            int offsetAnimacao = 0; Color corFundoBtn = amareloBrasil;
 
             if (mouseEmCima) {
                 if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) offsetAnimacao = 4;
-                else {
-                    offsetAnimacao = -4;
-                    corFundoBtn = WHITE;
-                    DrawRectangleRounded((Rectangle){ btnContinuar.x + 6, btnContinuar.y + 6, btnContinuar.width, btnContinuar.height }, 0.15f, 4, sombraUI);
-                }
-            } else {
-                DrawRectangleRounded((Rectangle){ btnContinuar.x + 3, btnContinuar.y + 3, btnContinuar.width, btnContinuar.height }, 0.15f, 4, sombraUI);
-            }
+                else { offsetAnimacao = -4; corFundoBtn = WHITE; DrawRectangleRounded((Rectangle){ btnContinuar.x + 6, btnContinuar.y + 6, btnContinuar.width, btnContinuar.height }, 0.15f, 4, sombraUI); }
+            } else { DrawRectangleRounded((Rectangle){ btnContinuar.x + 3, btnContinuar.y + 3, btnContinuar.width, btnContinuar.height }, 0.15f, 4, sombraUI); }
 
             Rectangle btnAnimado = { btnContinuar.x, btnContinuar.y + offsetAnimacao, btnContinuar.width, btnContinuar.height };
             DrawRectangleRounded(btnAnimado, 0.15f, 4, corFundoBtn);
@@ -246,78 +293,70 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
 
             const char* msgFim = "--- FIM DO QUIZ ---";
             int widthFim = MeasureTextEx(fonteCopa, msgFim, 24, 2).x;
-            DrawTextEx(fonteCopa, msgFim, (Vector2){ 500 - (widthFim / 2) + 3, 190 + 3 }, 24, 2, BLACK);
-            DrawTextEx(fonteCopa, msgFim, (Vector2){ 500 - (widthFim / 2), 190 }, 24, 2, WHITE);
+            DrawTextEx(fonteCopa, msgFim, (Vector2){ 500 - (widthFim / 2) + 3, 160 + 3 }, 24, 2, BLACK);
+            DrawTextEx(fonteCopa, msgFim, (Vector2){ 500 - (widthFim / 2), 160 }, 24, 2, WHITE);
             
             const char* msgScore = TextFormat("VOCE ACERTOU %d DE %d!", score, num_perguntas);
-            int widthScore = MeasureTextEx(fonteCopa, msgScore, 16, 1).x;
-            DrawTextEx(fonteCopa, msgScore, (Vector2){ 500 - (widthScore / 2), 290 }, 16, 1, amareloBrasil);
+            int widthScore = MeasureTextEx(fonteCopa, msgScore, 18, 1).x;
+            DrawTextEx(fonteCopa, msgScore, (Vector2){ 500 - (widthScore / 2), 240 }, 18, 1, amareloBrasil);
 
-            float alphaRec = 0.6f + sin(tempo * 5.0f) * 0.4f;
-            
-            // Só exibe que tem recompensa na interface se acertar 3 ou mais
-            const char* msgRecompensa = (score >= 3) ? "RECOMPENSAS LIBERADAS NO TERMINAL!" : "SEM RECOMPENSAS DESTA VEZ.";
-            int widthRec = MeasureTextEx(fonteCopa, msgRecompensa, 12, 1).x;
-            DrawTextEx(fonteCopa, msgRecompensa, (Vector2){ 500 - (widthRec / 2), 370 }, 12, 1, Fade(WHITE, alphaRec));
+            // Mostra pacotes ganhos nesta rodada
+            Color corRecompensa = (pacotes_ganhos_rodada > 0) ? GREEN : LIGHTGRAY;
+            const char* msgRodada = TextFormat("PACOTES GANHOS NESTA RODADA: %d", pacotes_ganhos_rodada);
+            int widthRodada = MeasureTextEx(fonteCopa, msgRodada, 14, 1).x;
+            DrawTextEx(fonteCopa, msgRodada, (Vector2){ 500 - (widthRodada / 2), 310 }, 14, 1, corRecompensa);
 
-            bool mouseEmCima = CheckCollisionPointRec(mousePoint, btnContinuar);
-            int offsetAnimacao = 0;
-            Color corFundoBtn = amareloBrasil;
+            // Mostra o total acumulado na carteira
+            int totalGuardado = (qtd_pacotes != NULL) ? *qtd_pacotes : 0;
+            const char* msgAcumulado = TextFormat("SEU SALDO TOTAL GUARDADO: %d PACOTES", totalGuardado);
+            int widthAcumulado = MeasureTextEx(fonteCopa, msgAcumulado, 12, 1).x;
+            DrawTextEx(fonteCopa, msgAcumulado, (Vector2){ 500 - (widthAcumulado / 2), 360 }, 12, 1, Fade(WHITE, 0.8f));
 
-            if (mouseEmCima) {
-                if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) offsetAnimacao = 4;
-                else {
-                    offsetAnimacao = -4;
-                    corFundoBtn = WHITE;
-                    DrawRectangleRounded((Rectangle){ btnContinuar.x + 6, btnContinuar.y + 6, btnContinuar.width, btnContinuar.height }, 0.15f, 4, sombraUI);
-                }
-            } else {
-                DrawRectangleRounded((Rectangle){ btnContinuar.x + 3, btnContinuar.y + 3, btnContinuar.width, btnContinuar.height }, 0.15f, 4, sombraUI);
-            }
+            // BOTÃO: TENTAR NOVAMENTE
+            bool hoverTentar = CheckCollisionPointRec(mousePoint, btnTentar);
+            int animTentar = 0; Color corFundoTentar = amareloBrasil;
+            if (hoverTentar) {
+                if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) animTentar = 4;
+                else { animTentar = -4; corFundoTentar = WHITE; DrawRectangleRounded((Rectangle){ btnTentar.x + 6, btnTentar.y + 6, btnTentar.width, btnTentar.height }, 0.15f, 4, sombraUI); }
+            } else { DrawRectangleRounded((Rectangle){ btnTentar.x + 3, btnTentar.y + 3, btnTentar.width, btnTentar.height }, 0.15f, 4, sombraUI); }
 
-            Rectangle btnAnimado = { btnContinuar.x, btnContinuar.y + offsetAnimacao, btnContinuar.width, btnContinuar.height };
-            DrawRectangleRounded(btnAnimado, 0.15f, 4, corFundoBtn);
-            DrawRectangleRoundedLinesEx(btnAnimado, 0.15f, 4, 2.0f, azulBrasil);
-            
-            int widthSair = MeasureTextEx(fonteCopa, "SAIR DO JOGO", 12, 1).x;
-            DrawTextEx(fonteCopa, "SAIR DO JOGO", (Vector2){ btnAnimado.x + (btnAnimado.width / 2) - (widthSair / 2), btnAnimado.y + 22 }, 12, 1, azulBrasil);
+            Rectangle rectTentar = { btnTentar.x, btnTentar.y + animTentar, btnTentar.width, btnTentar.height };
+            DrawRectangleRounded(rectTentar, 0.15f, 4, corFundoTentar);
+            DrawRectangleRoundedLinesEx(rectTentar, 0.15f, 4, 2.0f, azulBrasil);
+            int wt = MeasureTextEx(fonteCopa, "TENTAR DE NOVO", 12, 1).x;
+            DrawTextEx(fonteCopa, "TENTAR DE NOVO", (Vector2){ rectTentar.x + (rectTentar.width / 2) - (wt / 2), rectTentar.y + 22 }, 12, 1, azulBrasil);
+
+            // BOTÃO: MENU PRINCIPAL
+            bool hoverMenu = CheckCollisionPointRec(mousePoint, btnMenu);
+            int animMenu = 0; Color corFundoMenu = amareloBrasil;
+            if (hoverMenu) {
+                if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) animMenu = 4;
+                else { animMenu = -4; corFundoMenu = WHITE; DrawRectangleRounded((Rectangle){ btnMenu.x + 6, btnMenu.y + 6, btnMenu.width, btnMenu.height }, 0.15f, 4, sombraUI); }
+            } else { DrawRectangleRounded((Rectangle){ btnMenu.x + 3, btnMenu.y + 3, btnMenu.width, btnMenu.height }, 0.15f, 4, sombraUI); }
+
+            Rectangle rectMenu = { btnMenu.x, btnMenu.y + animMenu, btnMenu.width, btnMenu.height };
+            DrawRectangleRounded(rectMenu, 0.15f, 4, corFundoMenu);
+            DrawRectangleRoundedLinesEx(rectMenu, 0.15f, 4, 2.0f, azulBrasil);
+            int wm = MeasureTextEx(fonteCopa, "MENU PRINCIPAL", 12, 1).x;
+            DrawTextEx(fonteCopa, "MENU PRINCIPAL", (Vector2){ rectMenu.x + (rectMenu.width / 2) - (wm / 2), rectMenu.y + 22 }, 12, 1, azulBrasil);
         }
 
-        // ==========================================
-        // RENDER DO CURSOR
-        // ==========================================
         DrawTexture(cursorBola, (int)mousePoint.x - cursorBola.width/2, (int)mousePoint.y - cursorBola.height/2, WHITE);
-
         EndDrawing();
     }
 
+    // Limpeza da memória
+    UnloadMusicStream(musicaFundo);
+    UnloadSound(somAcerto);
+    UnloadSound(somErro);
+    if (audioIniciadoAqui) CloseAudioDevice();
     UnloadTexture(cursorBola);
     UnloadFont(fonteCopa);
     CloseWindow();
 
-    // ==========================================
-    // LÓGICA DE RECOMPENSAS PROGRESSIVAS
-    // ==========================================
-    int pacotesGanhos = 0;
-    
-    if (score == 7) {
-        pacotesGanhos = 3;
-    } else if (score >= 6) {
-        pacotesGanhos = 2;
-    } else if (score >= 3) {
-        pacotesGanhos = 1;
-    }
-
-    if (pacotesGanhos > 0) {
-        printf("\n[Quiz Finalizado] Parabens! Voce acertou %d perguntas e ganhou %d pacote(s) de figurinhas!\n", score, pacotesGanhos);
-        printf("Pressione ENTER para abrir suas recompensas...\n");
-        getchar();
-        
-        for (int i = 0; i < pacotesGanhos; i++) {
-            printf("\n--- ABRINDO PACOTE %d DE %d ---\n", i + 1, pacotesGanhos);
-            abrirPacote(figurinhas, mochila, album, total, total_mochila, total_album);
-        }
-    } else {
-        printf("\n[Quiz Finalizado] Voce acertou %d perguntas. Precisa de pelo menos 3 acertos para ganhar recompensas.\n", score);
-    }
+    // Mensagem de log no terminal indicando que o jogador deve abrir os pacotes pelo menu
+    int saldo = (qtd_pacotes != NULL) ? *qtd_pacotes : 0;
+    printf("\n--- SESSAO DO QUIZ ENCERRADA ---\n");
+    printf("Você tem um saldo total de %d pacote(s) aguardando para serem abertos!\n", saldo);
+    printf("Vá até o menu principal e escolha a opção correspondente para abri-los.\n");
 }

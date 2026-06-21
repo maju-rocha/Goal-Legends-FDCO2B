@@ -12,6 +12,11 @@ void menuPrincipal(void){
         int total_album = 0;
         int total_mochila = 0;
         
+        // ==========================================
+        // VARIÁVEL DE PACOTES ACUMULADOS
+        // ==========================================
+        int pacotes_fechados = 0; 
+        
         Figurinha *figurinhas = malloc(981 * sizeof(Figurinha));
         Figurinha *album = malloc(981 * sizeof(Figurinha));
         Figurinha *mochila = malloc(981 * sizeof(Figurinha));
@@ -182,8 +187,16 @@ void menuPrincipal(void){
                     DrawRectangleRec(btnAnimado, mouseEmCima ? LIGHTGRAY : amareloBrasil);
                     DrawRectangleLinesEx(btnAnimado, 2, mouseEmCima ? azulBrasil : DARKGRAY);
                     
-                    int textWidth = MeasureTextEx(fonteCopa, textosPrincipal[i], 14, 2).x;
-                    DrawTextEx(fonteCopa, textosPrincipal[i], (Vector2){ btnAnimado.x + (btnAnimado.width / 2) - (textWidth / 2), btnAnimado.y + 18 }, 14, 2, azulBrasil);
+                    // Mostra a quantidade de pacotes disponíveis dinamicamente no botão
+                    char textoBotao[100];
+                    if (i == 0) {
+                        sprintf(textoBotao, "1. Abrir Pacote (%d disp.)", pacotes_fechados);
+                    } else {
+                        strcpy(textoBotao, textosPrincipal[i]);
+                    }
+
+                    int textWidth = MeasureTextEx(fonteCopa, textoBotao, 14, 2).x;
+                    DrawTextEx(fonteCopa, textoBotao, (Vector2){ btnAnimado.x + (btnAnimado.width / 2) - (textWidth / 2), btnAnimado.y + 18 }, 14, 2, azulBrasil);
                 }
             } 
             else { 
@@ -258,22 +271,45 @@ void menuPrincipal(void){
                 UnloadTexture(cursorBola);
                 UnloadFont(fonteCopa); 
                 CloseWindow(); 
-
-                printf("\n=========================================\n");
                 
-                if (acaoEscolhida == 1) abrirPacote(figurinhas, mochila, album, total, &total_mochila, &total_album);
+                // LÓGICA DE ABRIR PACOTE SEGURA E MINIGAMES
+                if (acaoEscolhida == 1) {
+                    if (pacotes_fechados > 0) {
+                        printf("\n=========================================\n");
+                        printf(">>> Voce tem %d pacote(s) disponivel(is).\n", pacotes_fechados);
+                        printf(">>> Abrindo um pacote magico da Copa...\n\n");
+                        abrirPacote(figurinhas, mochila, album, total, &total_mochila, &total_album);
+                        pacotes_fechados--;
+                    } else {
+                        printf("\n=========================================\n");
+                        printf(">>> OPSSS! Voce nao tem pacotes fechados no inventario!\n");
+                        printf(">>> Jogue os Minigames da Copa para conquistar recompensas.\n");
+                    }
+                } 
                 else if (acaoEscolhida == 2) {
+                    printf("\n=========================================\n");
                     printf("Total album: %d\n", total_album);
                     listarFigurinhasAlbum(album, total_album);
                 } 
                 else if (acaoEscolhida == 3) {
+                    printf("\n=========================================\n");
                     printf("Total mochila: %d\n", total_mochila);
                     listarFigurinhasMochila(mochila, total_mochila);
                 } 
-                else if (acaoEscolhida == 4) excluirAlbum(figurinhas, album, &total_album);
-                else if (acaoEscolhida == 5) excluirMochila(figurinhas, mochila, &total_mochila);
-                else if (acaoEscolhida == 6) pesquisarFigurinha(figurinhas, total);
+                else if (acaoEscolhida == 4) {
+                    printf("\n=========================================\n");
+                    excluirAlbum(figurinhas, album, &total_album);
+                }
+                else if (acaoEscolhida == 5) {
+                    printf("\n=========================================\n");
+                    excluirMochila(figurinhas, mochila, &total_mochila);
+                }
+                else if (acaoEscolhida == 6) {
+                    printf("\n=========================================\n");
+                    pesquisarFigurinha(figurinhas, total);
+                }
                 else if (acaoEscolhida == 7) {
+                    printf("\n=========================================\n");
                     int opcao_alterar;
                     do {
                         printf("\n--- MENU DE ALTERACAO ---\n");
@@ -291,16 +327,24 @@ void menuPrincipal(void){
                         
                     } while (opcao_alterar != 3);
                 } 
-                else if (acaoEscolhida == 8) jogarQuiz(figurinhas, mochila, album, total, &total_mochila, &total_album);
+                // CHAMADA DOS MINIGAMES
+                else if (acaoEscolhida == 8) jogarQuiz(figurinhas, mochila, album, total, &total_mochila, &total_album, &pacotes_fechados);
                 else if (acaoEscolhida == 9) jogarGoleiro();
-                else if (acaoEscolhida == 10) jogarPenalti(); // AQUI FOI ALTERADO PARA CHAMAR O JOGO
+                else if (acaoEscolhida == 10) jogarPenalti(); 
 
-                printf("\n=========================================\n");
-                printf("Pressione ENTER para voltar ao menu grafico...");
-                
-                int c;
-                while ((c = getchar()) != '\n' && c != EOF);
-                getchar(); 
+                // =======================================================
+                // O SEGREDO DA TRANSIÇÃO PERFEITA ESTÁ AQUI:
+                // Só pausa e pede "ENTER" se a ação foi no terminal (1 a 7)
+                // Se for um minigame (8, 9, 10), ele ignora isso e reabre direto!
+                // =======================================================
+                if (acaoEscolhida >= 1 && acaoEscolhida <= 7) {
+                    printf("\n=========================================\n");
+                    printf("Pressione ENTER para voltar ao menu grafico...");
+                    
+                    int c;
+                    while ((c = getchar()) != '\n' && c != EOF);
+                    getchar(); 
+                }
 
                 estadoAtual = MENU_PRINCIPAL;
                 
@@ -329,5 +373,3 @@ void menuPrincipal(void){
         
         return;
     }
-
-
