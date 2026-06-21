@@ -3,6 +3,7 @@
 #include <string.h>
 #include <time.h>
 #include <raylib.h>
+#include "global.h"
 #include "../headers/biblioteca.h"
 
 void menuPrincipal(void){

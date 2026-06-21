@@ -31,7 +31,8 @@ OBJS = main.o \
        resetarLista.o \
        quiz.o \
        goleiro.o \
-       penalti.o
+       penalti.o \
+	   global.o
 
 # ==========================================
 # 3. REGRAS DE COMPILAÇÃO

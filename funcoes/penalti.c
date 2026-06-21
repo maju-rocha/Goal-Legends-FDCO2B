@@ -20,13 +20,7 @@ void jogarPenalti() {
     
     SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_VSYNC_HINT); 
     InitWindow(larguraTela, alturaTela, "Minijogo: Penalty Ultra Striker");
-
-    // Mantendo a identidade visual com o cursor da bola
-    HideCursor(); 
-    Image imagemBola = LoadImage("extras/bola_cursor.png"); 
-    ImageResize(&imagemBola, 40, 40); 
-    Texture2D cursorBola = LoadTextureFromImage(imagemBola); 
-    UnloadImage(imagemBola); 
+ 
 
     // Lógica do Goleiro (Escalado para a nova Trave Y: 290)
     Vector2 posicaoGoleiro = { 500, 290 };
@@ -303,12 +297,12 @@ void jogarPenalti() {
                 break;
         }
 
-        DrawTexture(cursorBola, (int)mousePoint.x - cursorBola.width/2, (int)mousePoint.y - cursorBola.height/2, WHITE);
+    
 
         EndDrawing();
     }
 
-    UnloadTexture(cursorBola);
+   
     CloseWindow();
 }
 

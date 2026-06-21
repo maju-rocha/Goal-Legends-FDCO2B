@@ -18,6 +18,8 @@ typedef struct {
 
 } Figurinha;//struct Figurinha
 
+extern int qntPacotes;
+
 void abrirPacote(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int total, int *total_mochila, int *total_album);//cabeçalho da função abrirPacote
 
 void listarFigurinhasAlbum(Figurinha *album, int total_album);//cabeçalho da função listarFigurinhas para o album

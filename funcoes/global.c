@@ -1,8 +1,4 @@
-#include <stdio.h>
-#include "global.h"
+#include "biblioteca.h"
 
-int main() {
-    int qntPacotes;
+int qntPacotes =  0;
 
-    return 0;
-}
