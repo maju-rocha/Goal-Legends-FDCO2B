@@ -2,6 +2,7 @@
 #include "biblioteca.h"
 #include <stdlib.h>
 #include <time.h>
+#include "global.h"
 
 //Struct atacantes
 typedef struct {
@@ -31,6 +32,7 @@ void jogarGoleiro(){
     float proximaAceleracao = 20.0f;
     float multiplicadorDificuldade = 1.0f;
     float velocidadeGoleiro = 8.0f;
+    float proximoPacote = 30.0f;
 
     bool fimdejogo = false;
 
@@ -55,8 +57,7 @@ void jogarGoleiro(){
     Rectangle obstacleRec = {(screenWidth - 200) / 2, screenHeight - 140, 200, 30}; // Posição e tamanho do obstáculo
     Rectangle golHitbox = {(screenWidth - 800) / 2, screenHeight - 100, 800, 100}; // Posição e tamanho do gol
 
-    while (!WindowShouldClose() && !fimdejogo)
-    {
+    while (!WindowShouldClose() && !fimdejogo){
         //Mouse
         Vector2 mousePoint = GetMousePosition();
         
@@ -143,6 +144,11 @@ void jogarGoleiro(){
             proximaAceleracao += 20.0f;
             velocidadeGoleiro += 0.5f;
         }//if
+
+        if(tempoJogo >= proximoPacote){
+            qntPacotes++;
+            proximoPacote += 30.0f;
+        }
         
         //Teclas para o goleiro
         if(IsKeyDown(KEY_RIGHT)) obstacleRec.x += velocidadeGoleiro;
@@ -231,7 +237,6 @@ void jogarGoleiro(){
         }//for
 
             //Texto de Tempo / Dificuldade
-
             DrawTexturePro(imagemFundoPontuacao,(Rectangle){0, 0, imagemFundoPontuacao.width, imagemFundoPontuacao.height}, fundoMenuRec,(Vector2){0, 0}, 0,Fade(WHITE, 0.8f));
             DrawTextEx(fonteCopa, TextFormat("Tempo: %.0f", tempoJogo), (Vector2){20, 50}, 14, 2, WHITE);//Texto do tempo de jogo
             DrawTextEx(fonteCopa, TextFormat("Dificuldade: %.1fx", multiplicadorDificuldade), (Vector2){20, 30}, 14, 2, WHITE);//Texto do nível de dificuldade
@@ -251,7 +256,10 @@ void jogarGoleiro(){
                 DrawTexturePro(imagemVida,(Rectangle){0,0,imagemVida.width,imagemVida.height},(Rectangle){screenWidth - 70, 20, 50, 50},(Vector2){0,0},0,WHITE);
             }//if
 
+<<<<<<< HEAD
             
+=======
+>>>>>>> f4aa6a071fd19c027119a80ee5de0b3cfe7fb25b
         EndDrawing();
     }
         if(fimdejogo){
@@ -263,41 +271,27 @@ void jogarGoleiro(){
                 }//if
 
                 BeginDrawing();
-                DrawRectangle(
-                    0,
-                    0,
-                    screenWidth,
-                    screenHeight,
-                    Fade(BLACK, 0.6f)
-                );
+                //Fading do fim de jogo
+                DrawRectangle(0,0,screenWidth,screenHeight,Fade(BLACK, 0.6f));
+                
+                //Texto fim de jogo
+                DrawText("FIM DE JOGO",screenWidth/2 - 180,screenHeight/2 - 30,50,RED);
 
-                // texto
-                DrawText(
-                    "FIM DE JOGO",
-                    screenWidth/2 - 180,
-                    screenHeight/2 - 30,
-                    50,
-                    RED
-                );
-
-                DrawText(
-                    "Pressione ENTER",
-                    screenWidth/2 - 140,
-                    screenHeight/2 + 40,
-                    20,
-                    WHITE
-                );
+                DrawText("Pressione ENTER",screenWidth/2 - 140,screenHeight/2 + 40,20,WHITE);
 
                 EndDrawing();
 
             }//while
         }//if
 
+<<<<<<< HEAD
 
 
     
     
 
+=======
+>>>>>>> f4aa6a071fd19c027119a80ee5de0b3cfe7fb25b
     UnloadFont(fonteCopa);
     CloseWindow();
     return;
