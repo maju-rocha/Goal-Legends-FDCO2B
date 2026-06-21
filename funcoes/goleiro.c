@@ -296,7 +296,7 @@ void jogarGoleiro(){
                     DrawText("FIM DE JOGO", 300, 150, 40, RED);
 
                     DrawRectangleRec(btnReiniciar, GREEN);
-                    DrawText("JOGAR NOVAMENTE", 330, 370, 20, );
+                    DrawText("JOGAR NOVAMENTE", 330, 370, 20, GREEN);
 
                     DrawRectangleRec(btnMenu, BLUE);
                     DrawText("MENU", 450, 470, 20, WHITE);
