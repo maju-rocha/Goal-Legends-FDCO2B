@@ -60,7 +60,7 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
     InitWindow(1000, 800, "Minijogo: Quiz da Copa - Edicao Canarinho");
     
     // ==========================================
-    // INICIALIZAÇÃO DE ÁUDIO
+    // INICIALIZAÇÃO DE ÁUDIO (EFEITOS E MÚSICA)
     // ==========================================
     bool audioIniciadoAqui = false;
     if (!IsAudioDeviceReady()) {
@@ -68,9 +68,14 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
         audioIniciadoAqui = true;
     }
 
-    // Carregando os sons
+    // Carregando os efeitos sonoros rápidos
     Sound somAcerto = LoadSound("musica/correct.mp3");
     Sound somErro = LoadSound("musica/false.mp3");
+
+    // Carregando a música de fundo
+    Music musicaFundo = LoadMusicStream("musica/music.mp3");
+    SetMusicVolume(musicaFundo, 0.3f); // Volume em 30% para não atrapalhar
+    PlayMusicStream(musicaFundo);      // Dá o play na música
     // ==========================================
 
     Font fonteCopa = LoadFont("extras/PressStart2P-Regular.ttf"); 
@@ -100,6 +105,9 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
     Rectangle btnContinuar = { 320, 620, 360, 58 };
 
     while (!WindowShouldClose()) {
+        // Atualiza a música a cada frame para ela continuar tocando
+        UpdateMusicStream(musicaFundo);
+
         Vector2 mousePoint = GetMousePosition();
         float tempo = (float)GetTime();
 
@@ -112,12 +120,12 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
                     if (CheckCollisionPointRec(mousePoint, btnOpcoes[i])) {
                         opcao_selecionada = i;
                         
-                        // LÓGICA DO SOM DE ACERTO/ERRO AQUI
+                        // LÓGICA DO SOM DE ACERTO/ERRO
                         if (opcao_selecionada == banco[sorteadas[pergunta_atual]].correta) {
                             score++;
-                            PlaySound(somAcerto); // Toca som correto
+                            PlaySound(somAcerto);
                         } else {
-                            PlaySound(somErro);   // Toca som incorreto
+                            PlaySound(somErro);
                         }
                         
                         estado = TELA_FEEDBACK;
@@ -146,7 +154,6 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
         BeginDrawing();
         ClearBackground(verdeCampo);
 
-        // Background Dinâmico Animado
         float offsetBg = tempo * 40.0f; 
         for (int i = -1000; i < 2000; i += 80) {
             DrawLineEx((Vector2){ i + offsetBg, 0 }, (Vector2){ i - 1000 + offsetBg, 1500 }, 20.0f, Fade(WHITE, 0.05f));
@@ -301,9 +308,6 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
             DrawTextEx(fonteCopa, "SAIR DO JOGO", (Vector2){ btnAnimado.x + (btnAnimado.width / 2) - (widthSair / 2), btnAnimado.y + 22 }, 12, 1, azulBrasil);
         }
 
-        // ==========================================
-        // RENDER DO CURSOR
-        // ==========================================
         DrawTexture(cursorBola, (int)mousePoint.x - cursorBola.width/2, (int)mousePoint.y - cursorBola.height/2, WHITE);
 
         EndDrawing();
@@ -312,6 +316,7 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
     // ==========================================
     // LIMPANDO OS ARQUIVOS DA MEMÓRIA
     // ==========================================
+    UnloadMusicStream(musicaFundo); // Descarrega a música
     UnloadSound(somAcerto);
     UnloadSound(somErro);
     if (audioIniciadoAqui) {

@@ -256,10 +256,7 @@ void jogarGoleiro(){
                 DrawTexturePro(imagemVida,(Rectangle){0,0,imagemVida.width,imagemVida.height},(Rectangle){screenWidth - 70, 20, 50, 50},(Vector2){0,0},0,WHITE);
             }//if
 
-<<<<<<< HEAD
             
-=======
->>>>>>> f4aa6a071fd19c027119a80ee5de0b3cfe7fb25b
         EndDrawing();
     }
         if(fimdejogo){
@@ -284,14 +281,11 @@ void jogarGoleiro(){
             }//while
         }//if
 
-<<<<<<< HEAD
 
 
     
     
 
-=======
->>>>>>> f4aa6a071fd19c027119a80ee5de0b3cfe7fb25b
     UnloadFont(fonteCopa);
     CloseWindow();
     return;
