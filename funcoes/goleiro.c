@@ -2,6 +2,7 @@
 #include "biblioteca.h"
 #include <stdlib.h>
 #include <time.h>
+#include <stdio.h>
 
 //Struct atacantes
 typedef struct{
@@ -9,7 +10,7 @@ typedef struct{
     bool usado;
 }Atacante;
 
-void jogarGoleiro(){
+void jogarGoleiro(int *qtd_pacotes){
     
     //Inicialização da tela
     const int screenWidth = 1000;
@@ -155,8 +156,11 @@ void jogarGoleiro(){
                 velocidadeGoleiro += 0.5f;
             }//if
 
+            // LOGICA DOS PACOTES CONSERTADA
             if(tempoJogo >= proximoPacote){
-                qntPacotes++;
+                if (qtd_pacotes != NULL) {
+                    (*qtd_pacotes)++;
+                }
                 proximoPacote += 30.0f;
             }
             
@@ -245,25 +249,25 @@ void jogarGoleiro(){
                 }//if
             }//for
 
-                //Texto de Tempo / Dificuldade
-                DrawTexturePro(imagemFundoPontuacao,(Rectangle){0, 0, imagemFundoPontuacao.width, imagemFundoPontuacao.height}, fundoMenuRec,(Vector2){0, 0}, 0,Fade(WHITE, 0.8f));
-                DrawTextEx(fonteCopa, TextFormat("Tempo: %.0f", tempoJogo), (Vector2){20, 50}, 14, 2, WHITE);//Texto do tempo de jogo
-                DrawTextEx(fonteCopa, TextFormat("Dificuldade: %.1fx", multiplicadorDificuldade), (Vector2){20, 30}, 14, 2, WHITE);//Texto do nível de dificuldade
+            //Texto de Tempo / Dificuldade
+            DrawTexturePro(imagemFundoPontuacao,(Rectangle){0, 0, imagemFundoPontuacao.width, imagemFundoPontuacao.height}, fundoMenuRec,(Vector2){0, 0}, 0,Fade(WHITE, 0.8f));
+            DrawTextEx(fonteCopa, TextFormat("Tempo: %.0f", tempoJogo), (Vector2){20, 50}, 14, 2, WHITE);//Texto do tempo de jogo
+            DrawTextEx(fonteCopa, TextFormat("Dificuldade: %.1fx", multiplicadorDificuldade), (Vector2){20, 30}, 14, 2, WHITE);
+            
+            //Desenha as vidas
+            DrawTexturePro(imagemFundoPontuacao, (Rectangle){0, 0, imagemFundoPontuacao.width, imagemFundoPontuacao.height }, (Rectangle){screenWidth - 195, 0, 200, 100}, (Vector2){0, 0}, 0, Fade(WHITE, 0.8f));
 
-                //Desenha as vidas
-                DrawTexturePro(imagemFundoPontuacao, (Rectangle){0, 0, imagemFundoPontuacao.width, imagemFundoPontuacao.height }, (Rectangle){screenWidth - 195, 0, 200, 100}, (Vector2){0, 0}, 0, Fade(WHITE, 0.8f));
+            if(vidas >= 1){
+                DrawTexturePro(imagemVida,(Rectangle){0,0,imagemVida.width,imagemVida.height},(Rectangle){screenWidth - 170, 20, 50, 50},(Vector2){0,0},0,WHITE);
+            }//if
 
-                if(vidas >= 1){
-                    DrawTexturePro(imagemVida,(Rectangle){0,0,imagemVida.width,imagemVida.height},(Rectangle){screenWidth - 170, 20, 50, 50},(Vector2){0,0},0,WHITE);
-                }//if
+            if(vidas >= 2){
+                DrawTexturePro(imagemVida,(Rectangle){0,0,imagemVida.width,imagemVida.height},(Rectangle){screenWidth - 120, 20, 50, 50},(Vector2){0,0},0,WHITE);
+            }//if
 
-                if(vidas >= 2){
-                    DrawTexturePro(imagemVida,(Rectangle){0,0,imagemVida.width,imagemVida.height},(Rectangle){screenWidth - 120, 20, 50, 50},(Vector2){0,0},0,WHITE);
-                }//if
-
-                if(vidas >= 3){
-                    DrawTexturePro(imagemVida,(Rectangle){0,0,imagemVida.width,imagemVida.height},(Rectangle){screenWidth - 70, 20, 50, 50},(Vector2){0,0},0,WHITE);
-                }//if
+            if(vidas >= 3){
+                DrawTexturePro(imagemVida,(Rectangle){0,0,imagemVida.width,imagemVida.height},(Rectangle){screenWidth - 70, 20, 50, 50},(Vector2){0,0},0,WHITE);
+            }//if
 
                 EndDrawing();
             }//fim do while
@@ -308,19 +312,25 @@ void jogarGoleiro(){
                     jogarNovamente = true;
                 }else{
                     jogarNovamente = false;
-                    UnloadFont(fonteCopa);
-                    CloseWindow();
-
-                    // Volta para o menu principal
-                    menuPrincipal();
                 }//if
 
         }//if fim de jogo
 
     }//while (fimdejogo)
     
-    
+    // Liberações de memória corretas aqui
+    UnloadTexture(imagemCampo);
+    UnloadTexture(imagemAtacante);
+    UnloadTexture(imagemGoleiro);
+    UnloadTexture(imagemVida);
+    UnloadTexture(imagemFundoPontuacao);
+    UnloadTexture(imagemLuvaGoleiro);
+    UnloadTexture(imagemCabecaGoleiro);
+    UnloadTexture(imagemCabecaAtacante);
+    UnloadTexture(imagemBola2026);
     UnloadFont(fonteCopa);
     CloseWindow();
+    
+   
     return;
 }

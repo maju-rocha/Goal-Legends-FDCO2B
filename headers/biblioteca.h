@@ -25,9 +25,10 @@ typedef enum{
 }Menu_FimdeJogo;
 
 extern int qntPacotes;
+extern int pacotes_fechados; 
 extern Menu_FimdeJogo estadoAtual;
 
-void abrirPacote(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int total, int *total_mochila, int *total_album);//cabeçalho da função abrirPacote
+void abrirPacote(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int total, int *total_mochila, int *total_album, int *pacotes_fechados);
 
 void listarFigurinhasAlbum(Figurinha *album, int total_album);//cabeçalho da função listarFigurinhas para o album
 
@@ -45,7 +46,7 @@ void resetarLista(Figurinha *vetor, int total);//cabeçalho da função resetar 
 
 void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int total, int *total_mochila, int *total_album, int *qtd_pacotes);
 
-void jogarGoleiro(); //cabeçalho da função do jogo do goleiro
+void jogarGoleiro(int *qntPacotes); //cabeçalho da função do jogo do goleiro
 
 void jogarPenalti(); //cabeçalho da função do jogo do pênalti
 
