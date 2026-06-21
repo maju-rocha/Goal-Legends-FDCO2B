@@ -1,6 +1,13 @@
 #ifndef BIBLIOTECA_H
 #define BIBLIOTECA_H
 
+typedef enum {
+    MENU_PRINCIPAL,
+    MENU_INVENTARIO,
+    MENU_EXCLUIR,
+    MENU_MINIGAMES
+} EstadoMenu;
+
 typedef struct {
 
     char codigo[10];
@@ -32,5 +39,7 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
 void jogarGoleiro(); //cabeçalho da função do jogo do goleiro
 
 void jogarPenalti(); //cabeçalho da função do jogo do pênalti
+
+
 
 #endif

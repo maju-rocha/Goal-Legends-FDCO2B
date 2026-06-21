@@ -1,55 +1,56 @@
+# ==========================================
+# 1. DETECÇÃO AUTOMÁTICA DE SISTEMA
+# ==========================================
+ifeq ($(OS),Windows_NT)
+    # Configurações para Windows (w64devkit buscando no sistema ou no projeto)
+    TARGET = main.exe
+    LIBS = -L./extras/libwin -LC:/w64devkit/w64devkit/x86_64-w64-mingw32/lib -LC:/w64devkit/w64devkit/lib -Lraylib/src -Lraylib/lib -lraylib -lopengl32 -lgdi32 -lwinmm
+    RM = rm -f
+else
+    # Configurações para Linux
+    TARGET = main
+    LIBS = -lraylib -lX11 -lGL -lm -lpthread -ldl -lrt
+    RM = rm -f
+endif
+
+# ==========================================
+# 2. CONFIGURAÇÕES DE COMPILAÇÃO
+# ==========================================
 CC = gcc
-
 CFLAGS = -Iheaders -Iraylib/src
-LDFLAGS = -Lraylib/src -lraylib -lm -lpthread -ldl -lrt -lX11
 
-OBJ = main.o abrirPacote.o listarAlbum.o listarMochila.o \
-    excluirAlbum.o excluirMochila.o pesquisar.o \
-    alterar.o resetarLista.o quiz.o goleiro.o penalti.o
+# Lista de todos os arquivos objeto (.o) necessários
+OBJS = main.o abrirPacote.o listarAlbum.o listarMochila.o excluirAlbum.o excluirMochila.o pesquisar.o alterar.o resetarLista.o quiz.o goleiro.o penalti.o
 
-main: $(OBJ)
-	@echo "Gerando executavel..."
-	$(CC) $(OBJ) -o main $(LDFLAGS)
+# ==========================================
+# 3. REGRAS DE COMPILAÇÃO
+# ==========================================
 
-main.o: funcoes/main.c headers/biblioteca.h
-	$(CC) $(CFLAGS) -c funcoes/main.c
+# A regra 'all' é a padrão que roda ao digitar apenas 'make'
+all: $(TARGET)
 
-abrirPacote.o: funcoes/abrirPacote.c headers/biblioteca.h
-	$(CC) $(CFLAGS) -c funcoes/abrirPacote.c
+# Linkagem final: Junta todos os .o e as bibliotecas para gerar o executável
+$(TARGET): $(OBJS)
+	@echo "---------------------------------------------"
+	@echo "Gerando executavel final: $(TARGET)"
+	@echo "---------------------------------------------"
+	$(CC) $(OBJS) -o $(TARGET) $(LIBS)
 
-listarAlbum.o: funcoes/listarAlbum.c headers/biblioteca.h
-	$(CC) $(CFLAGS) -c funcoes/listarAlbum.c
+# Regra genérica para compilar qualquer arquivo .c que esteja na pasta 'funcoes'
+%.o: funcoes/%.c
+	@echo "Compilando: $<"
+	$(CC) $(CFLAGS) -c $< -o $@
 
-listarMochila.o: funcoes/listarMochila.c headers/biblioteca.h
-	$(CC) $(CFLAGS) -c funcoes/listarMochila.c
+# Regra específica para o main.o caso ele esteja na raiz ou na pasta funcoes
+main.o: funcoes/main.c
+	$(CC) $(CFLAGS) -c funcoes/main.c -o main.o
 
-excluirAlbum.o: funcoes/excluirAlbum.c headers/biblioteca.h
-	$(CC) $(CFLAGS) -c funcoes/excluirAlbum.c
-
-excluirMochila.o: funcoes/excluirMochila.c headers/biblioteca.h
-	$(CC) $(CFLAGS) -c funcoes/excluirMochila.c
-
-pesquisar.o: funcoes/pesquisar.c headers/biblioteca.h
-	$(CC) $(CFLAGS) -c funcoes/pesquisar.c
-
-alterar.o: funcoes/alterar.c headers/biblioteca.h
-	$(CC) $(CFLAGS) -c funcoes/alterar.c
-
-resetarLista.o: funcoes/resetarLista.c headers/biblioteca.h
-	$(CC) $(CFLAGS) -c funcoes/resetarLista.c
-
-quiz.o: funcoes/quiz.c headers/biblioteca.h
-	$(CC) $(CFLAGS) -c funcoes/quiz.c
-
-goleiro.o: funcoes/goleiro.c headers/biblioteca.h
-	$(CC) $(CFLAGS) -c funcoes/goleiro.c
-
-penalti.o: funcoes/penalti.c headers/biblioteca.h
-	$(CC) $(CFLAGS) -c funcoes/penalti.c
-
-
-run: main
-	./main
-
+# ==========================================
+# 4. LIMPEZA ARQUIVOS TEMPORÁRIOS
+# ==========================================
 clean:
-	rm -f *.o main
+	@echo "Limpando arquivos temporarios..."
+	$(RM) *.o $(TARGET)
+
+run:
+	./main
