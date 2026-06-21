@@ -33,4 +33,6 @@ void jogarGoleiro(); //cabeçalho da função do jogo do goleiro
 
 void jogarPenalti(); //cabeçalho da função do jogo do pênalti
 
+
+
 #endif
