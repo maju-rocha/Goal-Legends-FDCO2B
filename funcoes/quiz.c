@@ -59,6 +59,20 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
     SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_VSYNC_HINT);
     InitWindow(1000, 800, "Minijogo: Quiz da Copa - Edicao Canarinho");
     
+    // ==========================================
+    // INICIALIZAÇÃO DE ÁUDIO
+    // ==========================================
+    bool audioIniciadoAqui = false;
+    if (!IsAudioDeviceReady()) {
+        InitAudioDevice();
+        audioIniciadoAqui = true;
+    }
+
+    // Carregando os sons
+    Sound somAcerto = LoadSound("musica/correct.mp3");
+    Sound somErro = LoadSound("musica/false.mp3");
+    // ==========================================
+
     Font fonteCopa = LoadFont("extras/PressStart2P-Regular.ttf"); 
     
     HideCursor(); 
@@ -97,9 +111,15 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
                 for (int i = 0; i < 4; i++) {
                     if (CheckCollisionPointRec(mousePoint, btnOpcoes[i])) {
                         opcao_selecionada = i;
+                        
+                        // LÓGICA DO SOM DE ACERTO/ERRO AQUI
                         if (opcao_selecionada == banco[sorteadas[pergunta_atual]].correta) {
                             score++;
+                            PlaySound(somAcerto); // Toca som correto
+                        } else {
+                            PlaySound(somErro);   // Toca som incorreto
                         }
+                        
                         estado = TELA_FEEDBACK;
                     }
                 }
@@ -190,7 +210,6 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
         else if (estado == TELA_FEEDBACK) {
             bool acertou = (opcao_selecionada == banco[sorteadas[pergunta_atual]].correta);
             
-            // Alteração de cor dinâmica: Verde para acerto, Vermelho para erro
             Color corDestaque = acertou ? GREEN : RED; 
             
             Rectangle cardFeedback = { 150, 180, 700, 360 };
@@ -255,7 +274,6 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
 
             float alphaRec = 0.6f + sin(tempo * 5.0f) * 0.4f;
             
-            // Só exibe que tem recompensa na interface se acertar 3 ou mais
             const char* msgRecompensa = (score >= 3) ? "RECOMPENSAS LIBERADAS NO TERMINAL!" : "SEM RECOMPENSAS DESTA VEZ.";
             int widthRec = MeasureTextEx(fonteCopa, msgRecompensa, 12, 1).x;
             DrawTextEx(fonteCopa, msgRecompensa, (Vector2){ 500 - (widthRec / 2), 370 }, 12, 1, Fade(WHITE, alphaRec));
@@ -289,6 +307,15 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
         DrawTexture(cursorBola, (int)mousePoint.x - cursorBola.width/2, (int)mousePoint.y - cursorBola.height/2, WHITE);
 
         EndDrawing();
+    }
+
+    // ==========================================
+    // LIMPANDO OS ARQUIVOS DA MEMÓRIA
+    // ==========================================
+    UnloadSound(somAcerto);
+    UnloadSound(somErro);
+    if (audioIniciadoAqui) {
+        CloseAudioDevice();
     }
 
     UnloadTexture(cursorBola);
