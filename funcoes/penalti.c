@@ -18,31 +18,42 @@ void jogarPenalti() {
     const int larguraTela = 1000;
     const int alturaTela = 800;
     
-    SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_VSYNC_HINT); 
-    InitWindow(larguraTela, alturaTela, "Minijogo: Penalty Ultra Striker");
+    if (!IsWindowReady()) {
+        SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_VSYNC_HINT); 
+        InitWindow(larguraTela, alturaTela, "Minijogo: Penalty Ultra Striker");
+    }
 
-    // Mantendo a identidade visual com o cursor da bola
+    // 🎵 ÁUDIO: Inicializa o dispositivo de som do jogo
+    InitAudioDevice();
+
+    // 🎵 ÁUDIO: Carrega os efeitos sonoros de chute e gol
+    Sound somChute = LoadSound("extras/chute.wav");
+    Sound somGol = LoadSound("extras/gol.wav");
+
+    // 📻 MÚSICA: Carrega a música de fundo (coloquei o nome como 'musica.mp3')
+    // Você pode usar .mp3 ou .ogg para a música de fundo!
+    Music musicaFundo = LoadMusicStream("extras/musica.mp3");
+    
+    // Começa a tocar a música de fundo e ativa o modo de repetição (loop)
+    PlayMusicStream(musicaFundo);
+
     HideCursor(); 
     Image imagemBola = LoadImage("extras/bola_cursor.png"); 
     ImageResize(&imagemBola, 40, 40); 
     Texture2D cursorBola = LoadTextureFromImage(imagemBola); 
     UnloadImage(imagemBola); 
-
-    // Lógica do Goleiro (Escalado para a nova Trave Y: 290)
     Vector2 posicaoGoleiro = { 500, 290 };
     Vector2 alvoGoleiro = { 500, 290 };
 
-    // Lógica da Bola e Rastro (Movida mais para baixo Y: 660)
     Vector2 posicaoBola = { 500, 660 };
     Vector2 velocidadeBola = { 0, 0 };
     bool bolaChutada = false;
-    float raioBola = 16.0f; // Bola levemente maior para a tela grande
+    float raioBola = 16.0f; 
     float rotacaoBola = 0.0f;
     
     Vector2 rastroBola[MAX_RASTRO];
     int contadorRastro = 0;
 
-    // Sistema de Mira e Efeito
     float anguloMira = 0.0f;
     float velocidadeMira = 0.04f;
     float intensidadeEfeito = 0.0f;
@@ -52,6 +63,11 @@ void jogarPenalti() {
     int tentativas = 0;
     const int maxTentativas = 5;
     int pontuacaoCombo = 0;
+
+    // Variáveis para a recompensa final
+    int pacotesGanhos = 0;
+    int totalFigurinhas = 0;
+    float porcentagemAproveitamento = 0.0f;
 
     EstadoPenalti estadoAtual = P_MENU;
     int timerFrames = 0;
@@ -65,10 +81,12 @@ void jogarPenalti() {
     SetTargetFPS(60);
 
     while (!WindowShouldClose()) {
+        // 📻 MÚSICA: Alimenta o streaming da música para ela continuar tocando fluentemente
+        UpdateMusicStream(musicaFundo);
+
         float tempoGlobal = (float)GetTime();
         Vector2 mousePoint = GetMousePosition();
 
-        // --- ATUALIZAÇÃO DA LÓGICA ---
         switch (estadoAtual) {
             case P_MENU:
                 escalaTextoModo = 1.0f + sinf(tempoGlobal * 5.0f) * 0.05f;
@@ -83,20 +101,22 @@ void jogarPenalti() {
             case P_JOGANDO:
                 if (!bolaChutada) {
                     anguloMira += velocidadeMira;
-                    if (anguloMira > 0.75f || anguloMira < -0.75f) velocidadeMira *= -1;
+                    if (anguloMira > 0.75f || anguloMira < -0.75f) velocidadMira *= -1;
 
-                    alvoGoleiro.x = 500 + sinf(tempoGlobal * 4.0f) * 200.0f; // Goleiro cobre mais espaço
+                    alvoGoleiro.x = 500 + sinf(tempoGlobal * 4.0f) * 200.0f; 
                     posicaoGoleiro.x += (alvoGoleiro.x - posicaoGoleiro.x) * 0.1f;
 
                     if (IsKeyPressed(KEY_SPACE)) {
                         velocidadeBola.x = sinf(anguloMira) * -16.0f;
-                        velocidadeBola.y = -19.0f; // Chute mais rápido devido à distância maior
+                        velocidadeBola.y = -19.0f; 
                         bolaChutada = true;
                         contadorRastro = 0;
                         intensidadeEfeito = 0.0f;
+
+                        // 🎵 ÁUDIO: Toca o som do chute
+                        PlaySound(somChute);
                     }
                 } else {
-                    // Adiciona curva
                     if (IsKeyDown(KEY_LEFT)){
                         velocidadeBola.x -= 0.45f;
                         intensidadeEfeito = -1.0f;
@@ -118,27 +138,33 @@ void jogarPenalti() {
                     posicaoBola.y += velocidadeBola.y;
 
                     alvoGoleiro.x = posicaoBola.x + (velocidadeBola.x * 1.1f);
-                    if (alvoGoleiro.x < 260) alvoGoleiro.x = 260; // Limites do goleiro ajustados
+                    if (alvoGoleiro.x < 260) alvoGoleiro.x = 260; 
                     if (alvoGoleiro.x > 740) alvoGoleiro.x = 740;
                     
                     posicaoGoleiro.x += (alvoGoleiro.x - posicaoGoleiro.x) * 0.09f;
 
-                    // Colisão com o goleiro redimensionada
                     if (CheckCollisionCircles(posicaoBola, raioBola, posicaoGoleiro, 32.0f)) {
                         estadoAtual = P_DEFENDEU;
                         tentativas++;
-                        pontuacaoCombo = 0;
+                        
+                        pontuacaoCombo -= 80;
+                        if (pontuacaoCombo < 0) pontuacaoCombo = 0;
+                        
                         timerFrames = 0;
                     }
-                    // Linha do gol agora fica em Y: 220
                     else if (posicaoBola.y <= 220) {
-                        // Gol ajustado para a nova largura da trave (252 a 748)
-                        if (posicaoBola.x >= 252 && posicaoBola.x <= 748 && posicaoBola.y >= 190) {
+                        if (posicaoBola.x >= 252 && posicaoBola.x <= 748) {
                             estadoAtual = P_GOL;
                             gols++;
                             pontuacaoCombo += 100 + (int)(fabsf(velocidadeBola.x) * 10); 
+
+                            // 🎵 ÁUDIO: Toca o som do Gol
+                            PlaySound(somGol);
                         } else {
                             estadoAtual = P_DEFENDEU; 
+                            
+                            pontuacaoCombo -= 80;
+                            if (pontuacaoCombo < 0) pontuacaoCombo = 0;
                         }
                         tentativas++;
                         timerFrames = 0;
@@ -157,8 +183,26 @@ void jogarPenalti() {
                     anguloMira = 0.0f;
                     intensidadeEfeito = 0.0f;
 
-                    if (tentativas >= maxTentativas) estadoAtual = P_FIM_DE_JOGO;
-                    else estadoAtual = P_JOGANDO;
+                    if (tentativas >= maxTentativas) {
+                        porcentagemAproveitamento = ((float)pontuacaoCombo / 904.0f) * 100.0f;
+                        if (porcentagemAproveitamento > 100.0f) porcentagemAproveitamento = 100.0f; 
+                        
+                        if (pontuacaoCombo <= 250) {
+                            pacotesGanhos = 1;
+                        } else if (pontuacaoCombo > 250 && pontuacaoCombo <= 500) {
+                            pacotesGanhos = 2;
+                        } else if (pontuacaoCombo > 500 && pontuacaoCombo <= 750) {
+                            pacotesGanhos = 3;
+                        } else { 
+                            pacotesGanhos = 4;
+                        }
+                        
+                        totalFigurinhas = pacotesGanhos * 7; 
+                        
+                        estadoAtual = P_FIM_DE_JOGO;
+                    } else {
+                        estadoAtual = P_JOGANDO;
+                    }
                 }
                 break;
 
@@ -171,16 +215,14 @@ void jogarPenalti() {
         BeginDrawing();
         ClearBackground(verdeCanarinho); 
 
-        // Gramado redimensionado (Y começa em 200, altura 50)
         for (int y = 200; y < alturaTela; y += 50) {
             Color corGramado = ( (y / 50) % 2 == 0 ) ? verdeCanarinho : (Color){ 28, 120, 28, 255 };
             DrawRectangle(0, y, larguraTela, 50, corGramado);
         }
 
-        DrawRectangle(0, 0, larguraTela, 190, azulBrasil); // Arquibancada
-        DrawRectangle(0, 180, larguraTela, 20, darkGlass); // Muro de vidro
+        DrawRectangle(0, 0, larguraTela, 190, azulBrasil); 
+        DrawRectangle(0, 180, larguraTela, 20, darkGlass); 
 
-        // Flashes da torcida re-proporcionados
         for (int i = 0; i < larguraTela; i += 16) {
             DrawRectangle(i, 50, 12, 130, Fade(amareloBrasil, 0.15f)); 
             if (rand() % 45 == 0) { 
@@ -188,7 +230,6 @@ void jogarPenalti() {
             }
         }
 
-        // Rede Tridimensional Ampliada
         int espacamentoRede = 15;
         for (int x = 250; x <= 750; x += espacamentoRede) {
             DrawLineEx((Vector2){ (float)x, 200 }, (Vector2){ (float)(x + (x - 500) / 4), 150 }, 1.5f, Fade(WHITE, 0.25f)); 
@@ -201,31 +242,25 @@ void jogarPenalti() {
             DrawLineEx((Vector2){ 250, (float)y }, (Vector2){ 750, (float)y }, 1.0f, Fade(WHITE, 0.25f)); 
         }
 
-        // Marcações do Campo escaladas
         DrawRectangleLinesEx((Rectangle){ 150, 200, 700, 420 }, 4, Fade(WHITE, 0.8f)); 
         DrawCircleSector((Vector2){ 500, 200 }, 80, 0, 180, 0, Fade(WHITE, 0.15f)); 
         DrawLineEx((Vector2){ 0, 330 }, (Vector2){ larguraTela, 330 }, 4, Fade(WHITE, 0.8f)); 
-        DrawCircle(500, 560, 8, WHITE); // Marca do Pênalti
+        DrawCircle(500, 560, 8, WHITE); 
 
-        // Trave Escalada (Width: 500, Height: 130)
-        DrawLineEx((Vector2){ 246, 330 }, (Vector2){ 246, 196 }, 10, WHITE); // Trave Esq sombra
-        DrawLineEx((Vector2){ 250, 330 }, (Vector2){ 250, 196 }, 8, WHITE);  // Trave Esq
-        DrawLineEx((Vector2){ 754, 330 }, (Vector2){ 754, 196 }, 10, WHITE); // Trave Dir sombra
-        DrawLineEx((Vector2){ 750, 330 }, (Vector2){ 750, 196 }, 8, WHITE);  // Trave Dir
-        DrawLineEx((Vector2){ 245, 200 }, (Vector2){ 755, 200 }, 8, WHITE);  // Travessão
+        DrawLineEx((Vector2){ 246, 330 }, (Vector2){ 246, 196 }, 10, WHITE); 
+        DrawLineEx((Vector2){ 250, 330 }, (Vector2){ 250, 196 }, 8, WHITE);  
+        DrawLineEx((Vector2){ 754, 330 }, (Vector2){ 754, 196 }, 10, WHITE); 
+        DrawLineEx((Vector2){ 750, 330 }, (Vector2){ 750, 196 }, 8, WHITE);  
+        DrawLineEx((Vector2){ 245, 200 }, (Vector2){ 755, 200 }, 8, WHITE);  
 
         switch (estadoAtual) {
             case P_MENU:
                 DrawRectangle(0, 0, larguraTela, alturaTela, Fade(BLACK, 0.7f));
-                
                 DrawRectangleRounded((Rectangle){ 200, 180, 600, 440 }, 0.05f, 4, darkGlass);
                 DrawRectangleRoundedLinesEx((Rectangle){ 200, 180, 600, 440 }, 0.05f, 4, 2.0f, amareloBrasil);
-
                 DrawText("SUPER STRIKER", larguraTela/2 - MeasureText("SUPER STRIKER", 50)/2, 230, 50, amareloBrasil);
                 DrawText("PRO PENALTY WORLD CUP", larguraTela/2 - MeasureText("PRO PENALTY WORLD CUP", 20)/2, 290, 20, WHITE);
-                
                 DrawText("Pressione ESPACO para Iniciar", (int)(larguraTela/2 - MeasureText("Pressione ESPACO para Iniciar", 24)/2), 400, 24, Fade(WHITE, escalaTextoModo));
-                
                 DrawRectangleRounded((Rectangle){ 240, 460, 520, 120 }, 0.1f, 4, azulBrasil);
                 DrawText("CONTROLES AVANCADOS:", 260, 480, 16, amareloBrasil);
                 DrawText("- [ESPACO]: Dispara o chute (Mira Oscilante)", 260, 510, 16, WHITE);
@@ -250,7 +285,7 @@ void jogarPenalti() {
                 if (bolaChutada && fabsf(intensidadeEfeito) > 0.1f) {
                     DrawText(intensidadeEfeito > 0 ? "EFEITO MAGNETICO >>>" : "<<< EFEITO MAGNETICO", 
                              (int)(posicaoBola.x - 110), (int)(posicaoBola.y + 25), 14, amareloBrasil);
-                }//if
+                }
 
                 if (!bolaChutada){
                     float miraX = posicaoBola.x + sinf(anguloMira) * -220.0f;
@@ -277,29 +312,48 @@ void jogarPenalti() {
 
             case P_DEFENDEU:
                 DrawRectangle(0, 0, larguraTela, alturaTela, Fade(BLACK, 0.5f));
-                if (posicaoBola.x < 250 || posicaoBola.x > 750 || posicaoBola.y < 190) {
+                if (posicaoBola.x < 252 || posicaoBola.x > 748 || posicaoBola.y < 220) {
                     DrawText("PARA FORA!", larguraTela/2 - MeasureText("PARA FORA!", 60)/2, 320, 60, WHITE);
                 } else {
-                    DrawText("DEFENDEU O GOLEIRO!", larguraTela/2 - MeasureText("DEFENDEU O GOLEIRO!", 50)/2, 320, 50, amareloBrasil);
+                    DrawText("QUE DEFESA ESPETACULAR!", larguraTela/2 - MeasureText("QUE DEFESA ESPETACULAR!", 50)/2, 320, 50, amareloBrasil);
                 }
                 break;
 
             case P_FIM_DE_JOGO:
                 DrawRectangle(0, 0, larguraTela, alturaTela, Fade(BLACK, 0.85f));
                 
-                DrawRectangleRounded((Rectangle){ 200, 150, 600, 450 }, 0.05f, 4, darkGlass);
-                DrawRectangleRoundedLinesEx((Rectangle){ 200, 150, 600, 450 }, 0.05f, 4, 2.5f, amareloBrasil);
+                DrawRectangleRounded((Rectangle){ 180, 120, 640, 520 }, 0.05f, 4, darkGlass);
+                DrawRectangleRoundedLinesEx((Rectangle){ 180, 120, 640, 520 }, 0.05f, 4, 2.5f, amareloBrasil);
 
-                DrawText("FIM DO TORNEIO", larguraTela/2 - MeasureText("FIM DO TORNEIO", 40)/2, 200, 40, WHITE);
+                DrawText("FIM DO TORNEIO", larguraTela/2 - MeasureText("FIM DO TORNEIO", 40)/2, 150, 40, WHITE);
                 
                 if (gols >= 4) {
-                    DrawText("SELECAO CAMPEA DO MUNDO!", larguraTela/2 - MeasureText("SELECAO CAMPEA DO MUNDO!", 30)/2, 310, 30, amareloBrasil);
+                    DrawText("SELECAO CAMPEA DO MUNDO!", larguraTela/2 - MeasureText("SELECAO CAMPEA DO MUNDO!", 26)/2, 220, 26, amareloBrasil);
                 } else {
-                    DrawText("ELIMINADO NAS QUARTAS DE FINAL...", larguraTela/2 - MeasureText("ELIMINADO NAS QUARTAS DE FINAL...", 22)/2, 310, 22, LIGHTGRAY);
+                    DrawText("ELIMINADO NAS QUARTAS DE FINAL...", larguraTela/2 - MeasureText("ELIMINADO NAS QUARTAS DE FINAL...", 22)/2, 220, 22, LIGHTGRAY);
                 }
 
-                DrawText(TextFormat("SCORE ACUMULADO: %d PONTOS", pontuacaoCombo), larguraTela/2 - MeasureText(TextFormat("SCORE ACUMULADO: %d PONTOS", pontuacaoCombo), 20)/2, 400, 20, WHITE);
-                DrawText("Pressione ESPACO para recomecar o desafio", larguraTela/2 - MeasureText("Pressione ESPACO para recomecar o desafio", 18)/2, 530, 18, LIGHTGRAY);
+                DrawText(TextFormat("SCORE ACUMULADO: %d PONTOS", pontuacaoCombo), larguraTela/2 - MeasureText(TextFormat("SCORE ACUMULADO: %d PONTOS", pontuacaoCombo), 20)/2, 280, 20, WHITE);
+                DrawText(TextFormat("APROVEITAMENTO: %.1f%% / 100%%", porcentagemAproveitamento), larguraTela/2 - MeasureText(TextFormat("APROVEITAMENTO: %.1f%% / 100%%", porcentagemAproveitamento), 18)/2, 315, 18, azulBrasil);
+
+                DrawRectangleRounded((Rectangle){ 230, 360, 540, 180 }, 0.08f, 4, azulBrasil);
+                DrawRectangleRoundedLinesEx((Rectangle){ 230, 360, 540, 180 }, 0.08f, 4, 2.0f, amareloBrasil);
+                
+                DrawText("RECOMPENSA COPA DO MUNDO:", larguraTela/2 - MeasureText("RECOMPENSA COPA DO MUNDO:", 18)/2, 380, 18, amareloBrasil);
+                
+                const char* textoPacotes = TextFormat("VOCE GANHOU: %d PACOTES!", pacotesGanhos);
+                DrawText(textoPacotes, larguraTela/2 - MeasureText(textoPacotes, 24)/2, 420, 24, WHITE);
+                
+                const char* textoFigurinhas = TextFormat("(+ %d Figurinhas para o seu Album)", totalFigurinhas);
+                DrawText(textoFigurinhas, larguraTela/2 - MeasureText(textoFigurinhas, 16)/2, 460, 16, amareloBrasil);
+                
+                for(int f = 0; f < pacotesGanhos; f++) {
+                    int posXCard = 420 + (f * 45) - ((pacotesGanhos - 1) * 22);
+                    DrawRectangleRounded((Rectangle){ (float)posXCard, 495, 30, 38 }, 0.1f, 4, amareloBrasil);
+                    DrawRectangleRoundedLinesEx((Rectangle){ (float)posXCard, 495, 30, 38 }, 0.1f, 4, 1.0f, WHITE);
+                }
+
+                DrawText("Pressione ESPACO para recomecar o desafio", larguraTela/2 - MeasureText("Pressione ESPACO para recomecar o desafio", 18)/2, 590, 18, LIGHTGRAY);
                 break;
         }
 
@@ -307,6 +361,14 @@ void jogarPenalti() {
 
         EndDrawing();
     }
+
+    // 🎵 ÁUDIO: Descarrega os arquivos de som e música ao fechar
+    UnloadSound(somChute);
+    UnloadSound(somGol);
+    UnloadMusicStream(musicaFundo); // Descarrega a música de fundo
+    
+    // 🎵 ÁUDIO: Fecha o sistema de som com segurança
+    CloseAudioDevice();
 
     UnloadTexture(cursorBola);
     CloseWindow();
@@ -319,7 +381,7 @@ void DrawLineBlurMode(Vector2 startPos, Vector2 endPos, float thick, Color color
 }
 
 void DesenharGoleiroPro(Vector2 pos, Color corUniforme) {
-    Rectangle corpo = { pos.x - 30, pos.y, 60, 38 }; // Goleiro levemente maior
+    Rectangle corpo = { pos.x - 30, pos.y, 60, 38 }; 
     DrawRectangleRounded(corpo, 0.3f, 4, corUniforme);
     DrawRectangleRoundedLinesEx(corpo, 0.3f, 4, 2.0f, (Color){ 0, 39, 118, 255 });
 
