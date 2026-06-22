@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../headers/biblioteca.h"
+#include "biblioteca.h"
 
 void abrirPacote(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int total, int *total_mochila, int *total_album, int *pacotes_fechados){
 
@@ -33,7 +33,7 @@ void abrirPacote(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, in
         return;
     }
 
-    // 4. Desconta os pacotes do saldo e calcula as figurinhas
+    //Desconta os pacotes do saldo e calcula as figurinhas
     *pacotes_fechados -= qtd_abrir;
     salvarPacotes();
     int total_figurinhas = qtd_abrir * 7;

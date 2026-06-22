@@ -248,7 +248,7 @@ void jogarGoleiro(){
 
             }//if
             
-            //Vártiavel de tempo atualiza a cada segundo (60 fps)
+            //Váriavel de tempo atualiza a cada segundo (60 fps)
             tempoJogo += GetFrameTime();
             
             //Condição de aumento de dificuldade
@@ -476,11 +476,12 @@ void jogarGoleiro(){
     UnloadTexture(imagemBola2026);
     UnloadFont(fonteCopa);
     UnloadSound(somDefesa);
+    UnloadSound(somToque);
+    UnloadSound(somMusica);
     CloseAudioDevice();
     
     //Fecha a janela do jogo
     CloseWindow();
-    
    
     return;
 }
