@@ -23,8 +23,6 @@ void DrawTextOutLine(const char *text, int x, int y, int fontSize, Color textCol
         }//for
     }//for
 
-    //DrawTextOutLine(texto, int [posiçao x], int [posição y], int [tamanho da fonte], Color [cor do texto], Color [cor do contorno])
-
     DrawText(text, x, y, fontSize, textColor);
 }//void
 

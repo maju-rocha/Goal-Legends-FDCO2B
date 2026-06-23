@@ -223,24 +223,12 @@ void albumGrafico(Figurinha *figurinhas, int total_figurinhas, Figurinha *album,
         int tamanhoFonte = 30;
         int larguraTexto = MeasureText(secoes[paginaAtual], tamanhoFonte);
 
-        DrawText(
-            secoes[paginaAtual],
-            (1000 - larguraTexto) / 2,
-            25,
-            tamanhoFonte,
-            BLACK
-        );
+        DrawText(secoes[paginaAtual], (1000 - larguraTexto) / 2, 25, tamanhoFonte,BLACK);
 
         //Texto de instruções
         int larguraInstrucao = MeasureText("Use as setas <- e -> para mudar de pagina", 18);
 
-        DrawText(
-            "Use as setas <- e -> para mudar de pagina",
-            (1000 - larguraInstrucao) / 2,
-            775,
-            18,
-            DARKGRAY
-        );
+        DrawText("Use as setas <- e -> para mudar de pagina", (1000 - larguraInstrucao) / 2, 775,18,DARKGRAY);
 
         //Desenha as figurinhas da página atual
         for(int i = 0; i < total_mostradas; i++){
@@ -252,19 +240,9 @@ void albumGrafico(Figurinha *figurinhas, int total_figurinhas, Figurinha *album,
 
                 if(temImagem[i]){
 
-                    Rectangle origem = {
-                        0,
-                        0,
-                        (float)imagens[i].width,
-                        (float)imagens[i].height
-                    };
+                    Rectangle origem = {0, 0, (float)imagens[i].width, (float)imagens[i].height};
 
-                    Rectangle destino = {
-                        (float)x,
-                        (float)y,
-                        larguraFigurinha,
-                        alturaFigurinha
-                    };
+                    Rectangle destino = {(float)x, (float)y, larguraFigurinha, alturaFigurinha};
 
                     Vector2 centro = {0, 0};
 
@@ -272,24 +250,12 @@ void albumGrafico(Figurinha *figurinhas, int total_figurinhas, Figurinha *album,
 
                 }else{
 
-                    DrawRectangle(
-                        x,
-                        y,
-                        larguraFigurinha,
-                        alturaFigurinha,
-                        LIGHTGRAY
-                    );
+                    DrawRectangle(x, y, larguraFigurinha, alturaFigurinha, LIGHTGRAY);
 
                 }//if else
 
                 //Contorno da figurinha
-                DrawRectangleLines(
-                    x,
-                    y,
-                    larguraFigurinha,
-                    alturaFigurinha,
-                    BLACK
-                );
+                DrawRectangleLines(x, y, larguraFigurinha, alturaFigurinha, BLACK);
 
             }//if
 

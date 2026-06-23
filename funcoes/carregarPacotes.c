@@ -3,13 +3,13 @@
 #include "biblioteca.h"
 
 void carregarPacotes(){
-    FILE *f = fopen("extras/pacotes.txt", "r");
+    FILE *arquivo_carrega_pacotes = fopen("extras/pacotes.txt", "r");
 
-    if(f == NULL){
+    if(arquivo_carrega_pacotes == NULL){
         pacotes_fechados = 0; // valor padrão
         return;
     }//if
 
-    fscanf(f, "%d", &pacotes_fechados);
-    fclose(f);
+    fscanf(arquivo_carrega_pacotes, "%d", &pacotes_fechados);
+    fclose(arquivo_carrega_pacotes);
 }
