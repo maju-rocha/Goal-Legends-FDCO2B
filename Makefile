@@ -34,7 +34,9 @@ OBJS = main.o \
        penalti.o \
 	   global.o \
        salvarPacotes.o \
-       carregarPacotes.o
+       carregarPacotes.o \
+       salvarRepetida.o \
+       trocar.o 
 
 # ==========================================
 # 3. REGRAS DE COMPILAÇÃO

@@ -1,5 +1,6 @@
 #include "biblioteca.h"
 
-int pacotes_fechados = 0; // Inicializa a variável de pacotes fechados
-
+//Váriaveis globais
+int pacotes_fechados = 0;
+int figurinha_repetida = 0;
 Menu_FimdeJogo estadoAtual = MENU_FIM;

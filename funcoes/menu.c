@@ -1,59 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
 #include <raylib.h>
 #include "../headers/biblioteca.h"
 
-void menuPrincipal(void){
-
-        char linha[300];
-        int total = 0;
-        int total_album = 0;
-        int total_mochila = 0;
-        
-        // ==========================================
-        // VARIÁVEL DE PACOTES ACUMULADOS
-        // ==========================================
-        Figurinha *figurinhas = malloc(981 * sizeof(Figurinha));
-        Figurinha *album = malloc(981 * sizeof(Figurinha));
-        Figurinha *mochila = malloc(981 * sizeof(Figurinha));
-        
-        if (figurinhas == NULL || album == NULL || mochila == NULL){
-            printf("Erro de alocacao.\n"); 
-            return;
-        }
-
-        FILE *arquivo = fopen("extras/figurinhas2026.csv","rb");
-        if (arquivo == NULL){
-            printf("Erro ao abrir o arquivo figurinhas2026.csv.\n"); 
-            return; 
-        }
-
-        FILE *arquivo_album = fopen("extras/album.csv", "r");
-        if(arquivo_album != NULL){
-            while(fscanf(arquivo_album," %9[^,],%49[^,],%49[^,],%49[^,],%49[^\n]", album[total_album].codigo, album[total_album].titulo, album[total_album].secao, album[total_album].grupo,album[total_album].tipo) == 5){
-                total_album++;
-            }
-            fclose(arquivo_album);
-        }
-
-        FILE *arquivo_mochila = fopen("extras/mochila.csv", "r");
-        if(arquivo_mochila != NULL){
-            while(fscanf(arquivo_mochila, " %9[^,],%49[^,],%49[^,],%49[^,],%49[^\n]", mochila[total_mochila].codigo, mochila[total_mochila].titulo, mochila[total_mochila].secao, mochila[total_mochila].grupo, mochila[total_mochila].tipo) == 5){
-                total_mochila++;
-            }
-            fclose(arquivo_mochila);
-        }
-
-        fgets(linha, sizeof(linha), arquivo); 
-        while (total < 981 && fscanf(arquivo, " %9[^,],%49[^,],%49[^,],%49[^,],%49[^\n]", figurinhas[total].codigo, figurinhas[total].titulo, figurinhas[total].secao, figurinhas[total].grupo, figurinhas[total].tipo) == 5){
-            total++;
-        }
-        fclose(arquivo);
-        
-        srand(time(NULL));
-
+void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, int total, int *total_album, int *total_mochila){
         // ==========================================
         // CONFIGURAÇÃO DA INTERFACE GRÁFICA
         // ==========================================
@@ -78,10 +29,11 @@ void menuPrincipal(void){
             "3. Excluir do Inventario",
             "4. Pesquisar Figurinha",
             "5. Alterar Figurinha",
-            "6. Area de Minigames"
+            "6. Trocar Figurinhas",
+            "7. Area de Minigames"
         };
-        Rectangle botoesPrincipal[6];
-        for (int i = 0; i < 6; i++) {
+        Rectangle botoesPrincipal[7];
+        for (int i = 0; i < 7; i++) {
             botoesPrincipal[i] = (Rectangle){ 250, 220 + (i * 70), 500, 50 };
         }
 
@@ -109,14 +61,15 @@ void menuPrincipal(void){
             // ==========================================
             if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
                 if (estadoAtual == MENU_PRINCIPAL) {
-                    for (int i = 0; i < 6; i++) {
+                    for (int i = 0; i < 7; i++) {
                         if (CheckCollisionPointRec(mousePoint, botoesPrincipal[i])) {
                             if (i == 0) acaoEscolhida = 1;
                             else if (i == 1) estadoAtual = MENU_INVENTARIO;
                             else if (i == 2) estadoAtual = MENU_EXCLUIR;
                             else if (i == 3) acaoEscolhida = 6;
                             else if (i == 4) acaoEscolhida = 7;
-                            else if (i == 5) estadoAtual = MENU_MINIGAMES;
+                            else if (i == 5) acaoEscolhida = 11;
+                            else if (i == 6) estadoAtual = MENU_MINIGAMES;
                         }
                     }
                 } 
@@ -167,7 +120,7 @@ void menuPrincipal(void){
                 DrawTextEx(fonteCopa, subtitle, (Vector2){ 500 - (subtitleWidth / 2) + 2, 120 + 2 }, 16, 2, BLACK); // Sombra
                 DrawTextEx(fonteCopa, subtitle, (Vector2){ 500 - (subtitleWidth / 2), 120 }, 16, 2, amareloBrasil);
 
-                for (int i = 0; i < 6; i++) {
+                for (int i = 0; i < 7; i++) {
                     bool mouseEmCima = CheckCollisionPointRec(mousePoint, botoesPrincipal[i]);
                     int offsetAnimacao = 0;
 
@@ -273,25 +226,25 @@ void menuPrincipal(void){
                 // LÓGICA DE ABRIR PACOTE
                 if (acaoEscolhida == 1) {
                     printf("\n=========================================\n");
-                    abrirPacote(figurinhas, mochila, album, total, &total_mochila, &total_album, &pacotes_fechados);
+                    abrirPacote(figurinhas, mochila, album, total, total_mochila, total_album, &pacotes_fechados);
                 }
                 else if (acaoEscolhida == 2) {
                     printf("\n=========================================\n");
-                    printf("Total album: %d\n", total_album);
-                    listarFigurinhasAlbum(album, total_album);
+                    printf("Total album: %d\n", *total_album);
+                    listarFigurinhasAlbum(album, *total_album);
                 } 
                 else if (acaoEscolhida == 3) {
                     printf("\n=========================================\n");
-                    printf("Total mochila: %d\n", total_mochila);
-                    listarFigurinhasMochila(mochila, total_mochila);
+                    printf("Total mochila: %d\n", *total_mochila);
+                    listarFigurinhasMochila(mochila, *total_mochila);
                 } 
                 else if (acaoEscolhida == 4) {
                     printf("\n=========================================\n");
-                    excluirAlbum(figurinhas, album, &total_album);
+                    excluirAlbum(figurinhas, album, total_album);
                 }
                 else if (acaoEscolhida == 5) {
                     printf("\n=========================================\n");
-                    excluirMochila(figurinhas, mochila, &total_mochila);
+                    excluirMochila(figurinhas, mochila, total_mochila);
                 }
                 else if (acaoEscolhida == 6) {
                     printf("\n=========================================\n");
@@ -315,16 +268,23 @@ void menuPrincipal(void){
                         else if (opcao_alterar != 3) printf("Opcao invalida.\n");
                         
                     } while (opcao_alterar != 3);
-                } 
+                }
+                else if (acaoEscolhida == 11){
+                    printf("\n=========================================\n");
+                    trocarFigurinha(figurinhas, mochila, album, total_mochila, total_album);
+                }
+                
                 // CHAMADA DOS MINIGAMES
-                else if (acaoEscolhida == 8) jogarQuiz(figurinhas, mochila, album, total, &total_mochila, &total_album);
+                else if (acaoEscolhida == 8) jogarQuiz(figurinhas, mochila, album, total, total_mochila, total_album);
                 else if (acaoEscolhida == 9) jogarGoleiro();
                 else if (acaoEscolhida == 10) jogarPenalti(); 
+
+
 
                 // ==========================================
                 // CONTROLE DE RETORNO DO TERMINAL
                 // ==========================================
-                if (acaoEscolhida >= 1 && acaoEscolhida <= 7) {
+                if ((acaoEscolhida >= 1 && acaoEscolhida <= 7) || acaoEscolhida == 11) {
                     printf("\n=========================================\n");
                     printf("Pressione ENTER para voltar ao menu grafico...");
                     

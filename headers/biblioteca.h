@@ -24,7 +24,8 @@ typedef enum{
     JOGAR_NOVAMENTE
 }Menu_FimdeJogo;
 
-extern int pacotes_fechados; 
+extern int pacotes_fechados;
+extern int figurinha_repetida; 
 extern Menu_FimdeJogo estadoAtual;
 
 void abrirPacote(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int total, int *total_mochila, int *total_album, int *pacotes_fechados);
@@ -49,11 +50,14 @@ void jogarGoleiro(); //cabeçalho do goleiro
 
 void jogarPenalti(); //cabeçalho da função do jogo do pênalti
 
-void menuPrincipal(void);//cabeçalho da função do menu
+void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, int total, int *total_album, int *total_mochila);//cabeçalho da função do menu
 
 void carregarPacotes();//cabeçalho da função que carrega a quantidade de pacotes
 
 void salvarPacotes();//cabeçalho da função que salva a quantidade de pacotes
 
+void salvarRepetida();//cabeçalho da função que salva a quantidade de repetidas
+
+void trocarFigurinha(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int *total_mochila, int *total_album);//cabeçalho da função que troca figurinhas repetidas
 
 #endif

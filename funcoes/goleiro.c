@@ -54,7 +54,7 @@ void jogarGoleiro(){
     Sound somToque = LoadSound ("audio/som_toqueatacante.mp3");
     SetSoundVolume(somToque, 0.3f);
     Sound somMusica = LoadSound ("audio/som_musicagoleiro.mp3");
-    SetSoundVolume(somMusica, 0.02f);
+    SetSoundVolume(somMusica, 0.03f);
     //Váriavel da fonte
     Font fonteCopa = LoadFont("extras/PressStart2P-Regular.ttf");
     
@@ -194,7 +194,7 @@ void jogarGoleiro(){
                 boxPosition = (Vector2){ 500, 27 };//Reseta a posição da bola
                 
                 boxSpeed.y = (rand() % 5 + 7) * multiplicadorDificuldade;//Muda a velocidade da bola de acordo com a dificuldade
-                boxSpeed.x = (rand() % 15) - 9;//Muda a angulação da bola
+                boxSpeed.x = (rand() % 11) - 5;//Muda a angulação da bola
 
                 
                 //Spawna de 0 a 2 atacantes
