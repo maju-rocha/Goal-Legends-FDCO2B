@@ -3,12 +3,12 @@
 #include "biblioteca.h"
 
 void salvarPacotes(){
-    FILE *f = fopen("extras/pacotes.txt", "w");
+    FILE *arquivo_salvar_pacotes = fopen("extras/pacotes.txt", "w");
 
-    if(f == NULL){
+    if(arquivo_salvar_pacotes == NULL){
         return;   
     }//if
 
-    fprintf(f, "%d", pacotes_fechados);
-    fclose(f);
+    fprintf(arquivo_salvar_pacotes, "%d", pacotes_fechados);
+    fclose(arquivo_salvar_pacotes);
 }
