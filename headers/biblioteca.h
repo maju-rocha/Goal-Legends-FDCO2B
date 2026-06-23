@@ -60,4 +60,8 @@ void salvarRepetida();//cabeçalho da função que salva a quantidade de repetid
 
 void trocarFigurinha(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int *total_mochila, int *total_album);//cabeçalho da função que troca figurinhas repetidas
 
+void albumGrafico(Figurinha *figurinhas, int total_figurinhas, Figurinha *album, int total_album);//cabeçalho da função gráfico do album
+
+int estaNoAlbum(Figurinha *album, int total_album, char codigo[]);//cabeçalho da função que consefere se a figurinha está no album
+
 #endif
