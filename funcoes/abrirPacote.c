@@ -25,6 +25,7 @@ void abrirPacote(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, in
     //Váriaveis
     int qtd_abrir = 0;
     char buffer[100];
+    char codigo_figurinha[20];
 
     //Pergunta a quantidade que deseja abrir
     printf("Voce tem %d pacote(s) disponivel(is).\n", *pacotes_fechados);
@@ -79,9 +80,9 @@ void abrirPacote(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, in
         //Condição para ver está no album, caso não coloca na mochila
         if(!estaNoAlbum(album, *total_album, figurinhas[sorteada].codigo)){
 
+            
             album[*total_album] = figurinhas[sorteada];
             (*total_album)++;
-
             fprintf(arquivoalbum,"%s,%s,%s,%s,%s\n", figurinhas[sorteada].codigo, figurinhas[sorteada].titulo, figurinhas[sorteada].secao, figurinhas[sorteada].grupo, figurinhas[sorteada].tipo);
 
             printf("=> NOVA! Figurinha adicionada ao album.\n\n");
