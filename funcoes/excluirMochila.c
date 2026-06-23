@@ -25,9 +25,9 @@ void excluirMochila(Figurinha *figurinhas, Figurinha *mochila, int *total_mochil
             if(arquivo != NULL){
 
                 for(int k = 0; k < *total_mochila; k++){
-
-                    fprintf(arquivo, "%s,%s,%s,%s,%s\n", mochila[k].codigo, mochila[k].titulo, mochila[k].secao, mochila[k].grupo, mochila[k].tipo);
+                    
                     //reescreve o arquivo mochila.csv com as figurinhas restantes após a exclusão
+                    fprintf(arquivo, "%s,%s,%s,%s,%s\n", mochila[k].codigo, mochila[k].titulo, mochila[k].secao, mochila[k].grupo, mochila[k].tipo);
                 }
 
                 fclose(arquivo);//fecha o arquivo mochila.csv

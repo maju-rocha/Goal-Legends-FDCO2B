@@ -3,78 +3,102 @@
 #include <string.h>
 #include "biblioteca.h"
 
-void abrirPacote(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int total, int *total_mochila, int *total_album){
+//Função para comparar se está no album
+int estaNoAlbum(Figurinha *album, int total_album, char codigo[]){
+    for(int i = 0; i < total_album; i++) {
+        if(strcmp(album[i].codigo, codigo) == 0) {
+            return 1;
+        }
+    }
+    return 0;
+}
 
-    char opcao[10];//variavel para armazenar a resposta do usuário sobre onde guardar a figurinha sorteada
+void abrirPacote(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int total, int *total_mochila, int *total_album, int *pacotes_fechados){
 
-    FILE *arquivoalbum = fopen("extras/album.csv", "a");//abre o arquivo album.csv para escrita, caso o arquivo não exista ele será criado
+    //Verifica se tem pacotes para abrir
+    if(*pacotes_fechados <= 0){
+        printf("OPSSS! Voce nao tem pacotes fechados no inventario!\n");
+        printf("Jogue os Minigames da Copa para conquistar recompensas.\n");
+        return;
+    }
 
+    //Váriaveis
+    int qtd_abrir = 0;
+    char buffer[100];
+
+    //Pergunta a quantidade que deseja abrir
+    printf("Voce tem %d pacote(s) disponivel(is).\n", *pacotes_fechados);
+    printf("Quantos pacotes deseja abrir de uma vez? ");
+    
+    fgets(buffer, sizeof(buffer), stdin);
+    sscanf(buffer, "%d", &qtd_abrir); // Converte o texto digitado para número
+
+    //Verificações de teste
+    if(qtd_abrir <= 0){
+        printf("\nQuantidade invalida. Operacao cancelada.\n");
+        return;
+    }
+
+    if(qtd_abrir > *pacotes_fechados){
+        printf("\nVoce nao tem pacotes suficientes! Tentou abrir %d, mas so tem %d.\n", qtd_abrir, *pacotes_fechados);
+        return;
+    }
+
+    //Diminui quantidade de pacotes geral e abre uma figurinha
+    *pacotes_fechados -= qtd_abrir;
+    salvarPacotes();
+    int total_figurinhas = qtd_abrir * 7;
+
+    //Abertura de arquivo .csv do album e mochila
+    FILE *arquivoalbum = fopen("extras/album.csv", "a");
     if(arquivoalbum == NULL){
         printf("\nErro ao abrir album.csv\n");
         return;
-    }//teste de abertura do arquivo album.csv
+    }
 
     FILE *arquivomochila = fopen("extras/mochila.csv", "a");
-
     if(arquivomochila == NULL){
         printf("\nErro ao abrir mochila.csv\n");
         fclose(arquivoalbum);
         return;
-    }//teste de abertura ddo arquivo mochila.csv
+    }
 
-    printf("\nPacote com 7 figurinhas:\n\n");
+    printf("\n>>> Abrindo %d pacote(s)... Voce tirou %d figurinhas!\n\n", qtd_abrir, total_figurinhas);
 
-    for(int i = 0; i < 7; i++){
+    //Loop para sortear todas as figurinhas escolhidas
+    for(int i = 0; i < total_figurinhas; i++){
         int sorteada = rand() % total;
 
+        printf("--- Figurinha %d de %d ---\n", i + 1, total_figurinhas);
         printf("Codigo: %s\n", figurinhas[sorteada].codigo);
         printf("Titulo: %s\n", figurinhas[sorteada].titulo);
         printf("Secao : %s\n", figurinhas[sorteada].secao);
         printf("Grupo : %s\n", figurinhas[sorteada].grupo);
         printf("Tipo  : %s\n\n", figurinhas[sorteada].tipo);
 
-        printf("Guardar no album? (sim/nao): ");
-        fgets(opcao, sizeof(opcao), stdin);
-        opcao[strcspn(opcao, "\n")] = '\0';
+        //Condição para ver está no album, caso não coloca na mochila
+        if(!estaNoAlbum(album, *total_album, figurinhas[sorteada].codigo)){
 
-        printf("Resposta lida = [%s]\n", opcao);
+            album[*total_album] = figurinhas[sorteada];
+            (*total_album)++;
 
-        if(strcmp(opcao, "sim") == 0){
+            fprintf(arquivoalbum,"%s,%s,%s,%s,%s\n", figurinhas[sorteada].codigo, figurinhas[sorteada].titulo, figurinhas[sorteada].secao, figurinhas[sorteada].grupo, figurinhas[sorteada].tipo);
 
-            album[*total_album] = figurinhas[sorteada];//salva a figurinha no vetor album
-
-            (*total_album)++;//incrementa a quantidade de figurinhas do album
-
-            fprintf(arquivoalbum,"%s,%s,%s,%s,%s\n",figurinhas[sorteada].codigo, figurinhas[sorteada].titulo, figurinhas[sorteada].secao, figurinhas[sorteada].grupo, figurinhas[sorteada].tipo);
-            //salva a figurinha no arquivo album.csv
-            
-            printf("Figurinha salva no album.\n\n");
+            printf("=> NOVA! Figurinha adicionada ao album.\n\n");
 
         }else{
 
-            printf("Guardar na mochila? (sim/nao): ");
-            fgets(opcao, sizeof(opcao), stdin);
-            opcao[strcspn(opcao, "\n")] = '\0';
+            mochila[*total_mochila] = figurinhas[sorteada];
+            (*total_mochila)++;
 
-            if(strcmp(opcao, "sim") == 0){
+            figurinha_repetida++;
+            salvarRepetida();
 
-                mochila[*total_mochila] = figurinhas[sorteada];//salva a figurinha no vetor mochila
-                (*total_mochila)++;//incrementa a quantidade de figurinhas da mochila
+            fprintf(arquivomochila,"%s,%s,%s,%s,%s\n", figurinhas[sorteada].codigo, figurinhas[sorteada].titulo, figurinhas[sorteada].secao, figurinhas[sorteada].grupo, figurinhas[sorteada].tipo);
 
-                fprintf(arquivomochila,"%s,%s,%s,%s,%s\n", figurinhas[sorteada].codigo, figurinhas[sorteada].titulo, figurinhas[sorteada].secao, figurinhas[sorteada].grupo, figurinhas[sorteada].tipo);
-                //salva a figurinha no arquivo mochila.csv
-
-                printf("Figurinha salva na mochila.\n\n");
-
-            }else{
-
-                printf("Figurinha descartada.\n\n");
-
-            }
-        }//else
+            printf("=> REPETIDA! Figurinha enviada para a mochila.\n\n");
+        }
     }//for
-
-    fclose(arquivoalbum);//fecha arquivo album
-    fclose(arquivomochila);//fecha arquivo mochila
-
-}//função para abrir um pacote de figurinhas, recebe o vetor de figurinhas e o total de figurinhas lidas do arquivo, sorteia 7 figurinhas aleatoriamente, exibe as informações de cada figurinha sorteada e pergunta ao usuário se deseja guardar a figurinha no album ou na mochila, salva a figurinha no vetor e no arquivo correspondente ou descarta a figurinha com base na resposta do usuário.
+    fclose(arquivoalbum);
+    fclose(arquivomochila);
+}//função

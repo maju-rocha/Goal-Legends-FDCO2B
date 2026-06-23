@@ -1,6 +1,13 @@
 #ifndef BIBLIOTECA_H
 #define BIBLIOTECA_H
 
+typedef enum {
+    MENU_PRINCIPAL,
+    MENU_INVENTARIO,
+    MENU_EXCLUIR,
+    MENU_MINIGAMES
+} EstadoMenu;
+
 typedef struct {
 
     char codigo[10];
@@ -11,7 +18,17 @@ typedef struct {
 
 } Figurinha;//struct Figurinha
 
-void abrirPacote(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int total, int *total_mochila, int *total_album);//cabeçalho da função abrirPacote
+//Enum Fim de Jogo
+typedef enum{
+    MENU_FIM, 
+    JOGAR_NOVAMENTE
+}Menu_FimdeJogo;
+
+extern int pacotes_fechados;
+extern int figurinha_repetida; 
+extern Menu_FimdeJogo estadoAtual;
+
+void abrirPacote(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int total, int *total_mochila, int *total_album, int *pacotes_fechados);
 
 void listarFigurinhasAlbum(Figurinha *album, int total_album);//cabeçalho da função listarFigurinhas para o album
 
@@ -27,12 +44,20 @@ void alterarFigurinha(Figurinha *vetor, int total);//cabeçalho da função alte
 
 void resetarLista(Figurinha *vetor, int total);//cabeçalho da função resetar lista de figurinhas
 
-void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int total, int *total_mochila, int *total_album); //cabeçalho da função do quiz
+void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int total, int *total_mochila, int *total_album);//cabeçalho do quiz
 
-void jogarGoleiro(); //cabeçalho da função do jogo do goleiro
+void jogarGoleiro(); //cabeçalho do goleiro
 
 void jogarPenalti(); //cabeçalho da função do jogo do pênalti
 
+void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, int total, int *total_album, int *total_mochila);//cabeçalho da função do menu
 
+void carregarPacotes();//cabeçalho da função que carrega a quantidade de pacotes
+
+void salvarPacotes();//cabeçalho da função que salva a quantidade de pacotes
+
+void salvarRepetida();//cabeçalho da função que salva a quantidade de repetidas
+
+void trocarFigurinha(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int *total_mochila, int *total_album);//cabeçalho da função que troca figurinhas repetidas
 
 #endif
