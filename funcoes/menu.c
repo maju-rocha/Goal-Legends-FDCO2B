@@ -232,6 +232,7 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
                     printf("\n=========================================\n");
                     printf("Total album: %d\n", *total_album);
                     listarFigurinhasAlbum(album, *total_album);
+                    albumGrafico(figurinhas, total, album, *total_album);
                 } 
                 else if (acaoEscolhida == 3) {
                     printf("\n=========================================\n");
