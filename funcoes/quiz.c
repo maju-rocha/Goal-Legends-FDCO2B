@@ -3,18 +3,18 @@
 #include <string.h>
 #include <math.h> 
 #include <raylib.h>
+#include <time.h>
 #include "biblioteca.h"
 
 
-typedef struct {
+typedef struct{
     char pergunta[200];
     char opcoes[4][100];
     int correta; 
 }PerguntaQuiz;
 
-typedef enum { TELA_PERGUNTA, TELA_FEEDBACK, TELA_FIM } EstadoQuiz;
+typedef enum{ TELA_PERGUNTA, TELA_FEEDBACK, TELA_FIM }EstadoQuiz;
 
-// ATENÇÃO: Assinatura atualizada com o ponteiro *qtd_pacotes no final
 void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int total, int *total_mochila, int *total_album){
     PerguntaQuiz banco[20] = {
         {"Quem ganhou a Copa do Mundo de 2002?", {"Brasil", "Alemanha", "Italia", "Argentina"}, 0},
@@ -47,6 +47,9 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
     int pergunta_atual = 0;
     int opcao_selecionada = -1;
     int pacotes_ganhos_rodada = 0;
+    
+    //Semente para randomização
+    srand(time(NULL));
     
     //Sorteio de perguntas
     for(int i = 0; i < num_perguntas; i++){

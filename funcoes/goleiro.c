@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdio.h>
+#define JOGAR_NOVAMENTE 1
 
 //Struct atacantes
 typedef struct{
