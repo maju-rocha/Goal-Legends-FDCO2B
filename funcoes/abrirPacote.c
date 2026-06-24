@@ -1,105 +1,114 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <raylib.h>
 #include "biblioteca.h"
 
-//Função para comparar se está no album
-int estaNoAlbum(Figurinha *album, int total_album, char codigo[]){
-    for(int i = 0; i < total_album; i++) {
-        if(strcmp(album[i].codigo, codigo) == 0) {
-            return 1;
-        }
-    }
-    return 0;
-}
 
-void abrirPacote(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int total, int *total_mochila, int *total_album, int *pacotes_fechados){
+void abrirPacote(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int total, int *total_mochila, int *total_album, int *pacotes_fechados) {
+    if (*pacotes_fechados <= 0) return;
 
-    //Verifica se tem pacotes para abrir
-    if(*pacotes_fechados <= 0){
-        printf("OPSSS! Voce nao tem pacotes fechados no inventario!\n");
-        printf("Jogue os Minigames da Copa para conquistar recompensas.\n");
-        return;
-    }
-
-    //Váriaveis
-    int qtd_abrir = 0;
-    char buffer[100];
-    char codigo_figurinha[20];
-
-    //Pergunta a quantidade que deseja abrir
-    printf("Voce tem %d pacote(s) disponivel(is).\n", *pacotes_fechados);
-    printf("Quantos pacotes deseja abrir de uma vez? ");
+    InitWindow(1000, 800, "Goal Legends - Abrindo Pacote");
+    SetTargetFPS(60);
+    Font fonteCopa = LoadFont("extras/PressStart2P-Regular.ttf");
     
-    fgets(buffer, sizeof(buffer), stdin);
-    sscanf(buffer, "%d", &qtd_abrir); // Converte o texto digitado para número
+    // --- CARREGAMENTO DO GIF COM REDIMENSIONAMENTO ---
+    int animFrames = 0;
+    Image imAnim = LoadImageAnim("imagens/animacao.gif", &animFrames);
+    // Redimensionamos a imagem para um tamanho que cabe na tela (ex: 500x500)
+    ImageResize(&imAnim, 500, 500); 
+    Texture2D texAnim = LoadTextureFromImage(imAnim);
+    
+    int currentAnimFrame = 0;
+    int frameDelay = 8; // Ajusta este valor (maior = mais lento)
+    int frameCounter = 0;
 
-    //Verificações de teste
-    if(qtd_abrir <= 0){
-        printf("\nQuantidade invalida. Operacao cancelada.\n");
-        return;
-    }
+    EstadoAbertura estado = ESCOLHER_QTD;
+    int qtd_abrir = 1, total_figurinhas = 0, figurinha_atual = 0;
+    Figurinha *sorteadas_array = NULL;
+    int *status_sorteadas = NULL;
+    Texture2D texFig = {0};
 
-    if(qtd_abrir > *pacotes_fechados){
-        printf("\nVoce nao tem pacotes suficientes! Tentou abrir %d, mas so tem %d.\n", qtd_abrir, *pacotes_fechados);
-        return;
-    }
+    while (!WindowShouldClose()) {
+        Vector2 mouse = GetMousePosition();
 
-    //Diminui quantidade de pacotes geral e abre uma figurinha
-    *pacotes_fechados -= qtd_abrir;
-    salvarPacotes();
-    int total_figurinhas = qtd_abrir * 7;
-
-    //Abertura de arquivo .csv do album e mochila
-    FILE *arquivoalbum = fopen("extras/album.csv", "a");
-    if(arquivoalbum == NULL){
-        printf("\nErro ao abrir album.csv\n");
-        return;
-    }
-
-    FILE *arquivomochila = fopen("extras/mochila.csv", "a");
-    if(arquivomochila == NULL){
-        printf("\nErro ao abrir mochila.csv\n");
-        fclose(arquivoalbum);
-        return;
-    }
-
-    printf("\n>>> Abrindo %d pacote(s)... Voce tirou %d figurinhas!\n\n", qtd_abrir, total_figurinhas);
-
-    //Loop para sortear todas as figurinhas escolhidas
-    for(int i = 0; i < total_figurinhas; i++){
-        int sorteada = rand() % total;
-
-        printf("--- Figurinha %d de %d ---\n", i + 1, total_figurinhas);
-        printf("Codigo: %s\n", figurinhas[sorteada].codigo);
-        printf("Titulo: %s\n", figurinhas[sorteada].titulo);
-        printf("Secao : %s\n", figurinhas[sorteada].secao);
-        printf("Grupo : %s\n", figurinhas[sorteada].grupo);
-        printf("Tipo  : %s\n\n", figurinhas[sorteada].tipo);
-
-        //Condição para ver está no album, caso não coloca na mochila
-        if(!estaNoAlbum(album, *total_album, figurinhas[sorteada].codigo)){
-
-            
-            album[*total_album] = figurinhas[sorteada];
-            (*total_album)++;
-            fprintf(arquivoalbum,"%s,%s,%s,%s,%s\n", figurinhas[sorteada].codigo, figurinhas[sorteada].titulo, figurinhas[sorteada].secao, figurinhas[sorteada].grupo, figurinhas[sorteada].tipo);
-
-            printf("=> NOVA! Figurinha adicionada ao album.\n\n");
-
-        }else{
-
-            mochila[*total_mochila] = figurinhas[sorteada];
-            (*total_mochila)++;
-
-            figurinha_repetida++;
-            salvarRepetida();
-
-            fprintf(arquivomochila,"%s,%s,%s,%s,%s\n", figurinhas[sorteada].codigo, figurinhas[sorteada].titulo, figurinhas[sorteada].secao, figurinhas[sorteada].grupo, figurinhas[sorteada].tipo);
-
-            printf("=> REPETIDA! Figurinha enviada para a mochila.\n\n");
+        // Lógica de Estados
+        if (estado == ESCOLHER_QTD) {
+            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                if (CheckCollisionPointRec(mouse, (Rectangle){350, 400, 50, 50}) && qtd_abrir > 1) qtd_abrir--;
+                if (CheckCollisionPointRec(mouse, (Rectangle){600, 400, 50, 50}) && qtd_abrir < *pacotes_fechados) qtd_abrir++;
+                if (CheckCollisionPointRec(mouse, (Rectangle){400, 500, 200, 60})) {
+                    *pacotes_fechados -= qtd_abrir;
+                    total_figurinhas = qtd_abrir * 7;
+                    sorteadas_array = malloc(total_figurinhas * sizeof(Figurinha));
+                    status_sorteadas = malloc(total_figurinhas * sizeof(int));
+                    for(int i=0; i<total_figurinhas; i++) {
+                        int idx = rand() % total;
+                        sorteadas_array[i] = figurinhas[idx];
+                        if(!estaNoAlbum(album, *total_album, sorteadas_array[i].codigo)) {
+                            album[*total_album++] = sorteadas_array[i];
+                            status_sorteadas[i] = 1;
+                        } else {
+                            mochila[*total_mochila++] = sorteadas_array[i];
+                            status_sorteadas[i] = 2;
+                        }
+                    }
+                    estado = ANIMACAO;
+                }
+            }
+        } 
+        else if (estado == ANIMACAO) {
+            frameCounter++;
+            if (frameCounter >= frameDelay) {
+                currentAnimFrame++;
+                if (currentAnimFrame >= animFrames) {
+                    estado = REVELAR_CARTA;
+                    char path[200];
+                    sprintf(path, "imagens/imagens_figurinhas/%s/%s.png", sorteadas_array[0].secao, sorteadas_array[0].codigo);
+                    if(FileExists(path)) texFig = LoadTexture(path);
+                } else {
+                    // Atualiza a textura com o frame específico do GIF redimensionado
+                    UpdateTexture(texAnim, ((unsigned char *)imAnim.data) + (imAnim.width * imAnim.height * 4 * currentAnimFrame));
+                }
+                frameCounter = 0;
+            }
         }
-    }//for
-    fclose(arquivoalbum);
-    fclose(arquivomochila);
-}//função
+        else if (estado == REVELAR_CARTA && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+            if (++figurinha_atual >= total_figurinhas) estado = FIM_ABERTURA;
+            else {
+                if(texFig.id > 0) UnloadTexture(texFig);
+                char path[200];
+                sprintf(path, "imagens/imagens_figurinhas/%s/%s.png", sorteadas_array[figurinha_atual].secao, sorteadas_array[figurinha_atual].codigo);
+                if(FileExists(path)) texFig = LoadTexture(path);
+            }
+        }
+        else if (estado == FIM_ABERTURA && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) break;
+
+        // Desenho
+        BeginDrawing();
+        ClearBackground((Color){20, 40, 20, 255});
+
+        if (estado == ESCOLHER_QTD) {
+            DrawTextEx(fonteCopa, "QTD PACOTES:", (Vector2){300, 300}, 20, 2, WHITE);
+            DrawTextEx(fonteCopa, TextFormat("%d", qtd_abrir), (Vector2){500, 300}, 20, 2, YELLOW);
+            DrawRectangle(400, 500, 200, 60, GOLD);
+            DrawText("ABRIR", 460, 520, 20, BLACK);
+        } else if (estado == ANIMACAO) {
+            // Desenha centralizado (500 é o meio da tela, subtraímos metade da largura do GIF)
+            DrawTexture(texAnim, 500 - 250, 400 - 250, WHITE);
+        } else if (estado == REVELAR_CARTA) {
+            if (texFig.id > 0) DrawTexturePro(texFig, (Rectangle){0,0,texFig.width,texFig.height}, (Rectangle){320, 120, 360, 400}, (Vector2){0,0}, 0, WHITE);
+            DrawTextEx(fonteCopa, "CLIQUE PARA PROXIMA", (Vector2){350, 700}, 20, 1, WHITE);
+        } else if (estado == FIM_ABERTURA) {
+            DrawTextEx(fonteCopa, "CONCLUIDO!", (Vector2){400, 400}, 30, 2, WHITE);
+        }
+        EndDrawing();
+    }
+
+    // Limpeza
+    if(sorteadas_array) free(sorteadas_array);
+    if(status_sorteadas) free(status_sorteadas);
+    if(texFig.id > 0) UnloadTexture(texFig);
+    UnloadTexture(texAnim); UnloadImage(imAnim); UnloadFont(fonteCopa); CloseWindow();
+    salvarPacotes(*pacotes_fechados);
+}
