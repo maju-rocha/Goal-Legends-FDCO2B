@@ -3,7 +3,7 @@
 #include <string.h>
 #include <math.h> 
 #include <raylib.h>
-#include "../headers/biblioteca.h"
+#include "biblioteca.h"
 #include <raymath.h>
 
 // Paleta de Cores de Alta Costura - Copa do Mundo Premium
@@ -12,7 +12,7 @@
 #define COPA_VERDE_NEON  (Color){ 0, 230, 150, 255 }   // Feedback de Hover e Luz Ativa
 #define COPA_VERMELHO    (Color){ 210, 20, 52, 255 }   // Vermelho Real Fifa
 #define COPA_OURO_PURO   (Color){ 255, 190, 0, 255 }   // Destaque Lendário / Campeão
-#define COPA_OURO_BRILHO (Color){ 255, 230, 120, 255 } // Brilho Incandescente
+#define COPA_OURO_BRILHO (Color){ 255, 230, 120, 255 }  // Brilho Incandescente
 #define COPA_CINZA_CARD  (Color){ 28, 36, 56, 255 }    // Slot Vazio Fosco Premium
 
 // Estrutura Avançada de Partículas Atmosféricas
@@ -354,12 +354,9 @@ void albumGrafico(Figurinha *figurinhas, int total_figurinhas, Figurinha *album,
         DrawText(txtProgresso, 650, 24, 13, ColorAlpha(WHITE, 0.7f));
 
         // Contador Central de Páginas
-        char textPagina[64];        
-        snprintf(textPagina, sizeof(textPagina),
-         "PAGE %02d / %02d",
-         paginaAtual + 1,
-         totalSecoes);        
-         DrawText(textPagina, 455, 58, 15, COPA_OURO_PURO);
+        char textPagina[20];
+        sprintf(textPagina, "PAGE %02d / %02d", paginaAtual + 1, totalSecoes);
+        DrawText(textPagina, 455, 58, 15, COPA_OURO_PURO);
 
         // --- BOTÕES DE NAVEGAÇÃO LATERAIS HUD (Heads-Up Display) ---
         Rectangle btnVoltarReal = { 5, 370, 50, 60 };
