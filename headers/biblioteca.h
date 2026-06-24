@@ -23,25 +23,31 @@ typedef enum {
 
 typedef enum { MENU_FIM } Menu_FimdeJogo;
 
-// Variáveis Globais (da branch do Edu)
+//Função para limpar espacos antes e depois do texto
+void limparEspacos(char *texto);
+
+//Função para limpar todos os campos da figurinha
+void limparFigurinha(Figurinha *f);
+
+//Função para trocar espacos por underline
+void trocarEspacoPorUnderline(char *texto);
+
+//Variáveis Globais
 extern int pacotes_fechados;
 extern int figurinha_repetida;
 extern Menu_FimdeJogo estadoAtual;
 
-// ==========================================================
-// PROTÓTIPOS DAS FUNÇÕES PRINCIPAIS DO SISTEMA
-// ==========================================================
-
-// Core e Menus
+//Menu e necessários
 void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, int total, int *total_album, int *total_mochila);
-void abrirPacoteGrafico(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int total, int *total_mochila, int *total_album, Font fonteCopa, Color azulBrasil, Color amareloBrasil, EstadoMenu *estadoAtual);
+void abrirPacote(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int total, int *total_mochila, int *total_album, Font fonteCopa, Color azulBrasil, Color amareloBrasil, EstadoMenu *estadoAtual);
 int estaNoAlbum(Figurinha *album, int total_album, char codigo[]);
 
-// Funções de Listagem e Visuais
+//Funções de Listagem e Visuais
 void listarFigurinhasAlbum(Figurinha *album, int total_album);
 void listarFigurinhasMochila(Figurinha *mochila, int total_mochila);
 void albumGrafico(Figurinha *figurinhas, int total, Figurinha *album, int total_album);
-// Funções de Manipulação
+
+//Funções excluir/pesquisar/alterar/resetar/trocar
 void excluirAlbum(Figurinha *figurinhas, Figurinha *album, int *total_album);
 void excluirMochila(Figurinha *figurinhas, Figurinha *mochila, int *total_mochila);
 void pesquisarFigurinha(Figurinha *figurinhas, int total);
@@ -49,12 +55,12 @@ void alterarFigurinha(Figurinha *figurinhas, int total);
 void resetarLista(Figurinha *figurinhas, int total);
 void trocarFigurinha(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int *total_mochila, int *total_album);
 
-// Minijogos
+//Minigames
 void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int total, int *total_mochila, int *total_album);
 void jogarGoleiro();
 void jogarPenalti(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int total, int *total_mochila, int *total_album, int *pacotes_fechados);
 
-// Salvamento de Arquivos
+//Salvamento de Arquivos
 void carregarPacotes(void); 
 void salvarPacotes(void);
 void salvarRepetida(void);

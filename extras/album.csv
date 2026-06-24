@@ -1,521 +1,69 @@
-<<<<<<< HEAD
-CPV4  , Pico                        , Cabo Verde         , Grupo H, Comum
-BRA7  , Danilo                      , Brasil             , Grupo C, Comum
-MEX18 , Alexis Vega                 , Mexico             , Grupo A, Comum
-TUN16 , Elias Saad                  , Tunisia            , Grupo F, Comum
-JOR14 , Amer Jamous                 , Jordania           , Grupo J, Comum
-SCO16 , Kenny McLean                , Escocia            , Grupo C, Comum
-ENG7  , Reece James                 , Inglaterra         , Grupo L, Comum
-KOR13 , Foto da Equipe              , Coreia do Sul      , Grupo A, Comum
-JPN10 , Ao Tanaka                   , Japao              , Grupo F, Comum
-JOR2  , Yazeed Abulaila             , Jordania           , Grupo J, Comum
-COD3  , Aaron Wan-Bissaka           , RD Congo           , Grupo K, Comum
-RSA8  , Siyabonga Ngezana           , Africa do Sul      , Grupo A, Comum
-AUT11 , Marcel Sabitzer             , Austria            , Grupo J, Comum
-JPN20 , Ayase Ueda                  , Japao              , Grupo F, Comum
-CUW4  , Sherel Floranus             , Curacao            , Grupo E, Comum
-USA7  , Antonee Robinson            , Estados Unidos     , Grupo D, Comum
-CUW1  , Escudo                      , Curacao            , Grupo E, Especial
-JOR7  , Saleem Obaid                , Jordania           , Grupo J, Comum
-COD17 , Brian Cipenga               , RD Congo           , Grupo K, Comum
-ESP12 , Fabian Ruiz                 , Espanha            , Grupo H, Comum
-SUI9  , Granit Xhaka                , Suica              , Grupo B, Comum
-COL8  , Jhon Lucumi                 , Colombia           , Grupo K, Comum
-NED10 , Tijjani Reijnders           , Holanda            , Grupo F, Comum
-NED3  , Virgil Van Dijk             , Holanda            , Grupo F, Comum
-CIV11 , Seko Fofana                 , Costa do Marfim    , Grupo E, Comum
-CZE3  , Jindrich Stanek             , Republica Tcheca   , Grupo A, Comum
-AUT4  , David Alaba                 , Austria            , Grupo J, Comum
-BIH8  , Amir Hadziahmetovic         , Bosnia             , Grupo B, Comum
-AUT10 , Xavier Schlager             , Austria            , Grupo J, Comum
-COL3  , David Ospina                , Colombia           , Grupo K, Comum
-SEN3  , Yehvann Diouf               , Senegal            , Grupo I, Comum
-PAN19 , Jose Luiz Rodriguez         , Panama             , Grupo L, Comum
-IRN10 , Saleh Hardani               , Ira                , Grupo G, Comum
-FRA8  , Lucas Digne                 , Franca             , Grupo I, Comum
-SCO14 , Lewis Ferguson              , Escocia            , Grupo C, Comum
-SWE17 , Dejan Kulusevski            , Suecia             , Grupo F, Comum
-COL12 , Richard Rios                , Colombia           , Grupo K, Comum
-IRQ3  , Rebin Sulaka                , Iraque             , Grupo I, Comum
-ARG14 , Nico Paz                    , Argentina          , Grupo J, Comum
-ENG2  , Jordan Pickford             , Inglaterra         , Grupo L, Comum
-SCO20 , Ben Gannon-Doak             , Escocia            , Grupo C, Comum
-CIV5  , Odilon Kossounou            , Costa do Marfim    , Grupo E, Comum
-NED18 , Donyell Malen               , Holanda            , Grupo F, Comum
-FRA19 , Hugo Ekitike                , Franca             , Grupo I, Comum
-ARG5  , Nicolas Otamendi            , Argentina          , Grupo J, Comum
-ECU16 , Gonzalo Plata               , Equador            , Grupo E, Comum
-ARG11 , Exequiel Palacios           , Argentina          , Grupo J, Comum
-ALG14 , Fares Chaibi                , Argelia            , Grupo J, Comum
-MEX7  , Israel Reyes                , Mexico             , Grupo A, Comum
-CZE12 , Tomas Soucek                , Republica Tcheca   , Grupo A, Comum
-SEN1  , Escudo                      , Senegal            , Grupo I, Especial
-JPN17 , Shuto Machino               , Japao              , Grupo F, Comum
-BEL14 , Hans Vanaken                , Belgica            , Grupo G, Comum
-SCO3  , Jack Hendry                 , Escocia            , Grupo C, Comum
-SEN11 , Pape Gueye                  , Senegal            , Grupo I, Comum
-AUS17 , Craig Goodwin               , Australia          , Grupo D, Comum
-EGY2  , Mohamed El Shenawy          , Egito              , Grupo G, Comum
-MAR6  , Nayef Aguerd                , Marrocos           , Grupo C, Comum
-BIH6  , Nihad Mujakic               , Bosnia             , Grupo B, Comum
-NED5  , Jurien Timber               , Holanda            , Grupo F, Comum
-USA17 , Brenden Aaronson            , Estados Unidos     , Grupo D, Comum
-QAT6  , Boualem Khoukhi             , Qatar              , Grupo B, Comum
-NOR7  , David Mller Wolfe           , Noruega            , Grupo I, Comum
-EGY10 , Marwan Attia                , Egito              , Grupo G, Comum
-KSA18 , Feras Akbrikan              , Arabia Saudita     , Grupo H, Comum
-ECU5  , Pervis Estupinan            , Equador            , Grupo E, Comum
-CIV16 , Sebastien Haller            , Costa do Marfim    , Grupo E, Comum
-NZL3  , Alex Paulsen                , Nova Zelandia      , Grupo G, Comum
-TUR6  , Caglar Soyunku              , Turquia            , Grupo D, Comum
-URU15 , Nicolas de la Cruz          , Uruguai            , Grupo H, Comum
-GHA8  , Caleb Yirenkyi              , Gana               , Grupo L, Comum
-ENG15 , Anthony Gordon              , Inglaterra         , Grupo L, Comum
-BEL5  , Zeno Debast                 , Belgica            , Grupo G, Comum
-UZB4  , Sherzod Nasrullaev          , Uzbequistao        , Grupo K, Comum
-GER11 , Florian Wirtz               , Alemanha           , Grupo E, Comum
-NED8  , Jereme Frimpong             , Holanda            , Grupo F, Comum
-JOR9  , Ibrahim Saadeh              , Jordania           , Grupo J, Comum
-CUW17 , Jurgen Locadia              , Curacao            , Grupo E, Comum
-BEL19 , Lois Openda                 , Belgica            , Grupo G, Comum
-BEL9  , Youri Tieleman              , Belgica            , Grupo G, Comum
-FWC4  , Slogan Oficial              , FIFA World Cup 2026,        , Especial
-MAR4  , Achraf Hakimi               , Marrocos           , Grupo C, Comum
-ARG12 , Leandro Paredes             , Argentina          , Grupo J, Comum
-SEN15 , Sadio Mane                  , Senegal            , Grupo I, Comum
-BEL20 , Romelu Lukaku               , Belgica            , Grupo G, Comum
-PAR13 , Foto da Equipe              , Paraguai           , Grupo D, Comum
-ENG1  , Escudo                      , Inglaterra         , Grupo L, Especial
-AUT17 , Patrick Wimmer              , Austria            , Grupo J, Comum
-UZB9  , Abdukodir Khusanov          , Uzbequistao        , Grupo K, Comum
-GHA20 , Antoine Semenyo             , Gana               , Grupo L, Comum
-CZE13 , Foto da Equipe              , Republica Tcheca   , Grupo A, Comum
-IRQ7  , Zaid Tahseen                , Iraque             , Grupo I, Comum
-ALG15 , Riyad Mahrez                , Argelia            , Grupo J, Comum
-BEL16 , Jeremy Doku                 , Belgica            , Grupo G, Comum
-CUW15 , Kenji Gorre                 , Curacao            , Grupo E, Comum
-CZE19 , Adam Hlozek                 , Republica Tcheca   , Grupo A, Comum
-POR8  , Goncalo Inacio              , Portugal           , Grupo K, Comum
-MAR2  , Yassine Bounou              , Marrocos           , Grupo C, Comum
-MAR18 , Soufiane Rahimi             , Marrocos           , Grupo C, Comum
-ALG3  , Ramy Bensebaini             , Argelia            , Grupo J, Comum
-COD18 , Fiston Mayele               , RD Congo           , Grupo K, Comum
-SCO13 , Foto da Equipe              , Escocia            , Grupo C, Comum
-BIH13 , Foto da Equipe              , Bosnia             , Grupo B, Comum
-CZE2  , Matej Kovar                 , Republica Tcheca   , Grupo A, Comum
-FRA1  , Escudo                      , Franca             , Grupo I, Especial
-QAT7  , Pedro Miguel                , Qatar              , Grupo B, Comum
-ARG2  , Emiliano Martinez           , Argentina          , Grupo J, Comum
-FRA6  , Ibrahima Konate             , Franca             , Grupo I, Comum
-GER10 , Joshua Kimmich              , Alemanha           , Grupo E, Comum
-FRA5  , Jules Kounde                , Franca             , Grupo I, Comum
-CUW20 , Sontje Hansen               , Curacao            , Grupo E, Comum
-RSA1  , Escudo                      , Africa do Sul      , Grupo A, Especial
-BIH10 , Armin Gigovic               , Bosnia             , Grupo B, Comum
-JPN12 , Takefusa Kubo               , Japao              , Grupo F, Comum
-POR18 , Goncalo Ramos               , Portugal           , Grupo K, Comum
-FWC17 , Italia 2006                 , FIFA World Cup 2026,        , Especial
-NED12 , Teun Koopmeiners            , Holanda            , Grupo F, Comum
-CAN2  , Dayne St.Clair              , Canada             , Grupo B, Comum
-GER16 , Serge Gnabry                , Alemanha           , Grupo E, Comum
-AUS10 , Milos Degenek               , Australia          , Grupo D, Comum
-TUN8  , Dylan Bronn                 , Tunisia            , Grupo F, Comum
-PAN17 , Jose Fajardo                , Panama             , Grupo L, Comum
-CIV18 , Yan Diomande                , Costa do Marfim    , Grupo E, Comum
-MEX14 , Erick Sanchez               , Mexico             , Grupo A, Comum
-SCO7  , Scott McKenna               , Escocia            , Grupo C, Comum
-SCO6  , Andrew Robertson            , Escocia            , Grupo C, Comum
-CIV7  , Willy Boly                  , Costa do Marfim    , Grupo E, Comum
-SWE4  , Gabriel Gudmundsson         , Suecia             , Grupo F, Comum
-SUI20 , Zeki Amdouni                , Suica              , Grupo B, Comum
-USA5  , Mark McKenzie               , Estados Unidos     , Grupo D, Comum
-AUS12 , Riley McGree                , Australia          , Grupo D, Comum
-UZB13 , Foto da Equipe              , Uzbequistao        , Grupo K, Comum
-GHA10 , Thomas Partey               , Gana               , Grupo L, Comum
-QAT4  , Lucas Mendes                , Qatar              , Grupo B, Comum
-MEX20 , Cesar Huerta                , Mexico             , Grupo A, Comum
-IRQ11 , Ibrahim Bavesh              , Iraque             , Grupo I, Comum
-CIV9  , Ousmane Diomande            , Costa do Marfim    , Grupo E, Comum
-FRA17 , Desire Doue                 , Franca             , Grupo I, Comum
-PAN4  , Fidel Escobar               , Panama             , Grupo L, Comum
-NED19 , Wout Weghorst               , Holanda            , Grupo F, Comum
-COD6  , Chancel Mbemba              , RD Congo           , Grupo K, Comum
-NZL7  , Tyler Bindon                , Nova Zelandia      , Grupo G, Comum
-SEN12 , Habib Diarra                , Senegal            , Grupo I, Comum
-HAI2  , Johny Placide               , Haiti              , Grupo C, Comum
-UZB16 , Eldor Shomurodov            , Uzbequistao        , Grupo K, Comum
-NOR20 , Oscar Bobb                  , Noruega            , Grupo I, Comum
-IRQ9  , Zidane Iqbal                , Iraque             , Grupo I, Comum
-RSA5  , Samukele Kabini             , Africa do Sul      , Grupo A, Comum
-AUS9  , Lewis Miller                , Australia          , Grupo D, Comum
-PAR11 , Damian Bobadilla            , Paraguai           , Grupo D, Comum
-IRN14 , Omid Noorafkan              , Ira                , Grupo G, Comum
-AUS1  , Escudo                      , Australia          , Grupo D, Especial
-ARG15 , Franco Mastantuono          , Argentina          , Grupo J, Comum
-COL5  , Yerry Mina                  , Colombia           , Grupo K, Comum
-NZL5  , Liberato Cacace             , Nova Zelandia      , Grupo G, Comum
-AUT15 , Nicolas Seiwald             , Austria            , Grupo J, Comum
-CUW8  , Shurandy Sambo              , Curacao            , Grupo E, Comum
-ALG4  , Youcef Atal                 , Argelia            , Grupo J, Comum
-BEL12 , Alexis Saelemaekers         , Belgica            , Grupo G, Comum
-URU8  , Guillermo Varela            , Uruguai            , Grupo H, Comum
-URU6  , Sebastian Caceres           , Uruguai            , Grupo H, Comum
-TUR20 , Kenan Yildiz                , Turquia            , Grupo D, Comum
-RSA17 , Lyle Foster                 , Africa do Sul      , Grupo A, Comum
-MAR13 , Foto da Equipe              , Marrocos           , Grupo C, Comum
-COD12 , Noah Sadiki                 , RD Congo           , Grupo K, Comum
-COL9  , Santiago Arias              , Colombia           , Grupo K, Comum
-POR16 , Francisco Trincao           , Portugal           , Grupo K, Comum
-SCO8  , John Souttar                , Escocia            , Grupo C, Comum
-NED2  , Bart Verbruggen             , Holanda            , Grupo F, Comum
-CRO19 , Andrej Kramaric             , Croacia            , Grupo L, Comum
-PAN16 , Ismael Diaz                 , Panama             , Grupo L, Comum
-SWE10 , Jesper Karlstrom            , Suecia             , Grupo F, Comum
-SEN18 , Iliman Ndiaye               , Senegal            , Grupo I, Comum
-COD16 , Yoane Wissa                 , RD Congo           , Grupo K, Comum
-SUI19 , Dan Ndoye                   , Suica              , Grupo B, Comum
-ALG9  , Houssem Aquar               , Argelia            , Grupo J, Comum
-JOR4  , Mohammad Abu Hashish        , Jordania           , Grupo J, Comum
-NOR12 , Andreas Schjelderup         , Noruega            , Grupo I, Comum
-CZE9  , Michal Sadilek              , Republica Tcheca   , Grupo A, Comum
-NOR10 , Martin degaard              , Noruega            , Grupo I, Comum
-KSA17 , Abdulrahman Al-Aboud        , Arabia Saudita     , Grupo H, Comum
-JOR5  , Yazan Al-Arab               , Jordania           , Grupo J, Comum
-IRN4  , Ehsan Hajsafi               , Ira                , Grupo G, Comum
-MEX4  , Jorge Sanchez               , Mexico             , Grupo A, Comum
-NED14 , Frenkie de Jong             , Holanda            , Grupo F, Comum
-SWE19 , Alexander Isak              , Suecia             , Grupo F, Comum
-SEN7  , El Hadji Malick Diouf       , Senegal            , Grupo I, Comum
-CAN1  , Escudo                      , Canada             , Grupo B, Especial
-QAT5  , Homam Ahmed                 , Qatar              , Grupo B, Comum
-BRA19 , Raphinha                    , Brasil             , Grupo C, Comum
-KOR10 , Jae-sung Lee                , Coreia do Sul      , Grupo A, Comum
-CAN18 , Liam Millar                 , Canada             , Grupo B, Comum
-ECU18 , Alan Minda                  , Equador            , Grupo E, Comum
-KOR17 , Gue-sung Cho                , Coreia do Sul      , Grupo A, Comum
-CUW5  , Jurien Gaari                , Curacao            , Grupo E, Comum
-GER4  , David Raum                  , Alemanha           , Grupo E, Comum
-URU11 , Giorgian De Arrascaeta      , Uruguai            , Grupo H, Comum
-TUR4  , Zeki Celik                  , Turquia            , Grupo D, Comum
-TUN11 , Ferjani Sassi               , Tunisia            , Grupo F, Comum
-BIH20 , Haris Tabakovic             , Bosnia             , Grupo B, Comum
-BRA13 , Foto da Equipe              , Brasil             , Grupo C, Comum
-CUW6  , Joshua Brenet               , Curacao            , Grupo E, Comum
-CUW11 , Juninho Bacuna              , Curacao            , Grupo E, Comum
-AUS6  , Jordan Bos                  , Australia          , Grupo D, Comum
-ALG20 , Mohammed Amoura             , Argelia            , Grupo J, Comum
-USA15 , Malim Tillman               , Estados Unidos     , Grupo D, Comum
-IRN7  , Ramin Rezaeian              , Ira                , Grupo G, Comum
-EGY3  , Mohamed Hany                , Egito              , Grupo G, Comum
-SCO5  , Aaron Hickey                , Escocia            , Grupo C, Comum
-SCO18 , Lyndon Dykes                , Escocia            , Grupo C, Comum
-GHA5  , Alidu Seidu                 , Gana               , Grupo L, Comum
-HAI9  , Hannes Delcroix             , Haiti              , Grupo C, Comum
-BRA12 , Luiz Henrique               , Brasil             , Grupo C, Comum
-SUI3  , Yvon Mvogo                  , Suica              , Grupo B, Comum
-SEN9  , Idrissa Gana Gueye          , Senegal            , Grupo I, Comum
-SEN20 , Krepin Diatta               , Senegal            , Grupo I, Comum
-CIV4  , Wilfried Singo              , Costa do Marfim    , Grupo E, Comum
-PAR9  , Mathias Villasanti          , Paraguai           , Grupo D, Comum
-SWE1  , Escudo                      , Suecia             , Grupo F, Especial
-GER3  , Jonathan Tah                , Alemanha           , Grupo E, Comum
-KSA12 , Nasser Aldawsari            , Arabia Saudita     , Grupo H, Comum
-BIH11 , Ivan Sunjic                 , Bosnia             , Grupo B, Comum
-QAT2  , Meshaal Barsham             , Qatar              , Grupo B, Comum
-MEX11 , Orbelin Pineda              , Mexico             , Grupo A, Comum
-URU19 , Rodrigo Aguirre             , Uruguai            , Grupo H, Comum
-ECU1  , Escudo                      , Equador            , Grupo E, Especial
-BIH17 , Ermedin Demirovic           , Bosnia             , Grupo B, Comum
-POR7  , Nuno Mendes                 , Portugal           , Grupo K, Comum
-NOR6  , Marcus Holmgren Pedersen    , Noruega            , Grupo I, Comum
-ENG9  , Jordan Henderson            , Inglaterra         , Grupo L, Comum
-QAT3  , Sultan Albrake              , Qatar              , Grupo B, Comum
-TUR19 , Kerem Akturkoglu            , Turquia            , Grupo D, Comum
-AUS3  , Joe Gauci                   , Australia          , Grupo D, Comum
-CIV1  , Escudo                      , Costa do Marfim    , Grupo E, Especial
-CPV17 , Ryan Mendes                 , Cabo Verde         , Grupo H, Comum
-ESP13 , Foto da Equipe              , Espanha            , Grupo H, Comum
-CZE20 , Patrik Schick               , Republica Tcheca   , Grupo A, Comum
-FWC19 , Argentina 2022              , FIFA World Cup 2026,        , Especial
-NZL11 , Sarpreet Singh              , Nova Zelandia      , Grupo G, Comum
-ENG14 , Morgan Rogers               , Inglaterra         , Grupo L, Comum
-ALG2  , Alexis Guendouz             , Argelia            , Grupo J, Comum
-TUR14 , Arda Guler                  , Turquia            , Grupo D, Comum
-GER15 , Jamal Musiala               , Alemanha           , Grupo E, Comum
-AUT1  , Escudo                      , Austria            , Grupo J, Especial
-SUI4  , Manuel Akanji               , Suica              , Grupo B, Comum
-ESP20 , Mikel Oyarzabal             , Espanha            , Grupo H, Comum
-PAR20 , Antonio Sanabria            , Paraguai           , Grupo D, Comum
-BRA20 , Estevao                     , Brasil             , Grupo C, Comum
-QAT14 , Mohammed Waad               , Qatar              , Grupo B, Comum
-SEN14 , Lamine Camara               , Senegal            , Grupo I, Comum
-BIH9  , Benjamin Tahirovic          , Bosnia             , Grupo B, Comum
-EGY11 , Zizo                        , Egito              , Grupo G, Comum
-SWE7  , Gustaf Lagerbielke          , Suecia             , Grupo F, Comum
-MAR7  , Roman Saiss                 , Marrocos           , Grupo C, Comum
-CRO1  , Escudo                      , Croacia            , Grupo L, Especial
-CAN11 , Ismael Kone                 , Canada             , Grupo B, Comum
-IRN17 , Sardar Azmoun               , Ira                , Grupo G, Comum
-NOR8  , Torbjrn Heggem              , Noruega            , Grupo I, Comum
-JPN6  , Shogo Taniguchi             , Japao              , Grupo F, Comum
-HAI17 , Ruben Providence            , Haiti              , Grupo C, Comum
-CUW19 , Gervane Kastaneer           , Curacao            , Grupo E, Comum
-AUS13 , Foto da Equipe              , Australia          , Grupo D, Comum
-QAT9  , Mohamed Al-Mannai           , Qatar              , Grupo B, Comum
-ENG13 , Foto da Equipe              , Inglaterra         , Grupo L, Comum
-JOR20 , Ibrahim Sabra               , Jordania           , Grupo J, Comum
-CRO10 , Mateo Kovacic               , Croacia            , Grupo L, Comum
-CZE17 , Tomas Chory                 , Republica Tcheca   , Grupo A, Comum
-ESP11 , Pedri                       , Espanha            , Grupo H, Comum
-IRN8  , Hossein Kanaani             , Ira                , Grupo G, Comum
-ECU7  , Angelo Preciado             , Equador            , Grupo E, Comum
-BEL2  , Thibaut Courtois            , Belgica            , Grupo G, Comum
-COD14 , Theo Bongonda               , RD Congo           , Grupo K, Comum
-USA13 , Foto da Equipe              , Estados Unidos     , Grupo D, Comum
-AUT2  , Alexander Schlager          , Austria            , Grupo J, Comum
-IRN16 , Mohammad Mohebi             , Ira                , Grupo G, Comum
-USA20 , Folarin Balogun             , Estados Unidos     , Grupo D, Comum
-ECU20 , Enner Valencia              , Equador            , Grupo E, Comum
-TUR5  , Abdulkerim Bardakci         , Turquia            , Grupo D, Comum
-GER20 , Nick Woltemade              , Alemanha           , Grupo E, Comum
-UZB12 , Jamshid Iskanderov          , Uzbequistao        , Grupo K, Comum
-CZE8  , David Zima                  , Republica Tcheca   , Grupo A, Comum
-ARG6  , Nicolas Tagliafico          , Argentina          , Grupo J, Comum
-ARG9  , Alexis Mac Allister         , Argentina          , Grupo J, Comum
-PAN8  , Jose Cordoba                , Panama             , Grupo L, Comum
-MAR11 , Azzedine Ounahi             , Marrocos           , Grupo C, Comum
-ARG1  , Escudo                      , Argentina          , Grupo J, Especial
-ESP5  , Dean Huijsen                , Espanha            , Grupo H, Comum
-FWC2  , Emblema Oficial (Parte 2)   , FIFA World Cup 2026,        , Especial
-COL10 , Jefferson Lerma             , Colombia           , Grupo K, Comum
-BEL17 , Charles De Ketelaere        , Belgica            , Grupo G, Comum
-POR2  , Diogo Costa                 , Portugal           , Grupo K, Comum
-FWC10 , Uruguai 1950                , FIFA World Cup 2026,        , Especial
-ALG5  , Rayan Ait-Nouri             , Argelia            , Grupo J, Comum
-NED13 , Foto da Equipe              , Holanda            , Grupo F, Comum
-TUR13 , Foto da Equipe              , Turquia            , Grupo D, Comum
-PAN6  , Michael Amir Murillo        , Panama             , Grupo L, Comum
-PAR3  , Orlando Gill                , Paraguai           , Grupo D, Comum
-ENG20 , Ollie Watkins               , Inglaterra         , Grupo L, Comum
-ALG1  , Escudo                      , Argelia            , Grupo J, Especial
-GER19 , Karim Adeyemi               , Alemanha           , Grupo E, Comum
-RSA19 , Mohau Nkota                 , Africa do Sul      , Grupo A, Comum
-UZB11 , Otabek Shukurov             , Uzbequistao        , Grupo K, Comum
-UZB20 , Abbosbek Fayzullaev         , Uzbequistao        , Grupo K, Comum
-CAN17 , Tajon Buchanan              , Canada             , Grupo B, Comum
-IRQ13 , Foto da Equipe              , Iraque             , Grupo I, Comum
-RSA16 , Sipho Mbule                 , Africa do Sul      , Grupo A, Comum
-KSA15 , Marwan Alsahafi             , Arabia Saudita     , Grupo H, Comum
-KSA5  , Nawaf Bouwashl              , Arabia Saudita     , Grupo H, Comum
-KSA20 , Abdullah Al-Hamdan          , Arabia Saudita     , Grupo H, Comum
-EGY14 , Mohamed Lasheen             , Egito              , Grupo G, Comum
-SUI17 , Breel Embolo                , Suica              , Grupo B, Comum
-KSA11 , Abdullah Alkhaibari         , Arabia Saudita     , Grupo H, Comum
-SEN16 , Ismaila Sarr                , Senegal            , Grupo I, Comum
-GHA1  , Escudo                      , Gana               , Grupo L, Especial
-JPN5  , Junnosuke Suzuki            , Japao              , Grupo F, Comum
-CZE14 , Pavel Sulc                  , Republica Tcheca   , Grupo A, Comum
-SUI6  , Nico Elvedi                 , Suica              , Grupo B, Comum
-EGY8  , Hossam Abdelmaguid          , Egito              , Grupo G, Comum
-CAN5  , Samuel Adekugbe             , Canada             , Grupo B, Comum
-NOR14 , Patrick Berg                , Noruega            , Grupo I, Comum
-USA2  , Math Freese                 , Estados Unidos     , Grupo D, Comum
-CPV15 , Garry Rodrigues             , Cabo Verde         , Grupo H, Comum
-JPN7  , Tsuyoshi Watanabe           , Japao              , Grupo F, Comum
-AUS20 , Mohamed Toure               , Australia          , Grupo D, Comum
-MAR3  , Munir El Kajoui             , Marrocos           , Grupo C, Comum
-CPV3  , Logan Costa                 , Cabo Verde         , Grupo H, Comum
-AUT7  , Stefan Bosch                , Austria            , Grupo J, Comum
-IRQ5  , Akam Hashem                 , Iraque             , Grupo I, Comum
-ENG3  , John Stones                 , Inglaterra         , Grupo L, Comum
-ESP9  , Martin Zubimendi            , Espanha            , Grupo H, Comum
-IRQ10 , Amir Al-Ammari              , Iraque             , Grupo I, Comum
-HAI13 , Foto da Equipe              , Haiti              , Grupo C, Comum
-CUW9  , Livano Comenencia           , Curacao            , Grupo E, Comum
-ENG19 , Marcus Rashford             , Inglaterra         , Grupo L, Comum
-SEN17 , Boulaye Dia                 , Senegal            , Grupo I, Comum
-KSA14 , Saleh Abu Alshamat          , Arabia Saudita     , Grupo H, Comum
-ECU4  , Piero Hincapie              , Equador            , Grupo E, Comum
-USA14 , Diego Luna                  , Estados Unidos     , Grupo D, Comum
-URU9  , Nahitan Nandez              , Uruguai            , Grupo H, Comum
-QAT11 , Assim Madibo                , Qatar              , Grupo B, Comum
-CZE15 , Matej Vydra                 , Republica Tcheca   , Grupo A, Comum
-GER8  , Ridle Baku                  , Alemanha           , Grupo E, Comum
-POR9  , Bernardo Silva              , Portugal           , Grupo K, Comum
-CPV10 , Kevin Pina                  , Cabo Verde         , Grupo H, Comum
-CRO9  , Luka Modric                 , Croacia            , Grupo L, Comum
-URU10 , Federico Valverde           , Uruguai            , Grupo H, Comum
-IRN11 , Saeed Ezatolahi             , Ira                , Grupo G, Comum
-BEL4  , Timothy Castagne            , Belgica            , Grupo G, Comum
-CUW14 , Tahith Chong                , Curacao            , Grupo E, Comum
-HAI4  , Martin Experience           , Haiti              , Grupo C, Comum
-NZL18 , Elijah Just                 , Nova Zelandia      , Grupo G, Comum
-BIH14 , Dzenis Burnic               , Bosnia             , Grupo B, Comum
-CRO13 , Foto da Equipe              , Croacia            , Grupo L, Comum
-AUS7  , Aziz Behich                 , Australia          , Grupo D, Comum
-SWE13 , Foto da Equipe              , Suecia             , Grupo F, Comum
-JPN16 , Takumi Minamino             , Japao              , Grupo F, Comum
-BRA9  , Lucas Paqueta               , Brasil             , Grupo C, Comum
-AUS18 , Kusini Vengi                , Australia          , Grupo D, Comum
-CAN10 , Stephen Eustaquio           , Canada             , Grupo B, Comum
-FWC16 , Brasil 2002                 , FIFA World Cup 2026,        , Especial
-NOR1  , Escudo                      , Noruega            , Grupo I, Especial
-JPN2  , Zion Suzuki                 , Japao              , Grupo F, Comum
-IRN1  , Escudo                      , Ira                , Grupo G, Especial
-QAT15 , Abdulaziz Hatem             , Qatar              , Grupo B, Comum
-CPV18 , Dailon Livramento           , Cabo Verde         , Grupo H, Comum
-IRN20 , Ali Gholizadeh              , Ira                , Grupo G, Comum
-GER9  , Maximilian Mittelstadt      , Alemanha           , Grupo E, Comum
-NZL4  , Michael Boxall              , Nova Zelandia      , Grupo G, Comum
-TUN2  , Bechir Ben Said             , Tunisia            , Grupo F, Comum
-BIH19 , Samed Bazdar                , Bosnia             , Grupo B, Comum
-BIH16 , Amar Memic                  , Bosnia             , Grupo B, Comum
-SWE15 , Ken Sema                    , Suecia             , Grupo F, Comum
-TUN20 , Naim Sliti                  , Tunisia            , Grupo F, Comum
-JPN13 , Foto da Equipe              , Japao              , Grupo F, Comum
-NOR16 , Alexander Srloth            , Noruega            , Grupo I, Comum
-GER5  , Nico Schlotterbeck          , Alemanha           , Grupo E, Comum
-POR10 , Bruno Fernandes             , Portugal           , Grupo K, Comum
-PAN10 , Cristian Martinez           , Panama             , Grupo L, Comum
-GHA4  , Mohammed Salisu             , Gana               , Grupo L, Comum
-COL16 , Jorge Carrascal             , Colombia           , Grupo K, Comum
-FRA18 , Kingsley Coman              , Franca             , Grupo I, Comum
-TUN1  , Escudo                      , Tunisia            , Grupo F, Especial
-ARG19 , Julian Alvarez              , Argentina          , Grupo J, Comum
-POR12 , Vitinha                     , Portugal           , Grupo K, Comum
-USA10 , Weston McKenny              , Estados Unidos     , Grupo D, Comum
-TUN10 , Aissa Laidouni              , Tunisia            , Grupo F, Comum
-JOR8  , Mohammad Abualnadi          , Jordania           , Grupo J, Comum
-CPV9  , Yannick Semedo              , Cabo Verde         , Grupo H, Comum
-NZL13 , Foto da Equipe              , Nova Zelandia      , Grupo G, Comum
-SUI16 , Michel Aebischer            , Suica              , Grupo B, Comum
-JOR10 , Nizar Al-Rashdan            , Jordania           , Grupo J, Comum
-IRN3  , Morteza Pouraliganji        , Ira                , Grupo G, Comum
-FWC00 , Logotipo da Panini          , FIFA World Cup 2026,        , Especial
-GER2  , Marc-Andre ter Stegen       , Alemanha           , Grupo E, Comum
-KSA7  , Moteb Al-Harbi              , Arabia Saudita     , Grupo H, Comum
-FWC12 , Brasil 1962                 , FIFA World Cup 2026,        , Especial
-AUS2  , Mathew Ryan                 , Australia          , Grupo D, Comum
-CIV3  , Ghislain Konan              , Costa do Marfim    , Grupo E, Comum
-AUT18 , Christoph Baumgartner       , Austria            , Grupo J, Comum
-PAN2  , Orlando Mosquera            , Panama             , Grupo L, Comum
-IRQ2  , Jalal Hassan                , Iraque             , Grupo I, Comum
-KSA10 , Ziyad Aljohani              , Arabia Saudita     , Grupo H, Comum
-GHA11 , Salis Abdul Samed           , Gana               , Grupo L, Comum
-ESP7  , Dani Carvajal               , Espanha            , Grupo H, Comum
-PAN5  , Andres Andrade              , Panama             , Grupo L, Comum
-SWE18 , Anthony Elanga              , Suecia             , Grupo F, Comum
-MAR15 , Ismael Saibari              , Marrocos           , Grupo C, Comum
-JOR6  , Abdallah Nasib              , Jordania           , Grupo J, Comum
-IRN19 , Alireza Jahanbakhsh         , Ira                , Grupo G, Comum
-SCO15 , Ryan Christie               , Escocia            , Grupo C, Comum
-ECU19 , Kevin Rodriguez             , Equador            , Grupo E, Comum
-QAT10 , Karim Boudiaf               , Qatar              , Grupo B, Comum
-PAN7  , Eric Davis                  , Panama             , Grupo L, Comum
-USA11 , Christian Roldan            , Estados Unidos     , Grupo D, Comum
-SCO12 , Billy Gilmour               , Escocia            , Grupo C, Comum
-POR1  , Escudo                      , Portugal           , Grupo K, Especial
-SUI12 , Fabian Rieder               , Suica              , Grupo B, Comum
-URU18 , Federico Vinas              , Uruguai            , Grupo H, Comum
-UZB8  , Khojiakbar Alijonov         , Uzbequistao        , Grupo K, Comum
-BEL15 , Kevin De Bruyne             , Belgica            , Grupo G, Comum
-FWC15 , Brasil 1994                 , FIFA World Cup 2026,        , Especial
-NOR13 , Foto da Equipe              , Noruega            , Grupo I, Comum
-TUN13 , Foto da Equipe              , Tunisia            , Grupo F, Comum
-CAN20 , Jonathan David              , Canada             , Grupo B, Comum
-JOR15 , Musa Al-Taamari             , Jordania           , Grupo J, Comum
-USA16 , Christian Pulisic           , Estados Unidos     , Grupo D, Comum
-HAI14 , Christopher Attys           , Haiti              , Grupo C, Comum
-SUI8  , Silvan Widmer               , Suica              , Grupo B, Comum
-JOR19 , Mohammad Abu Zrayq          , Jordania           , Grupo J, Comum
-JOR11 , Noor Al-Rawabdeh            , Jordania           , Grupo J, Comum
-ALG18 , Amine Gouiri                , Argelia            , Grupo J, Comum
-GER7  , Waldemar Anton              , Alemanha           , Grupo E, Comum
-PAR1  , Escudo                      , Paraguai           , Grupo D, Especial
-ALG10 , Hicham Boudaoui             , Argelia            , Grupo J, Comum
-BEL18 , Leandro Trossard            , Belgica            , Grupo G, Comum
-IRN18 , Mehdi Taremi                , Ira                , Grupo G, Comum
-FWC18 , Alemanha 2014               , FIFA World Cup 2026,        , Especial
-SCO4  , Kieran Tierney              , Escocia            , Grupo C, Comum
-TUN19 , Sayfallah Ltaief            , Tunisia            , Grupo F, Comum
-COL14 , James Rodriguez             , Colombia           , Grupo K, Comum
-JPN4  , Ayumu Seko                  , Japao              , Grupo F, Comum
-CPV19 , Willy Semedo                , Cabo Verde         , Grupo H, Comum
-USA18 , Ricardo Pepi                , Estados Unidos     , Grupo D, Comum
-ESP15 , Lamine Yamal                , Espanha            , Grupo H, Comum
-EGY12 , Hamdy Fathy                 , Egito              , Grupo G, Comum
-JPN9  , Yuki Soma                   , Japao              , Grupo F, Comum
-SUI2  , Gregor Kobel                , Suica              , Grupo B, Comum
-CPV14 , Deroy Duarte                , Cabo Verde         , Grupo H, Comum
-POR11 , Ruben Neves                 , Portugal           , Grupo K, Comum
-NED20 , Cody Gakpo                  , Holanda            , Grupo F, Comum
-CRO18 , Ante Budimir                , Croacia            , Grupo L, Comum
-IRQ4  , Hussein Ali                 , Iraque             , Grupo I, Comum
-JOR3  , Ihsan Haddad                , Jordania           , Grupo J, Comum
-TUN12 , Mohamed Ali Ben Romdhane    , Tunisia            , Grupo F, Comum
-TUN3  , Aymen Dahmen                , Tunisia            , Grupo F, Comum
-ENG12 , Cole Palmer                 , Inglaterra         , Grupo L, Comum
-KSA16 , Salem Aldawsari             , Arabia Saudita     , Grupo H, Comum
-RSA2  , Ronwen Williams             , Africa do Sul      , Grupo A, Comum
-JOR12 , Mohannad Abu Taha           , Jordania           , Grupo J, Comum
-NZL8  , Francis de Vries            , Nova Zelandia      , Grupo G, Comum
-CIV2  , Yahia Fofana                , Costa do Marfim    , Grupo E, Comum
-CRO11 , Martin Baturina             , Croacia            , Grupo L, Comum
-IRN6  , Shojae Khalilzadeh          , Ira                , Grupo G, Comum
-IRN2  , Alirez Beiranvand           , Ira                , Grupo G, Comum
-PAR17 , Miguel Almiron              , Paraguai           , Grupo D, Comum
-TUR3  , Mert Muldur                 , Turquia            , Grupo D, Comum
-IRN5  , Milad Mohammadi             , Ira                , Grupo G, Comum
-COD19 , Cedric Bakambu              , RD Congo           , Grupo K, Comum
-KSA2  , Nawaf Alaqidi               , Arabia Saudita     , Grupo H, Comum
-CPV11 , Patrick Andrade             , Cabo Verde         , Grupo H, Comum
-PAN3  , Luis Mejia                  , Panama             , Grupo L, Comum
-IRN13 , Foto da Equipe              , Ira                , Grupo G, Comum
-CRO17 , Marco Pasalic               , Croacia            , Grupo L, Comum
-NZL17 , Chris Wood                  , Nova Zelandia      , Grupo G, Comum
-EGY4  , Mohamed Hamdy               , Egito              , Grupo G, Comum
-KOR18 , Heung-min Son               , Coreia do Sul      , Grupo A, Comum
-ALG12 , Nabil Bentalab              , Argelia            , Grupo J, Comum
-FRA11 , Manu Kone                   , Franca             , Grupo I, Comum
-TUR17 , Can Uzun                    , Turquia            , Grupo D, Comum
-USA1  , Escudo                      , Estados Unidos     , Grupo D, Especial
-ALG6  , Mohamed Amine Tougai        , Argelia            , Grupo J, Comum
-ESP4  , Aymeric Laporte             , Espanha            , Grupo H, Comum
-UZB5  , Umar Eshmurodov             , Uzbequistao        , Grupo K, Comum
-MEX6  , Jesus Gallardo              , Mexico             , Grupo A, Comum
-SUI15 , Johan Manzambi              , Suica              , Grupo B, Comum
-FRA12 , Adrien Rabiot               , Franca             , Grupo I, Comum
-AUT16 , Romano Schmid               , Austria            , Grupo J, Comum
-JPN15 , Keito Nakamura              , Japao              , Grupo F, Comum
-BRA10 , Casemiro                    , Brasil             , Grupo C, Comum
-GHA19 , Osman Bukari                , Gana               , Grupo L, Comum
-PAR6  , Juan Jose Caceres           , Paraguai           , Grupo D, Comum
-CRO3  , Duje Caleta-Car             , Croacia            , Grupo L, Comum
-BIH3  , Amer Dedic                  , Bosnia             , Grupo B, Comum
-UZB3  , Farrukh Savfiev             , Uzbequistao        , Grupo K, Comum
-SCO11 , Scott McTominay             , Escocia            , Grupo C, Comum
-MAR14 , Bilal El Khannouss          , Marrocos           , Grupo C, Comum
-COD7  , Joris Kayembe               , RD Congo           , Grupo K, Comum
-CIV14 , Jean-Philippe Gbamin        , Costa do Marfim    , Grupo E, Comum
-TUN7  , Ali Abdi                    , Tunisia            , Grupo F, Comum
-ECU14 , John Veboah                 , Equador            , Grupo E, Comum
-CZE4  , Ladislav Krejci             , Republica Tcheca   , Grupo A, Comum
-PAN15 , Carlos Harvey               , Panama             , Grupo L, Comum
-FRA15 , Ousmane Dembele             , Franca             , Grupo I, Comum
-ARG20 , Giuliano Simeone            , Argentina          , Grupo J, Comum
-=======
-CPV4,Pico,Cabo Verde,Grupo H,Comum
-BRA7,Danilo,Brasil,Grupo C,Comum
-MEX18,Alexis Vega,Mexico,Grupo A,Comum
-TUN16,Elias Saad,Tunisia,Grupo F,Comum
-JOR14,Amer Jamous,Jordania,Grupo J,Comum
-SCO16,Kenny McLean,Escocia,Grupo C,Comum
-ENG7,Reece James,Inglaterra,Grupo L,Comum
-KOR13,Foto da Equipe,Coreia do Sul,Grupo A,Comum
-JPN10,Ao Tanaka,Japao,Grupo F,Comum
-JOR2,Yazeed Abulaila,Jordania,Grupo J,Comum
-COD3,Aaron Wan-Bissaka,RD Congo,Grupo K,Comum
-RSA8,Siyabonga Ngezana,Africa do Sul,Grupo A,Comum
-AUT11,Marcel Sabitzer,Austria,Grupo J,Comum
-JPN20,Ayase Ueda,Japao,Grupo F,Comum
->>>>>>> fa361db1f83adc15e6f5707bffd474dff6d1e956
+COD5,Arthur Masuaku,RD Congo,Grupo K,Comum
+URU16,Maxi Araujo,Uruguai,Grupo H,Comum
+MAR16,Youssef En-Nesyri,Marrocos,Grupo C,Comum
+SEN11,Pape Gueye,Senegal,Grupo I,Comum
+HAI10,Leverton Pierre,Haiti,Grupo C,Comum
+ALG13,Foto da Equipe,Argelia,Grupo J,Comum
+EGY15,Emam Ashour,Egito,Grupo G,Comum
+NOR16,Alexander Srloth,Noruega,Grupo I,Comum
+FWC13,Alemanha 1974,FIFA World Cup 2026,,Especial
+NED14,Frenkie de Jong,Holanda,Grupo F,Comum
+KSA4,Saud Abdulhamid,Arabia Saudita,Grupo H,Comum
+CPV1,Escudo,Cabo Verde,Grupo H,Especial
+PAN19,Jose Luiz Rodriguez,Panama,Grupo L,Comum
+IRQ12,Ali Jasim,Iraque,Grupo I,Comum
+CRO12,Lovro Majer,Croacia,Grupo L,Comum
+JOR3,Ihsan Haddad,Jordania,Grupo J,Comum
+GER20,Nick Woltemade,Alemanha,Grupo E,Comum
+QAT16,Hassan Al-Haydos,Qatar,Grupo B,Comum
+NOR12,Andreas Schjelderup,Noruega,Grupo I,Comum
+CAN13,Foto da Equipe,Canada,Grupo B,Comum
+FRA9,Aurelien Tchouameni,Franca,Grupo I,Comum
+MEX19,Roberto Alvarado,Mexico,Grupo A,Comum
+GHA3,Tariq Lamptey,Gana,Grupo L,Comum
+AUS4,Harry Souttar,Australia,Grupo D,Comum
+JOR9,Ibrahim Saadeh,Jordania,Grupo J,Comum
+IRN1,Escudo,Ira,Grupo G,Especial
+FRA6,Ibrahima Konate,Franca,Grupo I,Comum
+CZE3,Jindrich Stanek,Republica Tcheca,Grupo A,Comum
+PAR7,Omar Alderete,Paraguai,Grupo D,Comum
+MEX16,Santiago Gimenez,Mexico,Grupo A,Comum
+CAN11,Ismael Kone,Canada,Grupo B,Comum
+NZL1,Escudo,Nova Zelandia,Grupo G,Especial
+SWE8,Lucas Bergvall,Suecia,Grupo F,Comum
+SCO19,Che Adams,Escocia,Grupo C,Comum
+CPV6,Steven Moreira,Cabo Verde,Grupo H,Comum
+TUR15,Irfan Can Kahvecu,Turquia,Grupo D,Comum
+IRN14,Omid Noorafkan,Ira,Grupo G,Comum
+COD8,Charles Pickel,RD Congo,Grupo K,Comum
+ESP5,Dean Huijsen,Espanha,Grupo H,Comum
+AUS11,Jackson Irvine,Australia,Grupo D,Comum
+SWE7,Gustaf Lagerbielke,Suecia,Grupo F,Comum
+USA11,Christian Roldan,Estados Unidos,Grupo D,Comum
+ESP11,Pedri,Espanha,Grupo H,Comum
+COL5,Yerry Mina,Colombia,Grupo K,Comum
+SEN2,Eduardo Mendy,Senegal,Grupo I,Comum
+FWC17,Italia 2006,FIFA World Cup 2026,,Especial
+URU3,Santiago Mele,Uruguai,Grupo H,Comum
+BIH5,Tarik Muharemovic,Bosnia,Grupo B,Comum
+PAN13,Foto da Equipe,Panama,Grupo L,Comum
+ENG1,Escudo,Inglaterra,Grupo L,Especial
+NED5,Jurien Timber,Holanda,Grupo F,Comum
+MEX11,Orbelin Pineda,Mexico,Grupo A,Comum
+UZB4,Sherzod Nasrullaev,Uzbequistao,Grupo K,Comum
+UZB20,Abbosbek Fayzullaev,Uzbequistao,Grupo K,Comum
+FWC10,Uruguai 1950,FIFA World Cup 2026,,Especial
+NZL16,Ben Old,Nova Zelandia,Grupo G,Comum
+IRQ17,Osama Rashid,Iraque,Grupo I,Comum
+SCO5,Aaron Hickey,Escocia,Grupo C,Comum
+UZB2,Utkir Yusupov,Uzbequistao,Grupo K,Comum
+ARG12,Leandro Paredes,Argentina,Grupo J,Comum
+BEL7,Maxim De Cuyper,Belgica,Grupo G,Comum
+JPN3,Henry Heroki Mochizuki,Japao,Grupo F,Comum
+CIV12,Ibrahim Sangare,Costa do Marfim,Grupo E,Comum
+ALG5,Rayan Ait-Nouri,Argelia,Grupo J,Comum
+KOR8,Tae-seok Lee,Coreia do Sul,Grupo A,Comum
+NOR6,Marcus Holmgren Pedersen,Noruega,Grupo I,Comum
+TUN10,Aissa Laidouni,Tunisia,Grupo F,Comum
+CZE7,Tomas Holes,Republica Tcheca,Grupo A,Comum
+TUR10,Ismail Yuksek,Turquia,Grupo D,Comum
