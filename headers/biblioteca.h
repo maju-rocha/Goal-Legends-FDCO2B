@@ -46,6 +46,7 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
 void jogarGoleiro();
 void jogarPenalti(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int total, int *total_mochila, int *total_album, int *pacotes_fechados);
 // adicione estas linhas dentro do seu biblioteca.h se já não estiverem lá:
+int estaNoAlbum(Figurinha *album, int total_album, char codigo[]);
 
 
 // ... (outras definições e structs que você já tem)
@@ -60,8 +61,9 @@ void carregarPacotes(void);
 void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, int total, int *total_album, int *total_mochila);
 
 // Outros protótipos que você já possui (mantenha-os aqui)
-void abrirPacote(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int total, int *total_mochila, int *total_album, Font fonteCopa, Color azulBrasil, Color amareloBrasil, EstadoMenu *estadoAtual);
-void listarFigurinhasAlbum(Figurinha *album, int total_album);
+int estaNoAlbum(Figurinha *album, int total_album, char codigo[]);
+
+void abrirPacote(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int total, int *total_mochila, int *total_album, Font fonteCopa, Color azulBrasil, Color amareloBrasil, EstadoMenu *estadoAtual);void listarFigurinhasAlbum(Figurinha *album, int total_album);
 void albumGrafico(Figurinha *figurinhas, int total, Figurinha *album, int total_album);
 // Adicione esta linha dentro do seu biblioteca.h:
 void salvarRepetida(void);
