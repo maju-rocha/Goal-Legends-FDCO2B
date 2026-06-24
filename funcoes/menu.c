@@ -136,7 +136,7 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
                     Rectangle btnAnimado = { botoesPrincipal[i].x, botoesPrincipal[i].y + offsetAnimacao, botoesPrincipal[i].width, botoesPrincipal[i].height };
 
                     DrawRectangleRec(btnAnimado, mouseEmCima ? LIGHTGRAY : amareloBrasil);
-                    DrawRectangleLinesEx(btnAnimado, 2, mouseEmCima ? azulBrasil : DARKGRAY);
+                    DrawRectangleLinesEx(btnAnimado, 2.0f, mouseEmCima ? azulBrasil : DARKGRAY);
                     
                     // Mostra a quantidade de pacotes disponíveis dinamicamente no botão
                     char textoBotao[100];
@@ -278,7 +278,7 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
                 // CHAMADA DOS MINIGAMES
                 else if (acaoEscolhida == 8) jogarQuiz(figurinhas, mochila, album, total, total_mochila, total_album);
                 else if (acaoEscolhida == 9) jogarGoleiro();
-                else if (acaoEscolhida == 10) jogarPenalti(); 
+                else if (acaoEscolhida == 10) jogarPenalti(figurinhas,mochila,album,total,total_mochila,total_album,&pacotes_fechados); 
 
 
 
