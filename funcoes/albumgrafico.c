@@ -6,6 +6,15 @@
 #include "biblioteca.h"
 #include <raymath.h>
 
+bool estaNoAlbum(Figurinha *album, int total_album, const char *codigo) {
+    for (int i = 0; i < total_album; i++) {
+        if (strcmp(album[i].codigo, codigo) == 0) {
+            return true; // Figurinha encontrada no álbum
+        }
+    }
+    return false; // Não tem a figurinha
+}
+
 // Paleta de Cores de Alta Costura - Copa do Mundo Premium
 #define COPA_AZUL_ESCURO (Color){ 8, 12, 24, 255 }     // Fundo Espacial Profundo
 #define COPA_AZUL_MEDIO  (Color){ 20, 28, 48, 255 }    // UI Containers e Rodapé
