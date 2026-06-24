@@ -23,18 +23,14 @@ typedef enum {
 
 typedef enum { MENU_FIM } Menu_FimdeJogo;
 
-<<<<<<< HEAD
 // Declara a função para que outros ficheiros a conheçam
 
-=======
-// Variáveis globais vindas da global.c
->>>>>>> c3cec54f9bf048e4cfee84ed5c53e99d406d04a8
 extern int pacotes_fechados;
 extern int figurinha_repetida;
 extern Menu_FimdeJogo estadoAtual;
 
 // 2. ADICIONE O PROTÓTIPO DA NOVA FUNÇÃO GRÁFICA AQUI
-void abrirPacoteGrafico(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int total, int *total_mochila, int *total_album, Font fonteCopa, Color azulBrasil, Color amareloBrasil, EstadoMenu *estadoAtual);
+void abrirPacote(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int total, int *total_mochila, int *total_album, Font fonteCopa, Color azulBrasil, Color amareloBrasil, EstadoMenu *estadoAtual);
 
 // Outros protótipos do seu projeto (mantenha os que já existirem abaixo)
 void listarFigurinhasAlbum(Figurinha *album, int total_album);
@@ -64,7 +60,7 @@ void carregarPacotes(void);
 void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, int total, int *total_album, int *total_mochila);
 
 // Outros protótipos que você já possui (mantenha-os aqui)
-void abrirPacoteGrafico(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int total, int *total_mochila, int *total_album, Font fonteCopa, Color azulBrasil, Color amareloBrasil, EstadoMenu *estadoAtual);
+void abrirPacote(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int total, int *total_mochila, int *total_album, Font fonteCopa, Color azulBrasil, Color amareloBrasil, EstadoMenu *estadoAtual);
 void listarFigurinhasAlbum(Figurinha *album, int total_album);
 void albumGrafico(Figurinha *figurinhas, int total, Figurinha *album, int total_album);
 // Adicione esta linha dentro do seu biblioteca.h:

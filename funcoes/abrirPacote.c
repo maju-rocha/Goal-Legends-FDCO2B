@@ -1,14 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-<<<<<<< HEAD
-#include <raylib.h>
-#include "../headers/biblioteca.h"
-
-int estaNoAlbum(Figurinha *album, int total_album, char codigo[]){
-    for(int i = 0; i < total_album; i++) {
-        if(strcmp(album[i].codigo, codigo) == 0) return 1;
-=======
 #include <math.h>
 #include <raylib.h>
 #include <raymath.h>
@@ -39,22 +31,32 @@ typedef struct {
 
 #define MAX_PARTICULAS_MASTER 60
 
+// Estrutura atualizada
 typedef struct {
     int quantidadeDesejada;
     int fase;                  
     float tempoAnimacao;
     int cartaAtualIdx;
     Figurinha pacoteSorteado[7];
-    bool cartasProcessadas[7]; 
+    int statusCartas[7]; // 1 = NOVA, 2 = REPETIDA
     char statusMensagem[50];
     Texture2D texturaCartaAtual; 
     char codigoFotoCarregada[10]; 
     ParticulaLuxuosa particulas[MAX_PARTICULAS_MASTER];
     bool particulasInicializadas;
     float shakeIntensity;
+    
+    // -- Variáveis do GIF --
+    Image gifImage;
+    Texture2D gifTextura;
+    int animFrames;
+    int currentAnimFrame;
+    int frameCounter;
+    bool gifCarregado;
 } ControleMasterPacote;
 
-static ControleMasterPacote fluxo = {0, 0, 0.0f, 0, {0}, {0}, "", {0}, "", {0}, false, 0.0f};
+// Inicializa tudo a zero
+static ControleMasterPacote fluxo = {0};
 
 void InicializarParticulasLuxo() {
     for (int i = 0; i < MAX_PARTICULAS_MASTER; i++) {
@@ -65,122 +67,10 @@ void InicializarParticulasLuxo() {
         fluxo.particulas[i].alpha = (float)GetRandomValue(30, 90) / 100.0f;
         fluxo.particulas[i].velocidadeAlpha = (float)GetRandomValue(5, 15) / 1000.0f;
         fluxo.particulas[i].cor = (GetRandomValue(0, 1) == 0) ? COPA_OURO_PURO : COPA_VERDE_NEON;
->>>>>>> c3cec54f9bf048e4cfee84ed5c53e99d406d04a8
     }
     fluxo.particulasInicializadas = true;
 }
 
-<<<<<<< HEAD
-void limparString(char *str) {
-    if (!str) return;
-    int len = strlen(str);
-    while(len > 0 && (str[len-1] == ' ' || str[len-1] == '\r' || str[len-1] == '\n')) str[--len] = '\0';
-    int start = 0;
-    while(str[start] == ' ') start++;
-    if (start > 0) memmove(str, str + start, len - start + 1);
-}
-
-// Função para desenhar botões com estilo Flat Design
-void DesenharBotao(Rectangle rec, const char* texto, Color corBase, Vector2 mouse, Font fonte) {
-    Color corAtual = CheckCollisionPointRec(mouse, rec) ? ColorBrightness(corBase, 0.2f) : corBase;
-    DrawRectangleRounded(rec, 0.3f, 10, BLACK); // Sombra
-    DrawRectangleRounded((Rectangle){rec.x, rec.y, rec.width, rec.height-4}, 0.3f, 10, corAtual);
-    int textWidth = MeasureTextEx(fonte, texto, 20, 2).x;
-    DrawTextEx(fonte, texto, (Vector2){ rec.x + (rec.width - textWidth)/2, rec.y + 18 }, 20, 2, WHITE);
-}
-
-typedef enum { ESCOLHER_QTD, ANIMACAO, REVELAR_CARTA, FIM_ABERTURA } EstadoAbertura;
-
-void abrirPacote(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int total, int *total_mochila, int *total_album, int *pacotes_fechados){
-    if(*pacotes_fechados <= 0) return;
-
-    InitWindow(1000, 800, "Abrindo Pacotes - Goal Legends");
-    SetTargetFPS(60);
-    Font fonteCopa = LoadFont("extras/PressStart2P-Regular.ttf");
-    
-    int animFrames = 0;
-    Image imAnim = LoadImageAnim("imagens/animacao.gif", &animFrames);
-    Texture2D texAnim = LoadTextureFromImage(imAnim);
-    int currentAnimFrame = 0, frameDelay = 4, frameCounter = 0;
-
-    EstadoAbertura estado = ESCOLHER_QTD;
-    int qtd_sel = 1, total_figurinhas = 0, fig_atual = 0;
-    Figurinha *sort = NULL;
-    int *status = NULL;
-    Texture2D textura_fig = { 0 };
-
-    while(!WindowShouldClose()) {
-        Vector2 mouse = GetMousePosition();
-
-        if (estado == ESCOLHER_QTD) {
-            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-                if (CheckCollisionPointRec(mouse, (Rectangle){350, 400, 50, 50}) && qtd_sel > 1) qtd_sel--;
-                if (CheckCollisionPointRec(mouse, (Rectangle){600, 400, 50, 50}) && qtd_sel < *pacotes_fechados) qtd_sel++;
-                if (CheckCollisionPointRec(mouse, (Rectangle){400, 500, 200, 60})) {
-                    *pacotes_fechados -= qtd_sel;
-                    total_figurinhas = qtd_sel * 7;
-                    sort = malloc(total_figurinhas * sizeof(Figurinha));
-                    status = malloc(total_figurinhas * sizeof(int));
-                    for(int i = 0; i < total_figurinhas; i++) {
-                        int idx = rand() % total;
-                        sort[i] = figurinhas[idx];
-                        status[i] = estaNoAlbum(album, *total_album, sort[i].codigo) ? 2 : 1;
-                        if(status[i] == 1) { album[*total_album++] = sort[i]; } 
-                        else { mochila[*total_mochila++] = sort[i]; }
-                    }
-                    estado = ANIMACAO;
-                }
-            }
-        } else if (estado == ANIMACAO) {
-            if (++frameCounter >= frameDelay) {
-                if (++currentAnimFrame >= animFrames) {
-                    estado = REVELAR_CARTA;
-                    char pL[100], cL[100];
-                    strcpy(pL, sort[fig_atual].secao); limparString(pL);
-                    for(int j=0; pL[j]; j++) if(pL[j] == ' ') pL[j] = '_';
-                    strcpy(cL, sort[fig_atual].codigo); limparString(cL);
-                    textura_fig = LoadTexture(TextFormat("imagens/imagens_figurinhas/%s/%s.png", pL, cL));
-                } else UpdateTexture(texAnim, ((unsigned char *)imAnim.data) + (imAnim.width * imAnim.height * 4 * currentAnimFrame));
-                frameCounter = 0;
-            }
-        } else if (estado == REVELAR_CARTA) {
-            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(mouse, (Rectangle){400, 650, 200, 50})) {
-                if (++fig_atual >= total_figurinhas) estado = FIM_ABERTURA;
-                else {
-                    UnloadTexture(textura_fig);
-                    char pL[100], cL[100];
-                    strcpy(pL, sort[fig_atual].secao); limparString(pL);
-                    for(int j=0; pL[j]; j++) if(pL[j] == ' ') pL[j] = '_';
-                    strcpy(cL, sort[fig_atual].codigo); limparString(cL);
-                    textura_fig = LoadTexture(TextFormat("imagens/imagens_figurinhas/%s/%s.png", pL, cL));
-                }
-            }
-        } else if (estado == FIM_ABERTURA && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) break;
-
-        BeginDrawing();
-        ClearBackground((Color){20, 40, 20, 255});
-
-        if (estado == ESCOLHER_QTD) {
-            DrawTextEx(fonteCopa, "QUANTOS PACOTES?", (Vector2){ 300, 100 }, 25, 2, WHITE);
-            DesenharBotao((Rectangle){350, 400, 50, 50}, "-", MAROON, mouse, fonteCopa);
-            DrawTextEx(fonteCopa, TextFormat("%d", qtd_sel), (Vector2){ 480, 410 }, 30, 2, WHITE);
-            DesenharBotao((Rectangle){600, 400, 50, 50}, "+", BLUE, mouse, fonteCopa);
-            DesenharBotao((Rectangle){400, 500, 200, 60}, "ABRIR", (Color){0, 150, 0, 255}, mouse, fonteCopa);
-        } else if (estado == ANIMACAO) {
-            DrawTexture(texAnim, 500 - texAnim.width/2, 400 - texAnim.height/2, WHITE);
-        } else if (estado == REVELAR_CARTA) {
-            DrawRectangleRounded((Rectangle){300, 100, 400, 530}, 0.08f, 20, WHITE);
-            if (textura_fig.id != 0) DrawTexturePro(textura_fig, (Rectangle){0,0,textura_fig.width,textura_fig.height}, (Rectangle){320, 120, 360, 400}, (Vector2){0,0}, 0, WHITE);
-            else DrawTextEx(fonteCopa, "SEM IMAGEM", (Vector2){ 350, 300 }, 20, 1, RED);
-            DrawTextEx(fonteCopa, sort[fig_atual].titulo, (Vector2){ 350, 540 }, 14, 1, BLACK);
-            DrawRectangleRounded((Rectangle){300, 600, 400, 40}, 0.2f, 10, status[fig_atual] == 1 ? GREEN : ORANGE);
-            DesenharBotao((Rectangle){400, 650, 200, 50}, "PROXIMA", BLUE, mouse, fonteCopa);
-        }
-        EndDrawing();
-    }
-    if (sort) free(sort); if (status) free(status);
-    UnloadTexture(texAnim); UnloadImage(imAnim); UnloadFont(fonteCopa); CloseWindow();
-=======
 void GerenciarEfeitoParticulas(Vector2 mousePos, float tempoGlobal) {
     if (!fluxo.particulasInicializadas) InicializarParticulasLuxo();
 
@@ -240,14 +130,26 @@ void abrirPacoteGrafico(Figurinha *figurinhas, Figurinha *mochila, Figurinha *al
     Vector2 mousePoint = GetMousePosition();
     float tempoGlobal = (float)GetTime();
 
-    // Fundo Gradiente Luxuoso Dinâmico usando as cores passadas pelo menu.c
-    DrawRectangleGradientV(0, 0, 1000, 800, COPA_AZUL_ESCURO, azulBrasil);
+    if (!fluxo.gifCarregado) {
+        fluxo.animFrames = 0;
+        fluxo.gifImage = LoadImageAnim("imagens/animacao.gif", &fluxo.animFrames);
+        fluxo.gifTextura = LoadTextureFromImage(fluxo.gifImage);
+        fluxo.currentAnimFrame = 0;
+        fluxo.frameCounter = 0;
+        fluxo.gifCarregado = true;
+    }
 
+    DrawRectangleGradientV(0, 0, 1000, 800, COPA_AZUL_ESCURO, azulBrasil);
     GerenciarEfeitoParticulas(mousePoint, tempoGlobal);
     DesenharVinhetaCinema();
 
-    // ---- FASE 0: SELEÇÃO ----
+    // ---- FASE 0: SELEÇÃO COM BOTÕES + E - ----
     if (fluxo.fase == 0) {
+        // Inicializa e protege os limites da quantidade
+        if (fluxo.quantidadeDesejada < 1) fluxo.quantidadeDesejada = 1;
+        if (fluxo.quantidadeDesejada > pacotes_fechados && pacotes_fechados > 0) fluxo.quantidadeDesejada = pacotes_fechados;
+        if (pacotes_fechados == 0) fluxo.quantidadeDesejada = 0;
+
         DrawRectangle(180, 160, 640, 440, ColorAlpha(COPA_AZUL_MEDIO, 0.85f));
         DrawRectangleLinesEx((Rectangle){180, 160, 640, 440}, 2.0f, ColorAlpha(COPA_OURO_PURO, 0.5f));
         
@@ -257,50 +159,102 @@ void abrirPacoteGrafico(Figurinha *figurinhas, Figurinha *mochila, Figurinha *al
         DrawLineEx((Vector2){825, 605}, (Vector2){825, 570}, 3.0f, COPA_VERDE_NEON);
 
         char txtDisp[50];
-        sprintf(txtDisp, "BOOSTERS DISPONÍVEIS: %02d", pacotes_fechados);
+        sprintf(txtDisp, "PACOTES DISPONÍVEIS: %02d", pacotes_fechados);
         DrawTextEx(fonteCopa, txtDisp, (Vector2){ 500 - MeasureTextEx(fonteCopa, txtDisp, 15, 1).x/2, 210 }, 15, 1, ColorAlpha(WHITE, 0.5f));
-        DrawTextEx(fonteCopa, "CHOOSE YOUR ENERGY QUANTITY", (Vector2){ 500 - MeasureTextEx(fonteCopa, "CHOOSE YOUR ENERGY QUANTITY", 24, 2).x/2, 245 }, 24, 2, WHITE);
+        DrawTextEx(fonteCopa, "SELECIONE A QUANTIDADE", (Vector2){ 500 - MeasureTextEx(fonteCopa, "SELECIONE A QUANTIDADE", 22, 2).x/2, 255 }, 22, 2, WHITE);
 
-        int opcoesQtd[] = {1, 3, 5};
-        for (int i = 0; i < 3; i++) {
-            Rectangle btn = { 220 + (i * 195), 350, 165, 70 };
-            bool hover = CheckCollisionPointRec(mousePoint, btn);
-            
-            DrawRectangleRec(btn, hover ? ColorAlpha(COPA_VERDE_NEON, 0.12f) : ColorAlpha(COPA_AZUL_ESCURO, 0.6f));
-            DrawRectangleLinesEx(btn, hover ? 2.0f : 1.0f, hover ? COPA_VERDE_NEON : COPA_OURO_PURO);
-            
-            char txtBtn[20];
-            sprintf(txtBtn, "[ %d PACK%s ]", opcoesQtd[i], opcoesQtd[i] > 1 ? "S" : "");
-            DrawTextEx(fonteCopa, txtBtn, (Vector2){ btn.x + (165/2) - MeasureTextEx(fonteCopa, txtBtn, 14, 1).x/2, btn.y + 26 }, 14, 1, hover ? COPA_VERDE_NEON : WHITE);
+        // UI de Controle (+, -, Contador)
+        Rectangle btnMenos = { 330, 320, 60, 60 };
+        Rectangle boxQtd = { 420, 320, 160, 60 };
+        Rectangle btnMais = { 610, 320, 60, 60 };
 
-            if (hover && IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
-                if (pacotes_fechados >= opcoesQtd[i]) {
-                    fluxo.quantidadeDesejada = opcoesQtd[i];
-                    pacotes_fechados -= 1;
-                    for (int f = 0; f < 7; f++) {
-                        fluxo.pacoteSorteado[f] = figurinhas[rand() % total];
-                        limparFigurinha(&fluxo.pacoteSorteado[f]); 
-                        fluxo.cartasProcessadas[f] = false;
+        bool hoverMenos = CheckCollisionPointRec(mousePoint, btnMenos);
+        bool hoverMais = CheckCollisionPointRec(mousePoint, btnMais);
+
+        // Botão Menos
+        DrawRectangleRec(btnMenos, hoverMenos ? ColorAlpha(COPA_VERMELHO, 0.2f) : ColorAlpha(COPA_AZUL_ESCURO, 0.6f));
+        DrawRectangleLinesEx(btnMenos, hoverMenos ? 2.0f : 1.0f, hoverMenos ? COPA_VERMELHO : COPA_OURO_PURO);
+        DrawTextEx(fonteCopa, "-", (Vector2){ btnMenos.x + 30 - MeasureTextEx(fonteCopa, "-", 24, 1).x/2, btnMenos.y + 18 }, 24, 1, WHITE);
+
+        // Caixa de Quantidade
+        DrawRectangleRec(boxQtd, ColorAlpha(BLACK, 0.4f));
+        DrawRectangleLinesEx(boxQtd, 1.0f, ColorAlpha(WHITE, 0.2f));
+        char txtQtd[10];
+        sprintf(txtQtd, "%02d", fluxo.quantidadeDesejada);
+        DrawTextEx(fonteCopa, txtQtd, (Vector2){ boxQtd.x + 80 - MeasureTextEx(fonteCopa, txtQtd, 32, 2).x/2, boxQtd.y + 14 }, 32, 2, COPA_VERDE_NEON);
+
+        // Botão Mais
+        DrawRectangleRec(btnMais, hoverMais ? ColorAlpha(COPA_VERDE_NEON, 0.2f) : ColorAlpha(COPA_AZUL_ESCURO, 0.6f));
+        DrawRectangleLinesEx(btnMais, hoverMais ? 2.0f : 1.0f, hoverMais ? COPA_VERDE_NEON : COPA_OURO_PURO);
+        DrawTextEx(fonteCopa, "+", (Vector2){ btnMais.x + 30 - MeasureTextEx(fonteCopa, "+", 24, 1).x/2, btnMais.y + 18 }, 24, 1, WHITE);
+
+        // Interação de Clicar no + e -
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+            if (hoverMenos && fluxo.quantidadeDesejada > 1) fluxo.quantidadeDesejada--;
+            if (hoverMais && fluxo.quantidadeDesejada < pacotes_fechados) fluxo.quantidadeDesejada++;
+        }
+
+        // Botão de Abrir
+        Rectangle btnAbrir = { 400, 420, 200, 50 };
+        bool hoverAbrir = CheckCollisionPointRec(mousePoint, btnAbrir);
+        DrawRectangleRec(btnAbrir, hoverAbrir ? ColorAlpha(COPA_OURO_PURO, 0.2f) : ColorAlpha(COPA_OURO_PURO, 0.05f));
+        DrawRectangleLinesEx(btnAbrir, hoverAbrir ? 2.0f : 1.0f, COPA_OURO_PURO);
+        DrawTextEx(fonteCopa, "ABRIR PACOTES", (Vector2){ 500 - MeasureTextEx(fonteCopa, "ABRIR PACOTES", 16, 1).x/2, btnAbrir.y + 17 }, 16, 1, hoverAbrir ? COPA_OURO_PURO : WHITE);
+
+        if (hoverAbrir && IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
+            if (pacotes_fechados > 0 && fluxo.quantidadeDesejada > 0) {
+                pacotes_fechados -= 1; // Deduz 1 pacote para começar
+                
+                // LÓGICA AUTOMÁTICA DE ATRIBUIÇÃO
+                for (int f = 0; f < 7; f++) {
+                    Figurinha sorteada = figurinhas[rand() % total];
+                    limparFigurinha(&sorteada); 
+                    fluxo.pacoteSorteado[f] = sorteada;
+                    
+                    if (!estaNoAlbum(album, *total_album, sorteada.codigo)) {
+                        album[*total_album] = sorteada;
+                        (*total_album)++;
+                        FILE *fio = fopen("extras/album.csv", "a");
+                        if (fio) { fprintf(fio, "%s,%s,%s,%s,%s\n", sorteada.codigo, sorteada.titulo, sorteada.secao, sorteada.grupo, sorteada.tipo); fclose(fio); }
+                        fluxo.statusCartas[f] = 1; // NOVA
+                    } else {
+                        mochila[*total_mochila] = sorteada;
+                        (*total_mochila)++;
+                        FILE *fio = fopen("extras/mochila.csv", "a");
+                        if (fio) { fprintf(fio, "%s,%s,%s,%s,%s\n", sorteada.codigo, sorteada.titulo, sorteada.secao, sorteada.grupo, sorteada.tipo); fclose(fio); }
+                        fluxo.statusCartas[f] = 2; // REPETIDA
+                        salvarRepetida();
                     }
-                    fluxo.cartaAtualIdx = 0;
-                    fluxo.fase = 1;
-                } else {
-                    strcpy(fluxo.statusMensagem, "INSUFFICIENT PACK CREDITS!");
                 }
+                fluxo.cartaAtualIdx = 0;
+                fluxo.fase = 1;
+                strcpy(fluxo.statusMensagem, ""); // Limpa mensagens de erro
+            } else {
+                strcpy(fluxo.statusMensagem, "PACOTES INSUFICIENTES!");
             }
         }
 
+        // Botão de Voltar/Cancelar
         Rectangle btnVoltar = { 400, 510, 200, 45 };
         bool hoverVoltar = CheckCollisionPointRec(mousePoint, btnVoltar);
         DrawRectangleRec(btnVoltar, hoverVoltar ? ColorAlpha(COPA_VERMELHO, 0.15f) : ColorAlpha(WHITE, 0.02f));
         DrawRectangleLinesEx(btnVoltar, 1.0f, hoverVoltar ? COPA_VERMELHO : ColorAlpha(WHITE, 0.2f));
-        DrawTextEx(fonteCopa, "ABORT MISSION", (Vector2){ 500 - MeasureTextEx(fonteCopa, "ABORT MISSION", 12, 1).x/2, 526 }, 12, 1, hoverVoltar ? COPA_VERMELHO : ColorAlpha(WHITE, 0.6f));
+        DrawTextEx(fonteCopa, "VOLTAR AO MENU", (Vector2){ 500 - MeasureTextEx(fonteCopa, "VOLTAR AO MENU", 12, 1).x/2, 526 }, 12, 1, hoverVoltar ? COPA_VERMELHO : ColorAlpha(WHITE, 0.6f));
 
-        if (hoverVoltar && IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) *estadoAtual = MENU_PRINCIPAL;
+        if (hoverVoltar && IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
+            if (fluxo.gifCarregado) {
+                UnloadTexture(fluxo.gifTextura);
+                UnloadImage(fluxo.gifImage);
+                fluxo.gifCarregado = false;
+            }
+            fluxo.quantidadeDesejada = 1; // Reseta para a próxima vez
+            *estadoAtual = MENU_PRINCIPAL;
+        }
+        
         if (strlen(fluxo.statusMensagem) > 0) DrawTextEx(fonteCopa, fluxo.statusMensagem, (Vector2){ 500 - MeasureTextEx(fonteCopa, fluxo.statusMensagem, 14, 1).x/2, 120 }, 14, 1, COPA_VERMELHO);
     }
 
-    // ---- FASE 1: PACOTE ----
+    // ---- FASE 1: PACOTE ESPERANDO ----
     else if (fluxo.fase == 1) {
         float glow = (sinf(tempoGlobal * 5.0f) + 1.0f) / 2.0f; 
         Rectangle pack = { 380, 130, 240, 450 }; 
@@ -313,49 +267,47 @@ void abrirPacoteGrafico(Figurinha *figurinhas, Figurinha *mochila, Figurinha *al
         float laserY = pack.y + 15 + ((float)sinf(tempoGlobal * 2.5f) + 1.0f) * 0.5f * 400.0f;
         DrawRectangleGradientH(pack.x + 15, laserY, 210, 3, ColorAlpha(COPA_VERDE_NEON, 0.0f), COPA_VERDE_NEON);
 
-        DrawTextEx(fonteCopa, "FIFA OFFICIAL", (Vector2){ 500 - MeasureTextEx(fonteCopa, "FIFA OFFICIAL", 12, 1).x/2, 200 }, 12, 1, COPA_OURO_PURO);
-        DrawTextEx(fonteCopa, "ULTIMATE\nBOOSTER", (Vector2){ 500 - MeasureTextEx(fonteCopa, "ULTIMATE\nBOOSTER", 22, 1).x/2, 320 }, 22, 1, WHITE);
+        DrawTextEx(fonteCopa, "FIFA OFICIAL", (Vector2){ 500 - MeasureTextEx(fonteCopa, "FIFA OFICIAL", 12, 1).x/2, 200 }, 12, 1, COPA_OURO_PURO);
+        DrawTextEx(fonteCopa, "PACOTE\nULTIMATE", (Vector2){ 500 - MeasureTextEx(fonteCopa, "PACOTE\nULTIMATE", 22, 1).x/2, 320 }, 22, 1, WHITE);
         
-        char press[40];
-        sprintf(press, "PRESS [ SPACE ] TO UNLEASH");
+        char press[50];
+        sprintf(press, "APERTE [ ESPACO ] PARA ABRIR");
         DrawTextEx(fonteCopa, press, (Vector2){ 500 - MeasureTextEx(fonteCopa, press, 14, 1).x/2, 620 }, 14, 1, ColorAlpha(COPA_VERDE_NEON, 0.6f + (glow * 0.4f)));
     
         if (IsKeyPressed(KEY_SPACE)) {
             fluxo.fase = 2;
-            fluxo.tempoAnimacao = 0.0f;
+            fluxo.currentAnimFrame = 0; 
         }
     }
 
-    // ---- FASE 2: EXPLOSÃO ----
+    // ---- FASE 2: ANIMAÇÃO DO GIF ----
     else if (fluxo.fase == 2) {
-        fluxo.tempoAnimacao += GetFrameTime() * 2.2f;
-        float t = fluxo.tempoAnimacao;
-
-        float shake = (t < 0.20f) ? (1.0f - (t/0.20f)) * 14.0f : 0.0f;
-        float skX = (float)GetRandomValue(-1, 1) * shake;
-        float skY = (float)GetRandomValue(-1, 1) * shake;
-
-        float afastamento = (t >= 0.20f) ? powf(t - 0.20f, 2.5f) * 900.0f : 0.0f;
-        float queda = (t >= 0.20f) ? (t - 0.20f) * 450.0f : 0.0f;
-        float rot = (t >= 0.20f) ? (t - 0.20f) * 110.0f : 0.0f;
-
-        DrawRectanglePro((Rectangle){ 380 + skX - afastamento, 130 + skY + queda, 120, 450 }, (Vector2){ 120, 225 }, -rot, COPA_AZUL_MEDIO);
-        DrawRectanglePro((Rectangle){ 500 + skX + afastamento, 130 + skY + queda, 120, 450 }, (Vector2){ 0, 225 }, rot, COPA_AZUL_MEDIO);
-
-        if (t >= 0.15f && t <= 0.40f) {
-            float shockAlpha = (1.0f - ((t - 0.15f) / 0.25f));
-            DrawCircle(500, 350, (t - 0.15f) * 600.0f, ColorAlpha(WHITE, shockAlpha * 0.4f));
-            DrawLineEx((Vector2){500 + skX, 100}, (Vector2){500 + skX, 600}, shockAlpha * 25.0f, COPA_VERDE_NEON);
+        fluxo.frameCounter++;
+        
+        if (fluxo.frameCounter >= 6) { 
+            fluxo.currentAnimFrame++;
+            
+            if (fluxo.currentAnimFrame >= fluxo.animFrames) {
+                fluxo.fase = 3;
+                fluxo.currentAnimFrame = 0;
+                fluxo.codigoFotoCarregada[0] = '\0';
+            } else {
+                UpdateTexture(fluxo.gifTextura, ((unsigned char *)fluxo.gifImage.data) + (fluxo.gifImage.width * fluxo.gifImage.height * 4 * fluxo.currentAnimFrame));
+            }
+            fluxo.frameCounter = 0;
         }
 
-        if (fluxo.tempoAnimacao > 1.0f) {
-            fluxo.fase = 3;
-            fluxo.tempoAnimacao = 0.0f;
-            fluxo.codigoFotoCarregada[0] = '\0'; 
-        }
+        float glow = (sinf(tempoGlobal * 8.0f) + 1.0f) / 2.0f;
+        DrawCircle(500, 400, 240.0f + (glow * 15.0f), ColorAlpha(COPA_OURO_PURO, 0.15f));
+        
+        Rectangle origem = { 0.0f, 0.0f, (float)fluxo.gifTextura.width, (float)fluxo.gifTextura.height };
+        Rectangle destino = { 375.0f, 190.0f, 250.0f, 420.0f }; 
+        Vector2 centro = { 0.0f, 0.0f };
+        
+        DrawTexturePro(fluxo.gifTextura, origem, destino, centro, 0.0f, WHITE);
     }
 
-    // ---- FASE 3: CARROSSEL ----
+    // ---- FASE 3: CARROSSEL DE CARTAS ----
     else if (fluxo.fase == 3) {
         Figurinha fig = fluxo.pacoteSorteado[fluxo.cartaAtualIdx];
         gerenciarTexturaCarta(fig);
@@ -373,17 +325,18 @@ void abrirPacoteGrafico(Figurinha *figurinhas, Figurinha *mochila, Figurinha *al
         bool ehRara = (strstr(fig.tipo, "Rara") != NULL || strstr(fig.tipo, "Lendaria") != NULL || strstr(fig.tipo, "Ouro") != NULL);
         Color corBorda = COPA_VERDE_NEON;
         
-        if (!fluxo.cartasProcessadas[fluxo.cartaAtualIdx]) {
+        // A borda muda de acordo com o status (NOVA ou REPETIDA)
+        if (fluxo.statusCartas[fluxo.cartaAtualIdx] == 1) { // NOVA
             if (ehRara) {
                 float r = (sinf(tempoGlobal * 3.0f) + 1.0f) * 0.5f;
                 corBorda = ColorLerp(COPA_OURO_PURO, COPA_OURO_BRILHO, r);
                 DrawRectangleLinesEx((Rectangle){card.x - 2, card.y - 2, card.width + 4, card.height + 4}, 2.0f, corBorda);
             } else {
-                corBorda = ColorAlpha(WHITE, 0.25f);
+                corBorda = ColorAlpha(COPA_VERDE_NEON, 0.7f);
                 DrawRectangleLinesEx(card, 2.0f, corBorda);
             }
-        } else {
-            corBorda = ColorAlpha(WHITE, 0.08f);
+        } else { // REPETIDA
+            corBorda = ColorAlpha(WHITE, 0.2f);
             DrawRectangleLinesEx(card, 2.0f, corBorda);
         }
 
@@ -406,81 +359,76 @@ void abrirPacoteGrafico(Figurinha *figurinhas, Figurinha *mochila, Figurinha *al
         DrawTextEx(fonteCopa, fig.secao, (Vector2){ (card.x + 135) - MeasureTextEx(fonteCopa, fig.secao, 11, 1).x/2, card.y + 395 }, 11, 1, ColorAlpha(WHITE, 0.4f));
         DrawTextEx(fonteCopa, fig.tipo, (Vector2){ (card.x + 135) - MeasureTextEx(fonteCopa, fig.tipo, 11, 1).x/2, card.y + 418 }, 11, 1, ehRara ? COPA_OURO_PURO : COPA_VERDE_NEON);
 
-        if (!fluxo.cartasProcessadas[fluxo.cartaAtualIdx]) {
-            DrawRectangle(card.x + 15, card.y + 445, 240, 60, COPA_AZUL_MEDIO);
-            DrawRectangleLinesEx((Rectangle){card.x + 15, card.y + 445, 240, 60}, 1.0f, ColorAlpha(WHITE, 0.05f));
-            
-            DrawTextEx(fonteCopa, "[A] SLOT TO ALBUM", (Vector2){ card.x + 25, card.y + 452 }, 10, 1, WHITE);
-            DrawTextEx(fonteCopa, "[M] KEEP IN MOCHILA", (Vector2){ card.x + 25, card.y + 469 }, 10, 1, WHITE);
-            DrawTextEx(fonteCopa, "[D] DISCARD CARD", (Vector2){ card.x + 25, card.y + 486 }, 10, 1, COPA_VERMELHO);
-
-            if (IsKeyPressed(KEY_A)) {
-                album[*total_album] = fig; (*total_album)++;
-                fluxo.cartasProcessadas[fluxo.cartaAtualIdx] = true;
-                strcpy(fluxo.statusMensagem, "COLADA NO ALBUM!");
-                FILE *fio = fopen("extras/album.csv", "a");
-                if (fio) { fprintf(fio, "%s,%s,%s,%s,%s\n", fig.codigo, fig.titulo, fig.secao, fig.grupo, fig.tipo); fclose(fio); }
-            }
-            if (IsKeyPressed(KEY_M)) {
-                mochila[*total_mochila] = fig; (*total_mochila)++;
-                fluxo.cartasProcessadas[fluxo.cartaAtualIdx] = true;
-                strcpy(fluxo.statusMensagem, "GUARDADA!");
-                FILE *fio = fopen("extras/mochila.csv", "a");
-                if (fio) { fprintf(fio, "%s,%s,%s,%s,%s\n", fig.codigo, fig.titulo, fig.secao, fig.grupo, fig.tipo); fclose(fio); }
-            }
-            if (IsKeyPressed(KEY_D)) {
-                fluxo.cartasProcessadas[fluxo.cartaAtualIdx] = true;
-                strcpy(fluxo.statusMensagem, "CARD FOI DESCARTADO");
-            }
-        } else {
-            DrawRectangle(card.x + 15, card.y + 445, 240, 60, ColorAlpha(COPA_AZUL_MEDIO, 0.4f));
-            // Erro corrigido aqui de fluxes -> fluxo
-            DrawTextEx(fonteCopa, fluxo.statusMensagem, (Vector2){ (card.x + 135) - MeasureTextEx(fonteCopa, fluxo.statusMensagem, 11, 1).x/2, card.y + 469 }, 11, 1, COPA_VERDE_NEON);
+        // UI PARA MOSTRAR STATUS
+        if (fluxo.statusCartas[fluxo.cartaAtualIdx] == 1) { // NOVA
+            DrawRectangle(card.x + 15, card.y + 445, 240, 60, ColorAlpha(COPA_VERDE_NEON, 0.15f));
+            DrawRectangleLinesEx((Rectangle){card.x + 15, card.y + 445, 240, 60}, 1.0f, COPA_VERDE_NEON);
+            DrawTextEx(fonteCopa, "NOVA FIGURINHA!", (Vector2){ (card.x + 135) - MeasureTextEx(fonteCopa, "NOVA FIGURINHA!", 12, 1).x/2, card.y + 458 }, 12, 1, COPA_VERDE_NEON);
+            DrawTextEx(fonteCopa, "ADICIONADA AO ALBUM", (Vector2){ (card.x + 135) - MeasureTextEx(fonteCopa, "ADICIONADA AO ALBUM", 10, 1).x/2, card.y + 480 }, 10, 1, WHITE);
+        } else { // REPETIDA
+            DrawRectangle(card.x + 15, card.y + 445, 240, 60, ColorAlpha(COPA_AZUL_MEDIO, 0.6f));
+            DrawRectangleLinesEx((Rectangle){card.x + 15, card.y + 445, 240, 60}, 1.0f, ColorAlpha(WHITE, 0.3f));
+            DrawTextEx(fonteCopa, "REPETIDA", (Vector2){ (card.x + 135) - MeasureTextEx(fonteCopa, "REPETIDA", 12, 1).x/2, card.y + 458 }, 12, 1, ColorAlpha(WHITE, 0.7f));
+            DrawTextEx(fonteCopa, "ENVIADA PARA A MOCHILA", (Vector2){ (card.x + 135) - MeasureTextEx(fonteCopa, "ENVIADA PARA A MOCHILA", 10, 1).x/2, card.y + 480 }, 10, 1, ColorAlpha(WHITE, 0.5f));
         }
 
         if (fluxo.cartaAtualIdx > 0) DrawTextEx(fonteCopa, "<", (Vector2){ 290, 350 }, 26, 1, ColorAlpha(WHITE, 0.3f));
         if (fluxo.cartaAtualIdx < 6) DrawTextEx(fonteCopa, ">", (Vector2){ 690, 350 }, 26, 1, ColorAlpha(WHITE, 0.3f));
 
         char indicador[32];
-        sprintf(indicador, "TRACK: %d / 7", fluxo.cartaAtualIdx + 1);
+        sprintf(indicador, "FIGURINHA: %d / 7", fluxo.cartaAtualIdx + 1);
         DrawTextEx(fonteCopa, indicador, (Vector2){ 500 - MeasureTextEx(fonteCopa, indicador, 13, 1).x/2, 640 }, 13, 1, ColorAlpha(WHITE, 0.5f));
 
         if (IsKeyPressed(KEY_RIGHT) && fluxo.cartaAtualIdx < 6) {
             fluxo.cartaAtualIdx++;
-            strcpy(fluxo.statusMensagem, fluxo.cartasProcessadas[fluxo.cartaAtualIdx] ? "AÇÃO JÁ PROCESSADA" : "");
         }
         if (IsKeyPressed(KEY_LEFT) && fluxo.cartaAtualIdx > 0) {
             fluxo.cartaAtualIdx--;
-            strcpy(fluxo.statusMensagem, fluxo.cartasProcessadas[fluxo.cartaAtualIdx] ? "AÇÃO JÁ PROCESSADA" : "");
         }
 
-        bool todasProntas = true;
-        for (int c = 0; c < 7; c++) { if (!fluxo.cartasProcessadas[c]) todasProntas = false; }
-
-        if (todasProntas) {
-            float pulseEnter = (sinf(tempoGlobal * 6.0f) + 1.0f) / 2.0f;
-            DrawTextEx(fonteCopa, "PRESS [ ENTER ] FOR NEXT LEVEL", (Vector2){ 500 - MeasureTextEx(fonteCopa, "PRESS [ ENTER ] FOR NEXT LEVEL", 13, 1).x/2, 675 }, 13, 1, ColorAlpha(COPA_OURO_PURO, 0.5f + pulseEnter * 0.5f));
-            
-            if (IsKeyPressed(KEY_ENTER)) {
-                fluxo.quantidadeDesejada--;
-                if (fluxo.quantidadeDesejada > 0 && pacotes_fechados > 0) {
-                    pacotes_fechados--;
-                    for (int f = 0; f < 7; f++) {
-                        fluxo.pacoteSorteado[f] = figurinhas[rand() % total];
-                        limparFigurinha(&fluxo.pacoteSorteado[f]);
-                        fluxo.cartasProcessadas[f] = false;
+        float pulseEnter = (sinf(tempoGlobal * 6.0f) + 1.0f) / 2.0f;
+        DrawTextEx(fonteCopa, "APERTE [ ENTER ] PARA CONTINUAR", (Vector2){ 500 - MeasureTextEx(fonteCopa, "APERTE [ ENTER ] PARA CONTINUAR", 13, 1).x/2, 675 }, 13, 1, ColorAlpha(COPA_OURO_PURO, 0.5f + pulseEnter * 0.5f));
+        
+        if (IsKeyPressed(KEY_ENTER)) {
+            fluxo.quantidadeDesejada--;
+            if (fluxo.quantidadeDesejada > 0 && pacotes_fechados > 0) {
+                pacotes_fechados--;
+                
+                for (int f = 0; f < 7; f++) {
+                    Figurinha sorteada = figurinhas[rand() % total];
+                    limparFigurinha(&sorteada);
+                    fluxo.pacoteSorteado[f] = sorteada;
+                    
+                    if (!estaNoAlbum(album, *total_album, sorteada.codigo)) {
+                        album[*total_album] = sorteada;
+                        (*total_album)++;
+                        FILE *fio = fopen("extras/album.csv", "a");
+                        if (fio) { fprintf(fio, "%s,%s,%s,%s,%s\n", sorteada.codigo, sorteada.titulo, sorteada.secao, sorteada.grupo, sorteada.tipo); fclose(fio); }
+                        fluxo.statusCartas[f] = 1;
+                    } else {
+                        mochila[*total_mochila] = sorteada;
+                        (*total_mochila)++;
+                        FILE *fio = fopen("extras/mochila.csv", "a");
+                        if (fio) { fprintf(fio, "%s,%s,%s,%s,%s\n", sorteada.codigo, sorteada.titulo, sorteada.secao, sorteada.grupo, sorteada.tipo); fclose(fio); }
+                        fluxo.statusCartas[f] = 2;
+                        salvarRepetida();
                     }
-                    fluxo.cartaAtualIdx = 0;
-                    fluxo.fase = 1;
-                } else {
-                    if (fluxo.texturaCartaAtual.id > 0) UnloadTexture(fluxo.texturaCartaAtual);
-                    fluxo.texturaCartaAtual.id = 0;
-                    fluxo.codigoFotoCarregada[0] = '\0';
-                    fluxo.fase = 0;
-                    *estadoAtual = MENU_PRINCIPAL;
                 }
+                fluxo.cartaAtualIdx = 0;
+                fluxo.fase = 1; 
+            } else {
+                if (fluxo.texturaCartaAtual.id > 0) UnloadTexture(fluxo.texturaCartaAtual);
+                fluxo.texturaCartaAtual.id = 0;
+                fluxo.codigoFotoCarregada[0] = '\0';
+                if (fluxo.gifCarregado) {
+                    UnloadTexture(fluxo.gifTextura);
+                    UnloadImage(fluxo.gifImage);
+                    fluxo.gifCarregado = false;
+                }
+                fluxo.fase = 0;
+                fluxo.quantidadeDesejada = 1; // Reseta para quando o jogador voltar mais tarde
+                *estadoAtual = MENU_PRINCIPAL;
             }
         }
     }
->>>>>>> c3cec54f9bf048e4cfee84ed5c53e99d406d04a8
 }

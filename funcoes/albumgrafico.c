@@ -6,7 +6,7 @@
 #include "biblioteca.h"
 #include <raymath.h>
 
-bool estaNoAlbum(Figurinha *album, int total_album, const char *codigo) {
+int estaNoAlbum(Figurinha *album, int total_album, char codigo[]) {
     for (int i = 0; i < total_album; i++) {
         if (strcmp(album[i].codigo, codigo) == 0) {
             return true; // Figurinha encontrada no álbum
