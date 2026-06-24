@@ -126,6 +126,7 @@ void DesenharVinhetaCinema() {
     DrawRectangleGradientV(0, 680, 1000, 120, ColorAlpha(BLACK, 0.0f), ColorAlpha(BLACK, 0.8f));
 }
 
+// Cabeçalho corrigido: removemos o int *pacotes_fechados do final
 void abrirPacoteGrafico(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int total, int *total_mochila, int *total_album, Font fonteCopa, Color azulBrasil, Color amareloBrasil, EstadoMenu *estadoAtual) {
     Vector2 mousePoint = GetMousePosition();
     float tempoGlobal = (float)GetTime();
@@ -145,7 +146,6 @@ void abrirPacoteGrafico(Figurinha *figurinhas, Figurinha *mochila, Figurinha *al
 
     // ---- FASE 0: SELEÇÃO COM BOTÕES + E - ----
     if (fluxo.fase == 0) {
-        // Inicializa e protege os limites da quantidade
         if (fluxo.quantidadeDesejada < 1) fluxo.quantidadeDesejada = 1;
         if (fluxo.quantidadeDesejada > pacotes_fechados && pacotes_fechados > 0) fluxo.quantidadeDesejada = pacotes_fechados;
         if (pacotes_fechados == 0) fluxo.quantidadeDesejada = 0;
@@ -163,7 +163,6 @@ void abrirPacoteGrafico(Figurinha *figurinhas, Figurinha *mochila, Figurinha *al
         DrawTextEx(fonteCopa, txtDisp, (Vector2){ 500 - MeasureTextEx(fonteCopa, txtDisp, 15, 1).x/2, 210 }, 15, 1, ColorAlpha(WHITE, 0.5f));
         DrawTextEx(fonteCopa, "SELECIONE A QUANTIDADE", (Vector2){ 500 - MeasureTextEx(fonteCopa, "SELECIONE A QUANTIDADE", 22, 2).x/2, 255 }, 22, 2, WHITE);
 
-        // UI de Controle (+, -, Contador)
         Rectangle btnMenos = { 330, 320, 60, 60 };
         Rectangle boxQtd = { 420, 320, 160, 60 };
         Rectangle btnMais = { 610, 320, 60, 60 };
@@ -171,30 +170,25 @@ void abrirPacoteGrafico(Figurinha *figurinhas, Figurinha *mochila, Figurinha *al
         bool hoverMenos = CheckCollisionPointRec(mousePoint, btnMenos);
         bool hoverMais = CheckCollisionPointRec(mousePoint, btnMais);
 
-        // Botão Menos
         DrawRectangleRec(btnMenos, hoverMenos ? ColorAlpha(COPA_VERMELHO, 0.2f) : ColorAlpha(COPA_AZUL_ESCURO, 0.6f));
         DrawRectangleLinesEx(btnMenos, hoverMenos ? 2.0f : 1.0f, hoverMenos ? COPA_VERMELHO : COPA_OURO_PURO);
         DrawTextEx(fonteCopa, "-", (Vector2){ btnMenos.x + 30 - MeasureTextEx(fonteCopa, "-", 24, 1).x/2, btnMenos.y + 18 }, 24, 1, WHITE);
 
-        // Caixa de Quantidade
         DrawRectangleRec(boxQtd, ColorAlpha(BLACK, 0.4f));
         DrawRectangleLinesEx(boxQtd, 1.0f, ColorAlpha(WHITE, 0.2f));
         char txtQtd[10];
         sprintf(txtQtd, "%02d", fluxo.quantidadeDesejada);
         DrawTextEx(fonteCopa, txtQtd, (Vector2){ boxQtd.x + 80 - MeasureTextEx(fonteCopa, txtQtd, 32, 2).x/2, boxQtd.y + 14 }, 32, 2, COPA_VERDE_NEON);
 
-        // Botão Mais
         DrawRectangleRec(btnMais, hoverMais ? ColorAlpha(COPA_VERDE_NEON, 0.2f) : ColorAlpha(COPA_AZUL_ESCURO, 0.6f));
         DrawRectangleLinesEx(btnMais, hoverMais ? 2.0f : 1.0f, hoverMais ? COPA_VERDE_NEON : COPA_OURO_PURO);
         DrawTextEx(fonteCopa, "+", (Vector2){ btnMais.x + 30 - MeasureTextEx(fonteCopa, "+", 24, 1).x/2, btnMais.y + 18 }, 24, 1, WHITE);
 
-        // Interação de Clicar no + e -
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
             if (hoverMenos && fluxo.quantidadeDesejada > 1) fluxo.quantidadeDesejada--;
             if (hoverMais && fluxo.quantidadeDesejada < pacotes_fechados) fluxo.quantidadeDesejada++;
         }
 
-        // Botão de Abrir
         Rectangle btnAbrir = { 400, 420, 200, 50 };
         bool hoverAbrir = CheckCollisionPointRec(mousePoint, btnAbrir);
         DrawRectangleRec(btnAbrir, hoverAbrir ? ColorAlpha(COPA_OURO_PURO, 0.2f) : ColorAlpha(COPA_OURO_PURO, 0.05f));
@@ -203,9 +197,9 @@ void abrirPacoteGrafico(Figurinha *figurinhas, Figurinha *mochila, Figurinha *al
 
         if (hoverAbrir && IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
             if (pacotes_fechados > 0 && fluxo.quantidadeDesejada > 0) {
-                pacotes_fechados -= 1; // Deduz 1 pacote para começar
+                pacotes_fechados -= 1;
+                salvarPacotes(); // CORRIGIDO: Chama salvarPacotes sem parâmetros
                 
-                // LÓGICA AUTOMÁTICA DE ATRIBUIÇÃO
                 for (int f = 0; f < 7; f++) {
                     Figurinha sorteada = figurinhas[rand() % total];
                     limparFigurinha(&sorteada); 
@@ -216,25 +210,24 @@ void abrirPacoteGrafico(Figurinha *figurinhas, Figurinha *mochila, Figurinha *al
                         (*total_album)++;
                         FILE *fio = fopen("extras/album.csv", "a");
                         if (fio) { fprintf(fio, "%s,%s,%s,%s,%s\n", sorteada.codigo, sorteada.titulo, sorteada.secao, sorteada.grupo, sorteada.tipo); fclose(fio); }
-                        fluxo.statusCartas[f] = 1; // NOVA
+                        fluxo.statusCartas[f] = 1; 
                     } else {
                         mochila[*total_mochila] = sorteada;
                         (*total_mochila)++;
                         FILE *fio = fopen("extras/mochila.csv", "a");
                         if (fio) { fprintf(fio, "%s,%s,%s,%s,%s\n", sorteada.codigo, sorteada.titulo, sorteada.secao, sorteada.grupo, sorteada.tipo); fclose(fio); }
-                        fluxo.statusCartas[f] = 2; // REPETIDA
+                        fluxo.statusCartas[f] = 2; 
                         salvarRepetida();
                     }
                 }
                 fluxo.cartaAtualIdx = 0;
                 fluxo.fase = 1;
-                strcpy(fluxo.statusMensagem, ""); // Limpa mensagens de erro
+                strcpy(fluxo.statusMensagem, ""); 
             } else {
                 strcpy(fluxo.statusMensagem, "PACOTES INSUFICIENTES!");
             }
         }
 
-        // Botão de Voltar/Cancelar
         Rectangle btnVoltar = { 400, 510, 200, 45 };
         bool hoverVoltar = CheckCollisionPointRec(mousePoint, btnVoltar);
         DrawRectangleRec(btnVoltar, hoverVoltar ? ColorAlpha(COPA_VERMELHO, 0.15f) : ColorAlpha(WHITE, 0.02f));
@@ -247,7 +240,7 @@ void abrirPacoteGrafico(Figurinha *figurinhas, Figurinha *mochila, Figurinha *al
                 UnloadImage(fluxo.gifImage);
                 fluxo.gifCarregado = false;
             }
-            fluxo.quantidadeDesejada = 1; // Reseta para a próxima vez
+            fluxo.quantidadeDesejada = 1; 
             *estadoAtual = MENU_PRINCIPAL;
         }
         
@@ -325,7 +318,6 @@ void abrirPacoteGrafico(Figurinha *figurinhas, Figurinha *mochila, Figurinha *al
         bool ehRara = (strstr(fig.tipo, "Rara") != NULL || strstr(fig.tipo, "Lendaria") != NULL || strstr(fig.tipo, "Ouro") != NULL);
         Color corBorda = COPA_VERDE_NEON;
         
-        // A borda muda de acordo com o status (NOVA ou REPETIDA)
         if (fluxo.statusCartas[fluxo.cartaAtualIdx] == 1) { // NOVA
             if (ehRara) {
                 float r = (sinf(tempoGlobal * 3.0f) + 1.0f) * 0.5f;
@@ -359,13 +351,12 @@ void abrirPacoteGrafico(Figurinha *figurinhas, Figurinha *mochila, Figurinha *al
         DrawTextEx(fonteCopa, fig.secao, (Vector2){ (card.x + 135) - MeasureTextEx(fonteCopa, fig.secao, 11, 1).x/2, card.y + 395 }, 11, 1, ColorAlpha(WHITE, 0.4f));
         DrawTextEx(fonteCopa, fig.tipo, (Vector2){ (card.x + 135) - MeasureTextEx(fonteCopa, fig.tipo, 11, 1).x/2, card.y + 418 }, 11, 1, ehRara ? COPA_OURO_PURO : COPA_VERDE_NEON);
 
-        // UI PARA MOSTRAR STATUS
-        if (fluxo.statusCartas[fluxo.cartaAtualIdx] == 1) { // NOVA
+        if (fluxo.statusCartas[fluxo.cartaAtualIdx] == 1) { 
             DrawRectangle(card.x + 15, card.y + 445, 240, 60, ColorAlpha(COPA_VERDE_NEON, 0.15f));
             DrawRectangleLinesEx((Rectangle){card.x + 15, card.y + 445, 240, 60}, 1.0f, COPA_VERDE_NEON);
             DrawTextEx(fonteCopa, "NOVA FIGURINHA!", (Vector2){ (card.x + 135) - MeasureTextEx(fonteCopa, "NOVA FIGURINHA!", 12, 1).x/2, card.y + 458 }, 12, 1, COPA_VERDE_NEON);
             DrawTextEx(fonteCopa, "ADICIONADA AO ALBUM", (Vector2){ (card.x + 135) - MeasureTextEx(fonteCopa, "ADICIONADA AO ALBUM", 10, 1).x/2, card.y + 480 }, 10, 1, WHITE);
-        } else { // REPETIDA
+        } else { 
             DrawRectangle(card.x + 15, card.y + 445, 240, 60, ColorAlpha(COPA_AZUL_MEDIO, 0.6f));
             DrawRectangleLinesEx((Rectangle){card.x + 15, card.y + 445, 240, 60}, 1.0f, ColorAlpha(WHITE, 0.3f));
             DrawTextEx(fonteCopa, "REPETIDA", (Vector2){ (card.x + 135) - MeasureTextEx(fonteCopa, "REPETIDA", 12, 1).x/2, card.y + 458 }, 12, 1, ColorAlpha(WHITE, 0.7f));
@@ -393,6 +384,7 @@ void abrirPacoteGrafico(Figurinha *figurinhas, Figurinha *mochila, Figurinha *al
             fluxo.quantidadeDesejada--;
             if (fluxo.quantidadeDesejada > 0 && pacotes_fechados > 0) {
                 pacotes_fechados--;
+                salvarPacotes(); // CORRIGIDO: Chama salvarPacotes sem parâmetros
                 
                 for (int f = 0; f < 7; f++) {
                     Figurinha sorteada = figurinhas[rand() % total];
@@ -426,7 +418,7 @@ void abrirPacoteGrafico(Figurinha *figurinhas, Figurinha *mochila, Figurinha *al
                     fluxo.gifCarregado = false;
                 }
                 fluxo.fase = 0;
-                fluxo.quantidadeDesejada = 1; // Reseta para quando o jogador voltar mais tarde
+                fluxo.quantidadeDesejada = 1; 
                 *estadoAtual = MENU_PRINCIPAL;
             }
         }

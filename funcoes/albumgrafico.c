@@ -3,17 +3,8 @@
 #include <string.h>
 #include <math.h> 
 #include <raylib.h>
-#include "biblioteca.h"
+#include "../headers/biblioteca.h"
 #include <raymath.h>
-
-int estaNoAlbum(Figurinha *album, int total_album, char codigo[]) {
-    for (int i = 0; i < total_album; i++) {
-        if (strcmp(album[i].codigo, codigo) == 0) {
-            return true; // Figurinha encontrada no álbum
-        }
-    }
-    return false; // Não tem a figurinha
-}
 
 // Paleta de Cores de Alta Costura - Copa do Mundo Premium
 #define COPA_AZUL_ESCURO (Color){ 8, 12, 24, 255 }     // Fundo Espacial Profundo
@@ -21,7 +12,7 @@ int estaNoAlbum(Figurinha *album, int total_album, char codigo[]) {
 #define COPA_VERDE_NEON  (Color){ 0, 230, 150, 255 }   // Feedback de Hover e Luz Ativa
 #define COPA_VERMELHO    (Color){ 210, 20, 52, 255 }   // Vermelho Real Fifa
 #define COPA_OURO_PURO   (Color){ 255, 190, 0, 255 }   // Destaque Lendário / Campeão
-#define COPA_OURO_BRILHO (Color){ 255, 230, 120, 255 }  // Brilho Incandescente
+#define COPA_OURO_BRILHO (Color){ 255, 230, 120, 255 } // Brilho Incandescente
 #define COPA_CINZA_CARD  (Color){ 28, 36, 56, 255 }    // Slot Vazio Fosco Premium
 
 // Estrutura Avançada de Partículas Atmosféricas
