@@ -1,6 +1,5 @@
 #ifndef BIBLIOTECA_H
 #define BIBLIOTECA_H
-#include <raylib.h>
 
 typedef enum {
     MENU_PRINCIPAL,
@@ -24,10 +23,6 @@ typedef enum{
     MENU_FIM, 
     JOGAR_NOVAMENTE
 }Menu_FimdeJogo;
-
-// Em headers/biblioteca.h
-
-typedef enum { ESCOLHER_QTD, ANIMACAO, REVELAR_CARTA, FIM_ABERTURA }EstadoAbertura;
 
 // Declara a função para que outros ficheiros a conheçam
 
@@ -70,7 +65,5 @@ void trocarFigurinha(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album
 void albumGrafico(Figurinha *figurinhas, int total_figurinhas, Figurinha *album, int total_album);//cabeçalho da função gráfico do album
 
 int estaNoAlbum(Figurinha *album, int total_album, char codigo[]);//cabeçalho da função que consefere se a figurinha está no album
-
-void desenharAnimacaoPacote(Texture2D texAnim, int *currentFrame, int totalFrames, EstadoAbertura *estado);
 
 #endif
