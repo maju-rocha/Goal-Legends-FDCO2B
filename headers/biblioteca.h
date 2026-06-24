@@ -48,7 +48,7 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
 
 void jogarGoleiro(); //cabeçalho do goleiro
 
-void jogarPenalti(); //cabeçalho da função do jogo do pênalti
+void jogarPenalti(Figurinha *figurinhas,Figurinha *mochila,Figurinha *album,int total,int *total_mochila,int *total_album,int *qtd_pacotes); //cabeçalho da função do jogo do pênalti
 
 void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, int total, int *total_album, int *total_mochila);//cabeçalho da função do menu
 
