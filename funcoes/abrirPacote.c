@@ -189,11 +189,27 @@ void abrirPacoteGrafico(Figurinha *figurinhas, Figurinha *mochila, Figurinha *al
             if (hoverMais && fluxo.quantidadeDesejada < pacotes_fechados) fluxo.quantidadeDesejada++;
         }
 
-        Rectangle btnAbrir = { 400, 420, 200, 50 };
+        // --- MUDANÇA: BOTÃO ABRIR PACOTES COM LARGURA DINÂMICA ---
+        const char *txtAbrir = "ABRIR PACOTES";
+        int fonteSizeAbrir = 16;
+        float larguraTxtAbrir = MeasureTextEx(fonteCopa, txtAbrir, fonteSizeAbrir, 1).x;
+        int paddingXAbrir = 30; // Margem horizontal (ajuste se quiser mais largo)
+        int paddingYAbrir = 16; // Margem vertical (ajuste para aumentar altura)
+        
+        Rectangle btnAbrir = { 
+            500 - (larguraTxtAbrir / 2) - paddingXAbrir, 
+            430, 
+            larguraTxtAbrir + (paddingXAbrir * 2), 
+            fonteSizeAbrir + (paddingYAbrir * 2) 
+        };
+
         bool hoverAbrir = CheckCollisionPointRec(mousePoint, btnAbrir);
         DrawRectangleRec(btnAbrir, hoverAbrir ? ColorAlpha(COPA_OURO_PURO, 0.2f) : ColorAlpha(COPA_OURO_PURO, 0.05f));
         DrawRectangleLinesEx(btnAbrir, hoverAbrir ? 2.0f : 1.0f, COPA_OURO_PURO);
-        DrawTextEx(fonteCopa, "ABRIR PACOTES", (Vector2){ 500 - MeasureTextEx(fonteCopa, "ABRIR PACOTES", 16, 1).x/2, btnAbrir.y + 17 }, 16, 1, hoverAbrir ? COPA_OURO_PURO : WHITE);
+        
+        DrawTextEx(fonteCopa, txtAbrir, 
+            (Vector2){ btnAbrir.x + paddingXAbrir, btnAbrir.y + paddingYAbrir }, 
+            fonteSizeAbrir, 1, hoverAbrir ? COPA_OURO_PURO : WHITE);
 
         if (hoverAbrir && IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
             if (pacotes_fechados > 0 && fluxo.quantidadeDesejada > 0) {
@@ -228,11 +244,27 @@ void abrirPacoteGrafico(Figurinha *figurinhas, Figurinha *mochila, Figurinha *al
             }
         }
 
-        Rectangle btnVoltar = { 400, 510, 200, 45 };
+        // --- MUDANÇA: BOTÃO VOLTAR AO MENU COM LARGURA DINÂMICA ---
+        const char *txtVoltar = "VOLTAR AO MENU";
+        int fonteSizeVoltar = 12;
+        float larguraTxtVoltar = MeasureTextEx(fonteCopa, txtVoltar, fonteSizeVoltar, 1).x;
+        int paddingXVoltar = 20; 
+        int paddingYVoltar = 12; 
+        
+        Rectangle btnVoltar = { 
+            500 - (larguraTxtVoltar / 2) - paddingXVoltar, 
+            510, 
+            larguraTxtVoltar + (paddingXVoltar * 2), 
+            fonteSizeVoltar + (paddingYVoltar * 2) 
+        };
+
         bool hoverVoltar = CheckCollisionPointRec(mousePoint, btnVoltar);
         DrawRectangleRec(btnVoltar, hoverVoltar ? ColorAlpha(COPA_VERMELHO, 0.15f) : ColorAlpha(WHITE, 0.02f));
         DrawRectangleLinesEx(btnVoltar, 1.0f, hoverVoltar ? COPA_VERMELHO : ColorAlpha(WHITE, 0.2f));
-        DrawTextEx(fonteCopa, "VOLTAR AO MENU", (Vector2){ 500 - MeasureTextEx(fonteCopa, "VOLTAR AO MENU", 12, 1).x/2, 526 }, 12, 1, hoverVoltar ? COPA_VERMELHO : ColorAlpha(WHITE, 0.6f));
+        
+        DrawTextEx(fonteCopa, txtVoltar, 
+            (Vector2){ btnVoltar.x + paddingXVoltar, btnVoltar.y + paddingYVoltar }, 
+            fonteSizeVoltar, 1, hoverVoltar ? COPA_VERMELHO : ColorAlpha(WHITE, 0.6f));
 
         if (hoverVoltar && IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
             if (fluxo.gifCarregado) {
