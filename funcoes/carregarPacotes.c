@@ -52,17 +52,13 @@ void carregarPacotes(Figurinha *album, int *total_album, Figurinha *mochila, int
                 int posicaoCampo = 0;
 
                 for(int i = 0; linha[i] != '\0'; i++){
-
                     if(linha[i] == '\n' || linha[i] == '\r'){
                         linha[i] = '\0';
                     }
-
                 }
 
                 for(int i = 0; ; i++){
-
                     char letra = linha[i];
-
                     if(letra == ',' || letra == '\0'){
 
                         if(campo == 0){
@@ -83,7 +79,6 @@ void carregarPacotes(Figurinha *album, int *total_album, Figurinha *mochila, int
                         if(letra == '\0'){
                             break;
                         }
-
                     }else{
 
                         if(campo == 0 && posicaoCampo < sizeof(f.codigo) - 1){
@@ -102,9 +97,7 @@ void carregarPacotes(Figurinha *album, int *total_album, Figurinha *mochila, int
                             f.tipo[posicaoCampo] = letra;
                             posicaoCampo++;
                         }
-
                     }
-
                 }
 
                 limparFigurinha(&f);
@@ -113,13 +106,8 @@ void carregarPacotes(Figurinha *album, int *total_album, Figurinha *mochila, int
                     vetorAtual[*totalAtual] = f;
                     (*totalAtual)++;
                 }
-
             }
-
             fclose(arquivo_csv);
-
         }
-
     }
-
 }

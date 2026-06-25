@@ -23,7 +23,7 @@ void DrawTextOutLine(const char *text, int x, int y, int fontSize, Color textCol
         }//for
     }//for
 
-    //DrawText(text, x, y, fontSize, textColor);
+    DrawText(text, x, y, fontSize, textColor);
 }//void
 
 void jogarGoleiro(){
