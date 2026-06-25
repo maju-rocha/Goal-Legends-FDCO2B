@@ -83,18 +83,37 @@ void trocarEspacoPorUnderline(char *texto){
 
 }//void
 
-//Funcao para desenhar o fundo com um leve movimento de parallax
+// --- FUNÇÃO ATUALIZADA: Redimensiona e centraliza proporcionalmente qualquer imagem ---
 void DesenharFundoParallax(Texture2D textura, Vector2 posicaoMouse, float transparenciaParticula){
 
     if(textura.id == 0){
         return;
     }//if
 
+    // Fator do Parallax baseado no mouse
     float deslocamentoX = (posicaoMouse.x - 500.0f) * -0.02f;
     float deslocamentoY = (posicaoMouse.y - 400.0f) * -0.02f;
 
+    // Tamanho da janela (1000x800) + margem de 40px para o parallax ter folga (1040x840)
+    float larguraAlvo = 1040.0f;
+    float alturaAlvo = 840.0f;
+
+    // Calcula a proporção exata sem distorcer a imagem (Efeito "Cover")
+    float escalaX = larguraAlvo / (float)textura.width;
+    float escalaY = alturaAlvo / (float)textura.height;
+    
+    // Pega a maior escala para garantir que a tela inteira seja preenchida
+    float escalaFinal = (escalaX > escalaY) ? escalaX : escalaY;
+
+    float larguraEscalada = textura.width * escalaFinal;
+    float alturaEscalada = textura.height * escalaFinal;
+
+    // Centraliza matematicamente a imagem na janela (compensando a margem do Parallax)
+    float posX = (1000.0f - larguraEscalada) / 2.0f + deslocamentoX;
+    float posY = (800.0f - alturaEscalada) / 2.0f + deslocamentoY;
+
     Rectangle origem = { 0.0f, 0.0f, (float)textura.width, (float)textura.height };
-    Rectangle destino = { deslocamentoX - 20.0f, deslocamentoY - 20.0f, 1040.0f, 840.0f };
+    Rectangle destino = { posX, posY, larguraEscalada, alturaEscalada };
     Vector2 centro = { 0.0f, 0.0f };
 
     DrawTexturePro(textura, origem, destino, centro, 0.0f, Fade(WHITE, transparenciaParticula));
@@ -115,7 +134,6 @@ void albumGrafico(Figurinha *figurinhas, int total_figurinhas, Figurinha *album,
     char secoes[100][50];
     int totalSecoes = 0;
     int totalMostradas = 0;
-    int contadorFigurinhasColadas = 0;
     char caminho[256];
 
     //Limpa os dados do album
@@ -207,12 +225,8 @@ void albumGrafico(Figurinha *figurinhas, int total_figurinhas, Figurinha *album,
                     imagens[totalMostradas] = LoadTexture(caminho);
 
                     if(imagens[totalMostradas].id != 0){
-
                         SetTextureFilter(imagens[totalMostradas], TEXTURE_FILTER_BILINEAR);
-
                         temImagem[totalMostradas] = 1;
-                        contadorFigurinhasColadas++;
-
                     }//if
 
                 }//if
@@ -473,15 +487,19 @@ void albumGrafico(Figurinha *figurinhas, int total_figurinhas, Figurinha *album,
         DrawText(secoes[paginaAtual], 32, 27, 32, Fade(BLACK, 0.4f));
         DrawText(secoes[paginaAtual], 30, 25, 32, WHITE);
 
+        // =========================================================
+        // BARRA DE PROGRESSO CORRIGIDA
+        // =========================================================
         float porcentagemConclusao = 0.0f;
 
         if(total_figurinhas > 0){
-            porcentagemConclusao = ((float)contadorFigurinhasColadas / total_figurinhas) * 100.0f;
+            porcentagemConclusao = ((float)total_album / total_figurinhas) * 100.0f;
         }//if
 
         DrawRectangle(650, 47, 320, 10, Fade(BLACK, 0.5f));
         DrawRectangle(651, 48, (int)(318 * (porcentagemConclusao / 100.0f)), 8, COPA_VERDE_NEON);
-        DrawText(TextFormat("ALBUM PROGRESSO: %.1f%% (%d/%d)", porcentagemConclusao, contadorFigurinhasColadas, total_figurinhas), 650, 24, 13, Fade(WHITE, 0.7f));
+        DrawText(TextFormat("ALBUM PROGRESSO: %.1f%% (%d/%d)", porcentagemConclusao, total_album, total_figurinhas), 650, 24, 13, Fade(WHITE, 0.7f));
+        // =========================================================
 
         DrawText(TextFormat("PAGINA %02d / %02d", paginaAtual + 1, totalSecoes), 455, 58, 15, COPA_OURO_PURO);
 

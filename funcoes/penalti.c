@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <raylib.h>
-#include "../headers/biblioteca.h"
+#include "biblioteca.h"
 
 #define MAX_RASTRO 12
 
