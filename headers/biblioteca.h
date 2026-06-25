@@ -61,7 +61,7 @@ void jogarGoleiro();
 void jogarPenalti(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int total, int *total_mochila, int *total_album, int *pacotes_fechados);
 
 //Salvamento de Arquivos
-void carregarPacotes(void); 
+void carregarPacotes(Figurinha *album, int *total_album, Figurinha *mochila, int *total_mochila); 
 void salvarPacotes(void);
 void salvarRepetida(void);
 
