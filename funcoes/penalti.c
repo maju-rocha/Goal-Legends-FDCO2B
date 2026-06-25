@@ -27,13 +27,13 @@ void jogarPenalti(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, i
     }
 
     // Corrigido para "musicas/" com 's' no final
-    Music musicaFundo = LoadMusicStream("musicas/musica_fundo.mp3"); 
-    Sound somChute = LoadSound("musicas/chute.mp3");
-    Sound somGol = LoadSound("musicas/gol.mp3");
-
+    Music musicaFundo = LoadMusicStream("audio/musica_fundo.mp3"); 
+    Sound somChute = LoadSound("audio/chute.mp3");
+    Sound somGol = LoadSound("audio/gol.mp3");
+    
     // Inicia a música de fundo
     PlayMusicStream(musicaFundo);
-    SetMusicVolume(musicaFundo, 0.4f);
+    SetMusicVolume(musicaFundo, 0.1f);
 
     Font fonteCopa = LoadFont("extras/PressStart2P-Regular.ttf");
 
@@ -116,6 +116,7 @@ void jogarPenalti(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, i
 
                         // TOCA O SOM DO CHUTE
                         PlaySound(somChute);
+                        SetSoundVolume(somChute, 0.8f);
                     }
                 } else {
                     if (IsKeyDown(KEY_LEFT)){
@@ -158,6 +159,7 @@ void jogarPenalti(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, i
                             
                             // TOCA O SOM DO GOL
                             PlaySound(somGol);
+                            SetSoundVolume(somGol, 0.3f);
                         } else {
                             estadoAtual = P_DEFENDEU;
                             pontuacaoCombo -= 80;
@@ -219,10 +221,9 @@ void jogarPenalti(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, i
                         bolaChutada = false;
                         estadoAtual = P_JOGANDO;
                     } 
-                    // VOLTAR AO MENU INICIAL (Igual ao seu exemplo)
+                    // VOLTAR AO MENU INICIAL
                     else if (CheckCollisionPointRec(mousePoint, btnMenu)) {
                         sairDoJogo = true; 
-                        
                     }
                 }
                 break;
@@ -380,7 +381,7 @@ void jogarPenalti(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, i
         EndDrawing();
     }
 
-    // DESCARREGA OS ÁUDIOS E RECURSOS DA MEMÓRIA ANTES DE RETORNAR (Evita vazamento de memória e travamento)
+    // DESCARREGA OS ÁUDIOS E RECURSOS DA MEMÓRIA ANTES DE RETORNAR
     StopMusicStream(musicaFundo);
     UnloadMusicStream(musicaFundo);
     UnloadSound(somChute);
@@ -391,6 +392,9 @@ void jogarPenalti(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, i
     UnloadFont(fonteCopa);
     
     SetMouseCursor(MOUSE_CURSOR_DEFAULT);
+    
+    // --- CORREÇÃO AQUI: FECHAMENTO DA JANELA DO MINIGAME ---
+    CloseWindow(); 
 }
 
 void DesenharGoleiroPro(Vector2 pos, Color corUniforme) {

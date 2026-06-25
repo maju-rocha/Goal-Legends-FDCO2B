@@ -494,7 +494,7 @@ void abrirPacote(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, in
         DrawRectangleGradientH(pacoteRec.x + 15, linhaMovimento, 210, 3, Fade(COPA_VERDE_NEON, 0.0f), COPA_VERDE_NEON);
 
         DrawTextEx(fonteCopa, "FIFA OFICIAL", (Vector2){500 - MeasureTextEx(fonteCopa, "FIFA OFICIAL", 12, 1).x / 2, 200}, 12, 1, COPA_OURO_PURO);
-        DrawTextEx(fonteCopa, "PACOTE\nULTIMATE", (Vector2){500 - MeasureTextEx(fonteCopa, "PACOTE\nULTIMATE", 22, 1).x / 2, 320}, 22, 1, WHITE);
+        DrawTextEx(fonteCopa, "PACOTE\nFIGURINHA", (Vector2){500 - MeasureTextEx(fonteCopa, "PACOTE\nFIGURINHA", 22, 1).x / 2, 320}, 22, 1, WHITE);
 
         char apertar[50];
         strcpy(apertar, "APERTE [ ESPACO ] PARA ABRIR");

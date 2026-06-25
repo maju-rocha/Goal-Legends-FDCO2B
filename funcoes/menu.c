@@ -10,6 +10,16 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
     //============ Interface Gráfica ===========//
     //==========================================//
     InitWindow(1000, 800, "Album de Figurinhas - Copa do Mundo");
+
+    // --- 1. INICIALIZAÇÃO DO ÁUDIO PRIMEIRO ---
+    if (!IsAudioDeviceReady()) {
+        InitAudioDevice();
+    }
+    
+    // --- 2. CARREGAMENTO DA MÚSICA DEPOIS ---
+    Music somMenu = LoadMusicStream("audio/som_menu.mp3");
+    SetMusicVolume(somMenu, 0.08f);
+
     Font fonteCopa = LoadFont("extras/PressStart2P-Regular.ttf");
     
     // Configuração do Cursor
@@ -58,6 +68,14 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
     Color azulBrasil = (Color){0, 39, 118, 255};
 
     while(!WindowShouldClose()){
+        
+        // --- 3. GERENCIADOR INTELIGENTE DE MÚSICA ---
+        // Mantém a música tocando em TODAS as telas de menu (Principal, Inventário, Excluir e Minigames).
+        if (!IsMusicStreamPlaying(somMenu)) {
+            PlayMusicStream(somMenu); 
+        }
+        UpdateMusicStream(somMenu); 
+
         Vector2 mousePoint = GetMousePosition();
         int acaoTerminal = 0; // Controla se alguma ação ainda precisa ir para o prompt antigo
 
@@ -257,6 +275,12 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
         //============= Reaparecer Menu ============//
         //==========================================//
         if(acaoTerminal != 0){
+            // TRAVA DE SEGURANÇA: Desliga a música exatamentamente aqui!
+            // Quando a janela gráfica vai fechar e você vai pro jogo no terminal.
+            if (IsMusicStreamPlaying(somMenu)) {
+                StopMusicStream(somMenu);
+            }
+
             // Fecha temporariamente a tela se a ação requisitada for de terminal antigo
             UnloadTexture(cursorBola);
             UnloadFont(fonteCopa);
@@ -327,7 +351,10 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
         }
     }
 
-    //Fechamento e liberação de memória
+    // --- 4. LIBERAÇÃO DE MEMÓRIA DE ÁUDIO NO FECHAMENTO ---
+    UnloadMusicStream(somMenu);
+    CloseAudioDevice();
+    
     UnloadTexture(cursorBola);
     UnloadFont(fonteCopa);
     CloseWindow();
