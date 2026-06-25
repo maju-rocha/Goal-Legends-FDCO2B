@@ -7,6 +7,8 @@
 
 int main(void){
 
+    srand((int)time(NULL));
+
     //Váriaveis
     char linha[300];
     int total = 0;
