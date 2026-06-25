@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 main: main.o figurinhas.o
 	@echo "Gerando arquivo executável..."
 	gcc main.o figurinhas.o -o main
@@ -18,59 +19,80 @@ clean:
 run: main
 	./main
 =======
+=======
+# ==========================================
+# 1. DETECÇÃO AUTOMÁTICA DE SISTEMA
+# ==========================================
+ifeq ($(OS),Windows_NT)
+    TARGET = main.exe
+    LIBS = -L./extras/libwin -LC:/w64devkit/w64devkit/x86_64-w64-mingw32/lib \
+           -LC:/w64devkit/w64devkit/lib -Lraylib/src -Lraylib/lib \
+           -lraylib -lopengl32 -lgdi32 -lwinmm
+    RM = rm -f
+else
+    TARGET = main
+    LIBS = -lraylib -lX11 -lGL -lm -lpthread -ldl -lrt
+    RM = rm -f
+endif
+
+# ==========================================
+# 2. CONFIGURAÇÕES DE COMPILAÇÃO
+# ==========================================
+>>>>>>> 16c582dd713c6b6c580db3e690781347b7bb83d1
 CC = gcc
-
 CFLAGS = -Iheaders -Iraylib/src
-LDFLAGS = -Lraylib/src -lraylib -lm -lpthread -ldl -lrt -lX11
 
-OBJ = main.o abrirPacote.o listarAlbum.o listarMochila.o \
-    excluirAlbum.o excluirMochila.o pesquisar.o \
-    alterar.o resetarLista.o quiz.o goleiro.o penalti.o
+OBJS = main.o \
+       menu.o \
+       abrirPacote.o \
+       listarAlbum.o \
+       listarMochila.o \
+       excluirAlbum.o \
+       excluirMochila.o \
+       pesquisar.o \
+       alterar.o \
+       resetarLista.o \
+       quiz.o \
+       goleiro.o \
+       penalti.o \
+	   global.o \
+       salvarPacotes.o \
+       carregarPacotes.o \
+       salvarRepetida.o \
+       trocar.o \
+       albumgrafico.o 
 
-main: $(OBJ)
-	@echo "Gerando executavel..."
-	$(CC) $(OBJ) -o main $(LDFLAGS)
+# ==========================================
+# 3. REGRAS DE COMPILAÇÃO
+# ==========================================
+all: $(TARGET)
 
-main.o: funcoes/main.c headers/biblioteca.h
-	$(CC) $(CFLAGS) -c funcoes/main.c
+$(TARGET): $(OBJS)
+	@echo "---------------------------------------------"
+	@echo "Gerando executavel final: $(TARGET)"
+	@echo "---------------------------------------------"
+	$(CC) $(OBJS) -o $(TARGET) $(LIBS)
 
-abrirPacote.o: funcoes/abrirPacote.c headers/biblioteca.h
-	$(CC) $(CFLAGS) -c funcoes/abrirPacote.c
+# Compila arquivos da pasta funcoes
+%.o: funcoes/%.c
+	@echo "Compilando: $<"
+	$(CC) $(CFLAGS) -c $< -o $@
 
-listarAlbum.o: funcoes/listarAlbum.c headers/biblioteca.h
-	$(CC) $(CFLAGS) -c funcoes/listarAlbum.c
+# Compila o novo main.c (o da raiz)
+main.o: main.c
+	$(CC) $(CFLAGS) -c main.c -o main.o
 
-listarMochila.o: funcoes/listarMochila.c headers/biblioteca.h
-	$(CC) $(CFLAGS) -c funcoes/listarMochila.c
-
-excluirAlbum.o: funcoes/excluirAlbum.c headers/biblioteca.h
-	$(CC) $(CFLAGS) -c funcoes/excluirAlbum.c
-
-excluirMochila.o: funcoes/excluirMochila.c headers/biblioteca.h
-	$(CC) $(CFLAGS) -c funcoes/excluirMochila.c
-
-pesquisar.o: funcoes/pesquisar.c headers/biblioteca.h
-	$(CC) $(CFLAGS) -c funcoes/pesquisar.c
-
-alterar.o: funcoes/alterar.c headers/biblioteca.h
-	$(CC) $(CFLAGS) -c funcoes/alterar.c
-
-resetarLista.o: funcoes/resetarLista.c headers/biblioteca.h
-	$(CC) $(CFLAGS) -c funcoes/resetarLista.c
-
-quiz.o: funcoes/quiz.c headers/biblioteca.h
-	$(CC) $(CFLAGS) -c funcoes/quiz.c
-
-goleiro.o: funcoes/goleiro.c headers/biblioteca.h
-	$(CC) $(CFLAGS) -c funcoes/goleiro.c
-
-penalti.o: funcoes/penalti.c headers/biblioteca.h
-	$(CC) $(CFLAGS) -c funcoes/penalti.c
-
-
-run: main
-	./main
-
+# ==========================================
+# 4. LIMPEZA
+# ==========================================
 clean:
+<<<<<<< HEAD
 	rm -f *.o main
 >>>>>>> 09d87b5cd5bc06cc3679a6acb1f17c3b1f916654
+=======
+	@echo "Limpando arquivos temporarios..."
+	$(RM) *.o $(TARGET)
+
+run: $(TARGET)
+	./$(TARGET)
+>>>>>>> 16c582dd713c6b6c580db3e690781347b7bb83d1

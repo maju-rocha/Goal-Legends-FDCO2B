@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "biblioteca.h"
+#include "pesquisar.h"
 
 void pesquisarFigurinha(Figurinha *vetor, int total){
     
