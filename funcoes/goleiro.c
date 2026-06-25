@@ -63,6 +63,7 @@ void jogarGoleiro(){
     SetSoundVolume(somToque, 0.3f);
     Sound somMusica = LoadSound ("audio/som_musicagoleiro.mp3");
     SetSoundVolume(somMusica, 0.03f);
+    
     //Váriavel da fonte
     Font fonteCopa = LoadFont("extras/PressStart2P-Regular.ttf");
     
