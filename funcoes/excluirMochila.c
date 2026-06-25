@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "biblioteca.h"
+#include "excluirMochila.h"
 
 void excluirMochila(Figurinha *figurinhas, Figurinha *mochila, int *total_mochila){
     

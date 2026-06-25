@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "biblioteca.h"
+#include "listarMochila.h"
 
 void listarFigurinhasMochila(Figurinha *mochila, int total_mochila){
     for (int i = 0; i < total_mochila; i++){

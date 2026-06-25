@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "biblioteca.h"
+#include "alterar.h"
 
 //Funcao para limpar espacos antes e depois do texto
 static void limparCampoAlterar(char *texto){
@@ -28,9 +28,7 @@ static void limparCampoAlterar(char *texto){
         }//for
 
         texto[j] = '\0';
-
     }//if
-
 }//void
 
 //Funcao para limpar o ENTER que sobra no teclado
@@ -97,23 +95,14 @@ void alterarFigurinha(Figurinha *vetor, int total){
                 limparCampoAlterar(vetor[k].grupo);
                 limparCampoAlterar(vetor[k].tipo);
 
-                fprintf(arquivo, "%-6s, %-28s, %-19s, %-7s, %s\n",
-                        vetor[k].codigo,
-                        vetor[k].titulo,
-                        vetor[k].secao,
-                        vetor[k].grupo,
-                        vetor[k].tipo);
-
-            }//for
+                fprintf(arquivo, "%-6s, %-28s, %-19s, %-7s, %s\n",vetor[k].codigo,vetor[k].titulo,vetor[k].secao,vetor[k].grupo,vetor[k].tipo);}//for
 
             fclose(arquivo);
 
             printf("\nFigurinha alterada com sucesso!\n");
 
             break;
-
         }//if
-
     }//for
 
     if(!encontrada){

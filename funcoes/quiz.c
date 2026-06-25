@@ -5,6 +5,9 @@
 #include <raylib.h>
 #include <time.h>
 #include "biblioteca.h"
+#include "global.h"
+#include "quiz.h"
+#include "salvarPacotes.h"
 
 
 typedef struct{

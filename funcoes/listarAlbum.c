@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "biblioteca.h"
+#include "listarAlbum.h"
 
 void listarFigurinhasAlbum(Figurinha *album, int total_album){
     for (int i = 0; i < total_album; i++){

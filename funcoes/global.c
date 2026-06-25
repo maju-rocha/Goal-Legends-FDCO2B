@@ -1,18 +1,18 @@
-#include "biblioteca.h"
 #include <string.h>
+#include "global.h"
 
-//Váriaveis globais
+//Variáveis globais
 int pacotes_fechados = 0;
 int figurinha_repetida = 0;
 Menu_FimdeJogo estadoAtual = MENU_FIM;
 
-// Função para comparar se uma figurinha específica já está no álbum
+//Função para comparar se uma figurinha específica já está no álbum
 int estaNoAlbum(Figurinha *album, int total_album, char codigo[]) {
     for(int i = 0; i < total_album; i++) {
-        // Compara o código da figurinha no álbum com o código sorteado
+        //Compara o código da figurinha no álbum com o código sorteado
         if(strcmp(album[i].codigo, codigo) == 0) {
-            return 1; // Encontrou: Retorna verdadeiro (1)
+            return 1;
         }
     }
-    return 0; // Não encontrou: Retorna falso (0)
+    return 0;
 }

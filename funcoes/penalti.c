@@ -3,6 +3,9 @@
 #include <math.h>
 #include <raylib.h>
 #include "biblioteca.h"
+#include "global.h"
+#include "penalti.h"
+#include "salvarPacotes.h"
 
 #define MAX_RASTRO 12
 

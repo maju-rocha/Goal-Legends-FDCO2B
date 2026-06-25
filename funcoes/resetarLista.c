@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "biblioteca.h"
+#include "resetarLista.h"
 
 void resetarLista(Figurinha *vetor, int total){
 
