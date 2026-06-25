@@ -60,7 +60,7 @@ int main(void){
     fclose(arquivo);
 
     //Carrega a quantidade de pacotes (quando abre e fecha o jogo fica salvo)
-    carregarPacotes();
+    carregarPacotes(album, &total_album, mochila, &total_mochila);
 
     //Chama a função do menu principal
     menuPrincipal(figurinhas, album,mochila, total, &total_album, &total_mochila);
