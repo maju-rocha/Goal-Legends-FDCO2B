@@ -18,8 +18,10 @@ void jogarPenalti(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, i
     
     if (!IsWindowReady()) {
         InitWindow(larguraTela, alturaTela, "Minijogo: Penalty Strike");
-        SetTargetFPS(60);
     }
+
+    SetExitKey(KEY_NULL);
+    SetTargetFPS(60);
 
     // --- INICIALIZAÇÃO DO ÁUDIO ---
     if (!IsAudioDeviceReady()) {
@@ -71,7 +73,8 @@ void jogarPenalti(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, i
 
     EstadoPenalti estadoAtual = P_MENU;
     int timerFrames = 0;
-    bool sairDoJogo = false; // Variável de controle para sair do loop limpando a memória
+    bool sairDoJogo = false; // Volta para o menu sem fechar o projeto
+    bool fecharProjeto = false; // Fecha o projeto inteiro ao clicar no X
 
     Color verdeCanarinho = (Color){ 98, 209, 75, 255 }; 
     Color amareloBrasil = (Color){ 255, 215, 0, 255 };
@@ -81,7 +84,20 @@ void jogarPenalti(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, i
     Rectangle btnTentar = { 170, 640, 310, 58 };
     Rectangle btnMenu = { 520, 640, 310, 58 };
 
-    while (!WindowShouldClose() && !sairDoJogo) {
+    while (!sairDoJogo) {
+
+        // Se clicar no X da janela, fecha o projeto inteiro
+        if(WindowShouldClose()){
+            fecharProjeto = true;
+            break;
+        }
+
+        // Se apertar ESC, volta para o menu principal
+        if(IsKeyPressed(KEY_ESCAPE)){
+            sairDoJogo = true;
+            break;
+        }
+
         float tempoGlobal = (float)GetTime();
         Vector2 mousePoint = GetMousePosition();
 
@@ -159,7 +175,7 @@ void jogarPenalti(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, i
                             
                             // TOCA O SOM DO GOL
                             PlaySound(somGol);
-                            SetSoundVolume(somGol, 0.3f);
+                            SetSoundVolume(somGol, 0.06f);
                         } else {
                             estadoAtual = P_DEFENDEU;
                             pontuacaoCombo -= 80;
@@ -393,8 +409,15 @@ void jogarPenalti(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, i
     
     SetMouseCursor(MOUSE_CURSOR_DEFAULT);
     
-    // --- CORREÇÃO AQUI: FECHAMENTO DA JANELA DO MINIGAME ---
-    CloseWindow(); 
+    // Fecha apenas a janela do minigame antes de voltar para o menu
+    if(IsWindowReady()){
+        CloseWindow();
+    }
+
+    // Se a saída foi pelo X, encerra o projeto por completo
+    if(fecharProjeto){
+        exit(0);
+    }
 }
 
 void DesenharGoleiroPro(Vector2 pos, Color corUniforme) {

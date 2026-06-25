@@ -9,20 +9,21 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
     //==========================================//
     //============ Interface Gráfica ===========//
     //==========================================//
+
     InitWindow(1000, 800, "Album de Figurinhas - Copa do Mundo");
 
-    // --- 1. INICIALIZAÇÃO DO ÁUDIO PRIMEIRO ---
+    
     if (!IsAudioDeviceReady()) {
         InitAudioDevice();
     }
-    
-    // --- 2. CARREGAMENTO DA MÚSICA DEPOIS ---
+
+    //Váriaveis de audio
     Music somMenu = LoadMusicStream("audio/som_menu.mp3");
     SetMusicVolume(somMenu, 0.08f);
 
     Font fonteCopa = LoadFont("extras/PressStart2P-Regular.ttf");
     
-    // Configuração do Cursor
+    //Configuração do Cursor
     HideCursor();
     Image imagemBola = LoadImage("imagens/bola_cursor.png");
     ImageResize(&imagemBola, 40, 40);
@@ -56,7 +57,6 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
     const char *textosExcluir[] = {"1. Excluir Album", "2. Excluir Mochila", "3. Voltar ao Menu"};
     const char *textosMinigames[] = {"1. Quiz da Copa", "2. Jogo do Goleiro", "3. Penalti", "4. Voltar ao Menu"};
 
-    //Layout padrão para todos os submenus
     Rectangle botoesSubmenu[4];
 
     for(int i = 0; i < 4; i++){
@@ -65,39 +65,45 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
 
     Color verdeCampo = (Color){34, 139, 34, 255};
     Color amareloBrasil = (Color){255, 215, 0, 255};
-    Color azulBrasil = (Color){0, 39, 118, 255};
+    Color azulBrasil = (Color){25, 35, 66, 255};
+    Color COPA_AZUL_MEDIO = (Color){14, 20, 38, 255};
+    Color COPA_VERDE_NEON = (Color){0, 255, 140, 255};
+    Color COPA_OURO_PURO = (Color){255, 205, 66, 255};
+    Color bordabotao = (Color){128, 128, 128, 255};
 
     while(!WindowShouldClose()){
         
-        // --- 3. GERENCIADOR INTELIGENTE DE MÚSICA ---
-        // Mantém a música tocando em TODAS as telas de menu (Principal, Inventário, Excluir e Minigames).
+        //Mantém a música tocando em todas as telas de menu
         if (!IsMusicStreamPlaying(somMenu)) {
             PlayMusicStream(somMenu); 
         }
+
         UpdateMusicStream(somMenu); 
 
         Vector2 mousePoint = GetMousePosition();
-        int acaoTerminal = 0; // Controla se alguma ação ainda precisa ir para o prompt antigo
+
+        int acaoTerminal = 0;
 
         //====================================================//
         //================== Cliques/Tela ====================//
         //====================================================//
+
         if(IsMouseButtonReleased(MOUSE_LEFT_BUTTON)){
             if(telaAtual == MENU_PRINCIPAL){
                 for(int i = 0; i < 7; i++){
                     if(CheckCollisionPointRec(mousePoint, botoesPrincipal[i])){
                         if(i == 0){
-                            telaAtual = ESTADO_ABRIR_PACOTE; // Ativa a tela gráfica nova!
+                            telaAtual = ESTADO_ABRIR_PACOTE; //Ativa a tela gráfica nova
                         }else if(i == 1){
                             telaAtual = MENU_INVENTARIO;
                         }else if(i == 2){
                             telaAtual = MENU_EXCLUIR;
                         }else if(i == 3){
-                            acaoTerminal = 6;  // Pesquisar
+                            acaoTerminal = 6;  //Pesquisar
                         }else if(i == 4){
-                            acaoTerminal = 7;  // Alterar
+                            acaoTerminal = 7;  //Alterar
                         }else if(i == 5){
-                            acaoTerminal = 11; // Trocar
+                            acaoTerminal = 11; //Trocar
                         }else if(i == 6){
                             telaAtual = MENU_MINIGAMES;
                         }
@@ -107,9 +113,9 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
                 for(int i = 0; i < 3; i++){
                     if(CheckCollisionPointRec(mousePoint, botoesSubmenu[i])){
                         if(i == 0){
-                            acaoTerminal = 2; // Ver Album
+                            acaoTerminal = 2; //Ver Album
                         }else if(i == 1){
-                            acaoTerminal = 3; // Ver Mochila
+                            acaoTerminal = 3; //Ver Mochila
                         }else if(i == 2){
                             telaAtual = MENU_PRINCIPAL;
                         }
@@ -119,9 +125,9 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
                 for(int i = 0; i < 3; i++){
                     if(CheckCollisionPointRec(mousePoint, botoesSubmenu[i])){
                         if(i == 0){
-                            acaoTerminal = 4; // Excluir Album
+                            acaoTerminal = 4; //Excluir Album
                         }else if(i == 1){
-                            acaoTerminal = 5; // Excluir Mochila
+                            acaoTerminal = 5; //Excluir Mochila
                         }else if(i == 2){
                             telaAtual = MENU_PRINCIPAL;
                         }
@@ -131,11 +137,11 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
                 for(int i = 0; i < 4; i++){
                     if(CheckCollisionPointRec(mousePoint, botoesSubmenu[i])){
                         if(i == 0){
-                            acaoTerminal = 8;  // Quiz
+                            acaoTerminal = 8;  //Quiz
                         }else if(i == 1){
-                            acaoTerminal = 9;  // Goleiro
+                            acaoTerminal = 9;  //Goleiro
                         }else if(i == 2){
-                            acaoTerminal = 10; // Penalti
+                            acaoTerminal = 10; //Penalti
                         }else if(i == 3){
                             telaAtual = MENU_PRINCIPAL;
                         }
@@ -148,25 +154,23 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
         //================= Desenho ================//
         //==========================================//
         BeginDrawing();
-        ClearBackground(verdeCampo);
+        ClearBackground(COPA_AZUL_MEDIO);
 
-        // SE TIVER NA TELA DE ABRIR PACOTE: Desenha o fluxo interativo gráfico
+        //Se estiver no estado_abrir_pacote chama a funçao
         if(telaAtual == ESTADO_ABRIR_PACOTE){
             abrirPacote(figurinhas, mochila, album, total, total_mochila, total_album, fonteCopa, azulBrasil, amareloBrasil, &telaAtual);
-        }
-        // CASO CONTRÁRIO: Desenha as telas normais de menu
-        else if(telaAtual == MENU_PRINCIPAL){
-            const char *title = "ALBUM DE FIGURINHAS DA COPA";
-            int titleWidth = MeasureTextEx(fonteCopa, title, 28, 2).x;
+        }else if(telaAtual == MENU_PRINCIPAL){
+            const char *titulo = "ALBUM DE FIGURINHAS DA COPA";
+            int tituloTamanho = MeasureTextEx(fonteCopa, titulo, 28, 2).x;
 
-            DrawTextEx(fonteCopa, title, (Vector2){500 - (titleWidth / 2) + 3, 60 + 3}, 28, 2, BLACK);
-            DrawTextEx(fonteCopa, title, (Vector2){500 - (titleWidth / 2), 60}, 28, 2, WHITE);
+            DrawTextEx(fonteCopa, titulo, (Vector2){500 - (tituloTamanho / 2) + 3, 60 + 3}, 28, 2, BLACK);
+            DrawTextEx(fonteCopa, titulo, (Vector2){500 - (tituloTamanho / 2), 60}, 28, 2, WHITE);
 
-            const char *subtitle = "Selecione uma opcao abaixo:";
-            int subtitleWidth = MeasureTextEx(fonteCopa, subtitle, 16, 2).x;
+            const char *subtitulo = "Selecione uma opcao abaixo:";
+            int subtituloTamanho = MeasureTextEx(fonteCopa, subtitulo, 16, 2).x;
 
-            DrawTextEx(fonteCopa, subtitle, (Vector2){500 - (subtitleWidth / 2) + 2, 120 + 2}, 16, 2, BLACK);
-            DrawTextEx(fonteCopa, subtitle, (Vector2){500 - (subtitleWidth / 2), 120}, 16, 2, amareloBrasil);
+            DrawTextEx(fonteCopa, subtitulo, (Vector2){500 - (subtituloTamanho / 2) + 2, 120 + 2}, 16, 2, BLACK);
+            DrawTextEx(fonteCopa, subtitulo, (Vector2){500 - (subtituloTamanho / 2), 120}, 16, 2, COPA_VERDE_NEON);
 
             for(int i = 0; i < 7; i++){
                 bool mouseEmCima = CheckCollisionPointRec(mousePoint, botoesPrincipal[i]);
@@ -181,15 +185,21 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
                     }
                 }
 
-                Rectangle btnAnimado = {
-                    botoesPrincipal[i].x,
-                    botoesPrincipal[i].y + offsetAnimacao,
-                    botoesPrincipal[i].width,
-                    botoesPrincipal[i].height
-                };
+                Rectangle btnAnimado = {botoesPrincipal[i].x,botoesPrincipal[i].y + offsetAnimacao,botoesPrincipal[i].width,botoesPrincipal[i].height};
 
-                DrawRectangleRec(btnAnimado, mouseEmCima ? LIGHTGRAY : amareloBrasil);
-                DrawRectangleLinesEx(btnAnimado, 2.0f, mouseEmCima ? azulBrasil : DARKGRAY);
+                Color corBotao;
+                Color corBorda;
+
+                if(mouseEmCima){
+                    corBotao = LIGHTGRAY;
+                    corBorda = azulBrasil;
+                }else{
+                    corBotao = azulBrasil;
+                    corBorda = bordabotao;
+                }
+
+                DrawRectangleRec(btnAnimado, corBotao);
+                DrawRectangleLinesEx(btnAnimado, 2.0f, corBorda);
                 
                 char textoBotao[100];
 
@@ -199,9 +209,9 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
                     strcpy(textoBotao, textosPrincipal[i]);
                 }
 
-                int textWidth = MeasureTextEx(fonteCopa, textoBotao, 14, 2).x;
+                int textoTamanho = MeasureTextEx(fonteCopa, textoBotao, 14, 2).x;
 
-                DrawTextEx(fonteCopa, textoBotao, (Vector2){btnAnimado.x + (btnAnimado.width / 2) - (textWidth / 2), btnAnimado.y + 18}, 14, 2, azulBrasil);
+                DrawTextEx(fonteCopa, textoBotao, (Vector2){btnAnimado.x + (btnAnimado.width / 2) - (textoTamanho / 2), btnAnimado.y + 18}, 14, 2, WHITE);
             }
         }else{
             //Submenus (Inventário, Exclusão, Minigames)
@@ -225,46 +235,62 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
                 numBotoes = 4;
             }
 
-            int titleWidth = MeasureTextEx(fonteCopa, titulo, 28, 2).x;
+            int tituloTamanho = MeasureTextEx(fonteCopa, titulo, 28, 2).x;
 
-            DrawTextEx(fonteCopa, titulo, (Vector2){500 - (titleWidth / 2) + 3, 100 + 3}, 28, 2, BLACK);
-            DrawTextEx(fonteCopa, titulo, (Vector2){500 - (titleWidth / 2), 100}, 28, 2, WHITE);
+            DrawTextEx(fonteCopa, titulo, (Vector2){500 - (tituloTamanho / 2) + 3, 100 + 3}, 28, 2, BLACK);
+            DrawTextEx(fonteCopa, titulo, (Vector2){500 - (tituloTamanho / 2), 100}, 28, 2, WHITE);
             
-            int subtitleWidth = MeasureTextEx(fonteCopa, subtitulo, 16, 2).x;
+            int subtituloTamanho = MeasureTextEx(fonteCopa, subtitulo, 16, 2).x;
 
-            DrawTextEx(fonteCopa, subtitulo, (Vector2){500 - (subtitleWidth / 2) + 2, 180 + 2}, 16, 2, BLACK);
-            DrawTextEx(fonteCopa, subtitulo, (Vector2){500 - (subtitleWidth / 2), 180}, 16, 2, amareloBrasil);
+            DrawTextEx(fonteCopa, subtitulo, (Vector2){500 - (subtituloTamanho / 2) + 2, 180 + 2}, 16, 2, BLACK);
+            DrawTextEx(fonteCopa, subtitulo, (Vector2){500 - (subtituloTamanho / 2), 180}, 16, 2, COPA_VERDE_NEON);
 
             for(int i = 0; i < numBotoes; i++){
                 bool mouseEmCima = CheckCollisionPointRec(mousePoint, botoesSubmenu[i]);
-                int offsetAnimacao = mouseEmCima ? (IsMouseButtonDown(MOUSE_LEFT_BUTTON) ? 2 : -6) : 0;
+                int offsetAnimacao = 0;
+
+                if(mouseEmCima){
+                    if(IsMouseButtonDown(MOUSE_LEFT_BUTTON)){
+                        offsetAnimacao = 2;
+                    }else{
+                        offsetAnimacao = -6;
+                    }
+                }else{
+                    offsetAnimacao = 0;
+                }
 
                 if(mouseEmCima && !IsMouseButtonDown(MOUSE_LEFT_BUTTON)){
                     DrawRectangle(botoesSubmenu[i].x + 4, botoesSubmenu[i].y + 4, botoesSubmenu[i].width, botoesSubmenu[i].height, Fade(BLACK, 0.4f));
                 }
 
-                Rectangle btnAnimado = {
-                    botoesSubmenu[i].x,
-                    botoesSubmenu[i].y + offsetAnimacao,
-                    botoesSubmenu[i].width,
-                    botoesSubmenu[i].height
-                };
+                Rectangle btnAnimado = {botoesSubmenu[i].x,botoesSubmenu[i].y + offsetAnimacao,botoesSubmenu[i].width,botoesSubmenu[i].height};
 
-                DrawRectangleRec(btnAnimado, mouseEmCima ? LIGHTGRAY : amareloBrasil);
-                DrawRectangleLinesEx(btnAnimado, 2, mouseEmCima ? azulBrasil : DARKGRAY);
+                Color corBotao;
+                Color corBorda;
+
+                if(mouseEmCima){
+                    corBotao = LIGHTGRAY;
+                    corBorda = azulBrasil;
+                }else{
+                    corBotao = azulBrasil;
+                    corBorda = DARKGRAY;
+                }
+
+                DrawRectangleRec(btnAnimado, corBotao);
+                DrawRectangleLinesEx(btnAnimado, 2, corBorda);
                 
-                int textWidth = MeasureTextEx(fonteCopa, textosBotoes[i], 16, 2).x;
+                int textoTamanho = MeasureTextEx(fonteCopa, textosBotoes[i], 16, 2).x;
 
-                DrawTextEx(fonteCopa, textosBotoes[i], (Vector2){btnAnimado.x + (btnAnimado.width / 2) - (textWidth / 2), btnAnimado.y + 20}, 16, 2, azulBrasil);
+                DrawTextEx(fonteCopa, textosBotoes[i], (Vector2){btnAnimado.x + (btnAnimado.width / 2) - (textoTamanho / 2), btnAnimado.y + 20}, 16, 2, WHITE);
             }
         }
 
         //Texto Fechamento
-        const char *footer = "Feche a janela (X) ou aperte ESC para sair";
-        int footerWidth = MeasureTextEx(fonteCopa, footer, 12, 2).x;
+        const char *base = "Feche a janela (X) ou aperte ESC para sair";
+        int baseTamanho = MeasureTextEx(fonteCopa, base, 12, 2).x;
 
-        DrawTextEx(fonteCopa, footer, (Vector2){500 - (footerWidth / 2) + 2, 740 + 2}, 12, 2, BLACK);
-        DrawTextEx(fonteCopa, footer, (Vector2){500 - (footerWidth / 2), 740}, 12, 2, LIGHTGRAY);
+        DrawTextEx(fonteCopa, base, (Vector2){500 - (baseTamanho / 2) + 2, 740 + 2}, 12, 2, BLACK);
+        DrawTextEx(fonteCopa, base, (Vector2){500 - (baseTamanho / 2), 740}, 12, 2, LIGHTGRAY);
 
         //Cursor
         DrawTexture(cursorBola, (int)mousePoint.x - cursorBola.width / 2, (int)mousePoint.y - cursorBola.height / 2, WHITE);
@@ -275,16 +301,17 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
         //============= Reaparecer Menu ============//
         //==========================================//
         if(acaoTerminal != 0){
-            // TRAVA DE SEGURANÇA: Desliga a música exatamentamente aqui!
-            // Quando a janela gráfica vai fechar e você vai pro jogo no terminal.
-            if (IsMusicStreamPlaying(somMenu)) {
+            //Desliga a música
+            
+            if(IsMusicStreamPlaying(somMenu)){
                 StopMusicStream(somMenu);
             }
 
-            // Fecha temporariamente a tela se a ação requisitada for de terminal antigo
             UnloadTexture(cursorBola);
             UnloadFont(fonteCopa);
             CloseWindow();
+
+            bool voltarDiretoMenuGrafico = false;
             
             if(acaoTerminal == 2){
                 printf("\n=========================================\nTotal album: %d\n", *total_album);
@@ -293,12 +320,16 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
             }else if(acaoTerminal == 3){
                 printf("\n=========================================\nTotal mochila: %d\n", *total_mochila);
                 listarFigurinhasMochila(mochila, *total_mochila);
+
             }else if(acaoTerminal == 4){
                 excluirAlbum(figurinhas, album, total_album);
+                
             }else if(acaoTerminal == 5){
                 excluirMochila(figurinhas, mochila, total_mochila);
+                
             }else if(acaoTerminal == 6){
                 pesquisarFigurinha(figurinhas, total);
+
             }else if(acaoTerminal == 7){
                 int opcao_alterar;
 
@@ -316,24 +347,31 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
                     }else if(opcao_alterar == 2){
                         resetarLista(figurinhas, total);
                     }
+
                 }while(opcao_alterar != 3);
+
             }else if(acaoTerminal == 11){
                 trocarFigurinha(figurinhas, mochila, album, total_mochila, total_album);
             }else if(acaoTerminal == 8){
+                voltarDiretoMenuGrafico = true;
                 jogarQuiz(figurinhas, mochila, album, total, total_mochila, total_album);
             }else if(acaoTerminal == 9){
+                voltarDiretoMenuGrafico = true;
                 jogarGoleiro();
             }else if(acaoTerminal == 10){
+                voltarDiretoMenuGrafico = true;
                 jogarPenalti(figurinhas, mochila, album, total, total_mochila, total_album, &pacotes_fechados);
             }
 
             //Menu de travamento pós terminal
-            printf("\n=========================================\nPressione ENTER para voltar ao menu grafico...");
+            if(!voltarDiretoMenuGrafico){
+                printf("\n=========================================\nPressione ENTER para voltar ao menu grafico...");
 
             int c;
 
-            while((c = getchar()) != '\n' && c != EOF);
-            getchar();
+                while((c = getchar()) != '\n' && c != EOF);
+                getchar();
+            }//if
 
             telaAtual = MENU_PRINCIPAL;
             
@@ -351,7 +389,7 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
         }
     }
 
-    // --- 4. LIBERAÇÃO DE MEMÓRIA DE ÁUDIO NO FECHAMENTO ---
+    //Libera Memória
     UnloadMusicStream(somMenu);
     CloseAudioDevice();
     

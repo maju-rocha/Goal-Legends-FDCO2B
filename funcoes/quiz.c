@@ -47,7 +47,9 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
     int pergunta_atual = 0;
     int opcao_selecionada = -1;
     int pacotes_ganhos_rodada = 0;
-    
+    bool voltarMenu = false; // Volta para o menu sem fechar o projeto
+    bool fecharProjeto = false; // Fecha o projeto inteiro ao clicar no X
+
     //Semente para randomização
     srand(time(NULL));
     
@@ -66,6 +68,7 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
 
     SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_VSYNC_HINT);
     InitWindow(1000, 800, "Minijogo: Quiz da Copa - Edicao Canarinho");
+    SetExitKey(KEY_NULL);
     
     //Váriavel para começo de audio
     bool audioIniciadoAqui = false;
@@ -119,8 +122,20 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
     Rectangle btnMenu = { 520, 460, 310, 58 };
 
     //Estrutra do jogo
-    while (!WindowShouldClose()){
-        
+    while(!voltarMenu){
+
+        // Se clicar no X da janela, fecha o projeto inteiro
+        if(WindowShouldClose()){
+            fecharProjeto = true;
+            break;
+        }
+
+        // Se apertar ESC, volta para o menu principal
+        if(IsKeyPressed(KEY_ESCAPE)){
+            voltarMenu = true;
+            break;
+        }
+
         //Música de fundo
         UpdateMusicStream(musicaFundo);
 
@@ -194,9 +209,9 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
                     }
                     estado = TELA_PERGUNTA;
                 } 
-                //Volta ao menu inial
+                //Volta ao menu inicial
                 else if(CheckCollisionPointRec(mousePoint, btnMenu)){
-                    break;
+                    voltarMenu = true;
                 }
             }
         }
@@ -413,10 +428,14 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
     UnloadTexture(cursorBola);
     UnloadFont(fonteCopa);
     UnloadImage(imagemBola); 
-    CloseWindow();
 
-    //Mensagem final
-    int saldo = pacotes_fechados;
-    printf("\n--- SESSAO DO QUIZ ENCERRADA ---\n");
-    printf("Você tem %d pacote(s) aguardando para serem abertos!\n", saldo);
+    // Fecha apenas a janela do minigame antes de voltar para o menu
+    if(IsWindowReady()){
+        CloseWindow();
+    }
+
+    // Se a saída foi pelo X, encerra o projeto por completo
+    if(fecharProjeto){
+        exit(0);
+    }
 }

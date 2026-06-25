@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdio.h>
-#define JOGAR_NOVAMENTE 1
 
 //Struct atacantes
 typedef struct{
@@ -24,7 +23,7 @@ void DrawTextOutLine(const char *text, int x, int y, int fontSize, Color textCol
         }//for
     }//for
 
-    DrawText(text, x, y, fontSize, textColor);
+    //DrawText(text, x, y, fontSize, textColor);
 }//void
 
 void jogarGoleiro(){
@@ -33,7 +32,14 @@ void jogarGoleiro(){
     const int screenWidth = 1000;
     const int screenHeight = 800;
     InitWindow(screenWidth, screenHeight, "Minigame: Jogo do Goleiro");
-    InitAudioDevice();
+
+    bool audioFoiIniciadoAqui = false;
+
+    if(!IsAudioDeviceReady()){
+        InitAudioDevice();
+        audioFoiIniciadoAqui = true;
+    }//if
+
     SetExitKey(KEY_NULL);
     
     //Váriaveis das imagens
@@ -62,17 +68,23 @@ void jogarGoleiro(){
     bool fecharPrograma = false;
     bool mostrarExplicacao = true;
 
-    //Opções fim de jogo
-    Rectangle btnMenu = {300, 450, 400, 60};
-    Rectangle btnReiniciar = {300, 350, 400, 60};
-    
     srand(time(NULL));//inicia aleatoriedade para as direções da bola após defesa
 
     //=======================================================//
     //========== Estrutura e Desenho da explicação ==========//
     //=======================================================//
 
-    while(!WindowShouldClose() && mostrarExplicacao){
+    while(mostrarExplicacao){
+
+        if(WindowShouldClose()){
+            fecharPrograma = true;
+            break;
+        }//if
+
+        if(IsKeyPressed(KEY_ESCAPE)){
+            jogarNovamente = false;
+            break;
+        }//if
 
         Color fundoexplicacao = (Color){98, 88, 237, 255};
 
@@ -105,8 +117,7 @@ void jogarGoleiro(){
         PlaySound(somMusica);//Musica do jogo
 
         if(fecharPrograma){
-            CloseWindow();
-            exit(0);
+            break;
         }//if
 
         SetTargetFPS(60);
@@ -233,7 +244,7 @@ void jogarGoleiro(){
                 boxPosition = (Vector2){500, 27};//Reseta a posição da bola
 
                 boxSpeed.y = (rand() % 5 + 7) * multiplicadorDificuldade;//Aumenta a velocidade de 5 a 11 de acordo com o mutiplicador de dificuldade
-                boxSpeed.x = (rand() % 11) - 5;//Ângulo randomizado
+                boxSpeed.x = (rand() % 11) - 5 + 0.9f;//Ângulo randomizado
 
                 //Verifica se a bola está parada
                 if(boxSpeed.x == 0){
@@ -396,70 +407,88 @@ void jogarGoleiro(){
                 EndDrawing();
             }//fim do while
 
+            if(fecharPrograma){
+                break;
+            }//if
+
             //=======================================================//
             //========= Estrutura e Desenho do Fim de Jogo ==========//
             //=======================================================//
 
             if(fimdejogo){
 
-                Menu_FimdeJogo opcao = MENU_FIM;
+                bool reiniciarJogo = false;
 
-                while(!WindowShouldClose()){
+                while(true){
 
-                    BeginDrawing();
+                    if(WindowShouldClose()){
+                        fecharPrograma = true;
+                        break;
+                    }//if
+
+                    if(IsKeyPressed(KEY_ESCAPE)){
+                        reiniciarJogo = false;
+                        break;
+                    }//if
 
                     Vector2 mouse = GetMousePosition();
 
-                    bool clicouReiniciar = IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(mouse, btnReiniciar);
+                    //Janela Fim de Jogo
+                    Rectangle janelaFim = {screenWidth/2 - 200, screenHeight/2 - 150, 400, 300};
 
-                    bool clicouMenu = IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(mouse, btnMenu);
+                    //Botões
+                    Rectangle btnReiniciarFim = {janelaFim.x + 100, janelaFim.y + 120, 200, 50};
+                    Rectangle btnMenuFim = {janelaFim.x + 100, janelaFim.y + 190, 200, 50};
+
+                    bool clicouReiniciar = IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(mouse, btnReiniciarFim);
+
+                    bool clicouMenu = IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(mouse, btnMenuFim);
 
                     if(clicouMenu){
-                        opcao = MENU_FIM;
+                        reiniciarJogo = false;
                         break;
                     }//if
 
                     if(clicouReiniciar){
-                        opcao = JOGAR_NOVAMENTE;
+                        reiniciarJogo = true;
                         break;
                     }//if
 
+                    BeginDrawing();
+
                     //Fundo Fim de Jogo
                     DrawRectangle(0, 0, screenWidth, screenHeight, Fade(corfimdejogo, 0.6f));
-
-                    //Janela Fim de Jogo
-                    Rectangle janelaFim = {screenWidth/2 - 200, screenHeight/2 - 150, 400, 300};
 
                     DrawRectangleRec(janelaFim, DARKBLUE);
                     DrawRectangleLinesEx(janelaFim, 3, BLACK);
 
                     //Texto Fim de jogo
                     DrawTextOutLine("FIM DE JOGO", janelaFim.x + 75, janelaFim.y + 30, 40, RED,BLACK);
-
-                    //Botões
-                    Rectangle btnReiniciar = {janelaFim.x + 100, janelaFim.y + 120, 200, 50};
-                    Rectangle btnMenu = {janelaFim.x + 100, janelaFim.y + 190, 200, 50};
                     
                     //Cor, contorno e texto do botão reiniciar
-                    DrawRectangleRec(btnReiniciar, BLUE);
-                    DrawRectangleLinesEx(btnReiniciar, 3, BLACK);
-                    DrawTextOutLine("REINICIAR", btnReiniciar.x + 45, btnReiniciar.y + 15, 20, WHITE,BLACK);
+                    DrawRectangleRec(btnReiniciarFim, BLUE);
+                    DrawRectangleLinesEx(btnReiniciarFim, 3, BLACK);
+                    DrawTextOutLine("REINICIAR", btnReiniciarFim.x + 45, btnReiniciarFim.y + 15, 20, WHITE,BLACK);
 
                     //Cor, contorno e texto do botão menu
-                    DrawRectangleRec(btnMenu, BLUE);
-                    DrawRectangleLinesEx(btnMenu, 3, BLACK);
-                    DrawTextOutLine("MENU", btnMenu.x + 70, btnMenu.y + 15, 20, WHITE,BLACK);
+                    DrawRectangleRec(btnMenuFim, BLUE);
+                    DrawRectangleLinesEx(btnMenuFim, 3, BLACK);
+                    DrawTextOutLine("MENU", btnMenuFim.x + 70, btnMenuFim.y + 15, 20, WHITE,BLACK);
 
                     EndDrawing();
                 }//while
 
-                if(opcao == JOGAR_NOVAMENTE){
+                if(fecharPrograma){
+                    break;
+                }//if
+
+                if(reiniciarJogo){
                     jogarNovamente = true;
                 }else{
                     jogarNovamente = false;
                 }//if
 
-        }//if fimdejogo
+            }//if fimdejogo
 
     }//while (fimdejogo)
     
@@ -477,10 +506,16 @@ void jogarGoleiro(){
     UnloadSound(somDefesa);
     UnloadSound(somToque);
     UnloadSound(somMusica);
-    CloseAudioDevice();
+    if(audioFoiIniciadoAqui){
+        CloseAudioDevice();
+    }//if
     
     //Fecha a janela do jogo
     CloseWindow();
+
+    if(fecharPrograma){
+        exit(0);
+    }//if
    
     return;
 }

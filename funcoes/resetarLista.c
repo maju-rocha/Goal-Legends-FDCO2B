@@ -4,21 +4,30 @@
 #include "biblioteca.h"
 
 void resetarLista(Figurinha *vetor, int total){
-    
-    FILE *arquivo = fopen("extras/figurinhas2026.csv", "r");//abre o arquivo original para leitura
-    FILE *arquivo_copia = fopen("extras/figurinhas2026copy.csv", "w");//abre um novo arquivo para escrita da lista resetada
 
-    if (arquivo == NULL){
-        printf("\nErro ao abrir o arquivo para resetar a lista.\n");
+    FILE *arquivo = fopen("extras/figurinhas2026.csv", "r");
+    FILE *arquivo_copia = fopen("extras/figurinhas2026copy.csv", "w");
+
+    char linha[1024];
+
+    if(arquivo == NULL){
+        printf("\nErro ao abrir o arquivo original para resetar a lista.\n");
         return;
     }//if
-    for(int i = 0; i < total; i++){
-        fscanf(arquivo, " %9[^,],%49[^,],%49[^,],%49[^,],%49[^\n]", vetor[i].codigo, vetor[i].titulo, vetor[i].secao, vetor[i].grupo, vetor[i].tipo);
-        fprintf(arquivo_copia, " %9s,%49s,%49s,%49s,%49s\n", vetor[i].codigo, vetor[i].titulo, vetor[i].secao, vetor[i].grupo, vetor[i].tipo);
-    }//for
 
-    fclose(arquivo);//fecha o arquivo original
-    fclose(arquivo_copia);//fecha o arquivo de cópia
+    if(arquivo_copia == NULL){
+        printf("\nErro ao abrir o arquivo de copia para resetar a lista.\n");
+        fclose(arquivo);
+        return;
+    }//if
+
+    while(fgets(linha, sizeof(linha), arquivo)){
+        fputs(linha, arquivo_copia);
+    }//while
+
+    fclose(arquivo);
+    fclose(arquivo_copia);
 
     printf("\nLista resetada com sucesso!\n");
-}//função para resetar a lista de figurinhas
+
+}//funcao para resetar a lista de figurinhas
