@@ -3,6 +3,21 @@
 #include <string.h>
 #include <raylib.h>
 #include "biblioteca.h"
+#include "global.h"
+#include "menu.h"
+#include "abrirPacote.h"
+#include "listarAlbum.h"
+#include "listarMochila.h"
+#include "albumgrafico.h"
+#include "excluirAlbum.h"
+#include "excluirMochila.h"
+#include "pesquisar.h"
+#include "alterar.h"
+#include "resetarLista.h"
+#include "trocar.h"
+#include "quiz.h"
+#include "goleiro.h"
+#include "penalti.h"
 
 void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, int total, int *total_album, int *total_mochila){
     
@@ -314,6 +329,7 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
             bool voltarDiretoMenuGrafico = false;
             
             if(acaoTerminal == 2){
+                voltarDiretoMenuGrafico = true;
                 printf("\n=========================================\nTotal album: %d\n", *total_album);
                 listarFigurinhasAlbum(album, *total_album);
                 albumGrafico(figurinhas, total, album, *total_album);

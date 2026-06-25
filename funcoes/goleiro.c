@@ -1,8 +1,11 @@
-#include "raylib.h"
-#include "biblioteca.h"
 #include <stdlib.h>
 #include <time.h>
 #include <stdio.h>
+#include <raylib.h>
+#include "biblioteca.h"
+#include "global.h"
+#include "goleiro.h"
+#include "salvarPacotes.h"
 
 //Struct atacantes
 typedef struct{

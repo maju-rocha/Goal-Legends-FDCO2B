@@ -4,6 +4,8 @@
 #include <time.h>
 #include <raylib.h>
 #include "biblioteca.h"
+#include "carregarPacotes.h"
+#include "menu.h"
 
 int main(void){
 

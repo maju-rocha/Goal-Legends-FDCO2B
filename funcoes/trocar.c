@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "biblioteca.h"
+#include "global.h"
+#include "trocar.h"
+#include "salvarPacotes.h"
+#include "salvarRepetida.h"
 
 void trocarFigurinha(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int *total_mochila, int *total_album){
 

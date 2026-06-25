@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "biblioteca.h"
+#include "global.h"
+#include "carregarPacotes.h"
 
 void carregarPacotes(Figurinha *album, int *total_album, Figurinha *mochila, int *total_mochila){
 

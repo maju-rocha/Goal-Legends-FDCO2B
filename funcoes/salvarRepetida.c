@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "biblioteca.h"
+#include "salvarRepetida.h"
 
 void salvarRepetida(){
     FILE *f = fopen("extras/repetidas.txt", "w");

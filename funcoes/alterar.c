@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "biblioteca.h"
+#include "alterar.h"
 
 //Funcao para limpar espacos antes e depois do texto
 static void limparCampoAlterar(char *texto){

@@ -5,6 +5,8 @@
 #include <raylib.h>
 #include <raymath.h>
 #include "biblioteca.h"
+#include "global.h"
+#include "albumgrafico.h"
 
 //Paleta de cores usada na tela do album grafico
 #define COPA_AZUL_ESCURO (Color){ 8, 12, 24, 255 }
@@ -25,7 +27,7 @@ typedef struct{
     float tamanhoBase;
     float randomizadorPosicao;
     float transparenciaParticula;
-    float velocidadeTransparenciaParticula;
+    float velocidadetransparenciaParticula;
 
 }ParticulaCopa;
 
@@ -83,37 +85,18 @@ void trocarEspacoPorUnderline(char *texto){
 
 }//void
 
-// --- FUNÇÃO ATUALIZADA: Redimensiona e centraliza proporcionalmente qualquer imagem ---
+//Funcao para desenhar o fundo com um leve movimento de parallax
 void DesenharFundoParallax(Texture2D textura, Vector2 posicaoMouse, float transparenciaParticula){
 
     if(textura.id == 0){
         return;
     }//if
 
-    // Fator do Parallax baseado no mouse
     float deslocamentoX = (posicaoMouse.x - 500.0f) * -0.02f;
     float deslocamentoY = (posicaoMouse.y - 400.0f) * -0.02f;
 
-    // Tamanho da janela (1000x800) + margem de 40px para o parallax ter folga (1040x840)
-    float larguraAlvo = 1040.0f;
-    float alturaAlvo = 840.0f;
-
-    // Calcula a proporção exata sem distorcer a imagem (Efeito "Cover")
-    float escalaX = larguraAlvo / (float)textura.width;
-    float escalaY = alturaAlvo / (float)textura.height;
-    
-    // Pega a maior escala para garantir que a tela inteira seja preenchida
-    float escalaFinal = (escalaX > escalaY) ? escalaX : escalaY;
-
-    float larguraEscalada = textura.width * escalaFinal;
-    float alturaEscalada = textura.height * escalaFinal;
-
-    // Centraliza matematicamente a imagem na janela (compensando a margem do Parallax)
-    float posX = (1000.0f - larguraEscalada) / 2.0f + deslocamentoX;
-    float posY = (800.0f - alturaEscalada) / 2.0f + deslocamentoY;
-
     Rectangle origem = { 0.0f, 0.0f, (float)textura.width, (float)textura.height };
-    Rectangle destino = { posX, posY, larguraEscalada, alturaEscalada };
+    Rectangle destino = { deslocamentoX - 20.0f, deslocamentoY - 20.0f, 1040.0f, 840.0f };
     Vector2 centro = { 0.0f, 0.0f };
 
     DrawTexturePro(textura, origem, destino, centro, 0.0f, Fade(WHITE, transparenciaParticula));
@@ -134,6 +117,7 @@ void albumGrafico(Figurinha *figurinhas, int total_figurinhas, Figurinha *album,
     char secoes[100][50];
     int totalSecoes = 0;
     int totalMostradas = 0;
+    int contadorFigurinhasColadas = 0;
     char caminho[256];
 
     //Limpa os dados do album
@@ -169,6 +153,7 @@ void albumGrafico(Figurinha *figurinhas, int total_figurinhas, Figurinha *album,
 
     SetConfigFlags(FLAG_MSAA_4X_HINT);
     InitWindow(1000, 800, "FIFA WORLD CUP 2026 - SUPREME COLLECTOR ALBUM");
+    SetExitKey(KEY_NULL);
     SetTargetFPS(60);
 
     //Carrega as imagens de fundo
@@ -225,8 +210,12 @@ void albumGrafico(Figurinha *figurinhas, int total_figurinhas, Figurinha *album,
                     imagens[totalMostradas] = LoadTexture(caminho);
 
                     if(imagens[totalMostradas].id != 0){
+
                         SetTextureFilter(imagens[totalMostradas], TEXTURE_FILTER_BILINEAR);
+
                         temImagem[totalMostradas] = 1;
+                        contadorFigurinhasColadas++;
+
                     }//if
 
                 }//if
@@ -255,7 +244,7 @@ void albumGrafico(Figurinha *figurinhas, int total_figurinhas, Figurinha *album,
         particulas[i].tamanhoBase = (float)GetRandomValue(2, 4);
         particulas[i].randomizadorPosicao = (float)GetRandomValue(0, 360);
         particulas[i].transparenciaParticula = (float)GetRandomValue(20, 80) / 100.0f;
-        particulas[i].velocidadeTransparenciaParticula = (float)GetRandomValue(5, 15) / 1000.0f;
+        particulas[i].velocidadetransparenciaParticula = (float)GetRandomValue(5, 15) / 1000.0f;
 
     }//for
 
@@ -270,6 +259,10 @@ void albumGrafico(Figurinha *figurinhas, int total_figurinhas, Figurinha *album,
     //Laco principal da janela
     while(!WindowShouldClose()){
 
+        if(IsKeyPressed(KEY_ESCAPE)){
+            break;
+        }//if
+
         tempoGlobal += GetFrameTime();
 
         Vector2 posicaoMouse = GetMousePosition();
@@ -279,7 +272,7 @@ void albumGrafico(Figurinha *figurinhas, int total_figurinhas, Figurinha *album,
 
             particulas[i].posicao.x += particulas[i].velocidade.x + sinf(tempoGlobal + particulas[i].randomizadorPosicao) * 0.2f;
             particulas[i].posicao.y += particulas[i].velocidade.y;
-            particulas[i].transparenciaParticula -= particulas[i].velocidadeTransparenciaParticula;
+            particulas[i].transparenciaParticula -= particulas[i].velocidadetransparenciaParticula;
 
             float distanciaMouse = Vector2Distance(posicaoMouse, particulas[i].posicao);
 
@@ -487,19 +480,15 @@ void albumGrafico(Figurinha *figurinhas, int total_figurinhas, Figurinha *album,
         DrawText(secoes[paginaAtual], 32, 27, 32, Fade(BLACK, 0.4f));
         DrawText(secoes[paginaAtual], 30, 25, 32, WHITE);
 
-        // =========================================================
-        // BARRA DE PROGRESSO CORRIGIDA
-        // =========================================================
         float porcentagemConclusao = 0.0f;
 
         if(total_figurinhas > 0){
-            porcentagemConclusao = ((float)total_album / total_figurinhas) * 100.0f;
+            porcentagemConclusao = ((float)contadorFigurinhasColadas / total_figurinhas) * 100.0f;
         }//if
 
         DrawRectangle(650, 47, 320, 10, Fade(BLACK, 0.5f));
         DrawRectangle(651, 48, (int)(318 * (porcentagemConclusao / 100.0f)), 8, COPA_VERDE_NEON);
-        DrawText(TextFormat("ALBUM PROGRESSO: %.1f%% (%d/%d)", porcentagemConclusao, total_album, total_figurinhas), 650, 24, 13, Fade(WHITE, 0.7f));
-        // =========================================================
+        DrawText(TextFormat("ALBUM PROGRESSO: %.1f%% (%d/%d)", porcentagemConclusao, contadorFigurinhasColadas, total_figurinhas), 650, 24, 13, Fade(WHITE, 0.7f));
 
         DrawText(TextFormat("PAGINA %02d / %02d", paginaAtual + 1, totalSecoes), 455, 58, 15, COPA_OURO_PURO);
 
