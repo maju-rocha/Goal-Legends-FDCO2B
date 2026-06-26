@@ -3,6 +3,6 @@
 
 #include "biblioteca.h"
 
-void trocarFigurinha(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int *total_mochila, int *total_album);
+void trocarFigurinha(Figurinha *mochila, int *total_mochila);
 
 #endif

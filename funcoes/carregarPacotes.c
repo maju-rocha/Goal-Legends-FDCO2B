@@ -3,20 +3,18 @@
 #include "biblioteca.h"
 #include "global.h"
 #include "carregarPacotes.h"
-#include "carregarAlbum.h"
-#include "carregarMochila.h"
 
-void carregarPacotes(Figurinha *album, int *total_album, Figurinha *mochila, int *total_mochila){
+void carregarPacotes(){
 
-    FILE *arquivo_carrega_pacotes = fopen("extras/pacotes.bin", "rb");
+    FILE *arquivo_carrega_pacotes = fopen("extras/pacotes.txt", "r");//Lê o arquivo pacotes.txt
 
     if(arquivo_carrega_pacotes == NULL){
-        pacotes_fechados = 0;
-    }else{
-        fread(&pacotes_fechados, sizeof(int), 1, arquivo_carrega_pacotes);
-        fclose(arquivo_carrega_pacotes);
-    }
+        pacotes_fechados = 0;//Se o arquivo não existir, começa com 0 pacotes
+        return;
+    }//if
 
-    carregarAlbum(album, total_album);
-    carregarMochila(mochila, total_mochila);
-}
+    fscanf(arquivo_carrega_pacotes, "%d", &pacotes_fechados);//Lê a quantidade de pacotes fechados
+
+    fclose(arquivo_carrega_pacotes);//Fecha o arquivo
+
+}//void

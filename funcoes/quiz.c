@@ -73,7 +73,7 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
     InitWindow(1000, 800, "Minijogo: Quiz da Copa - Edicao Canarinho");
     SetExitKey(KEY_NULL);
     
-    //Váriavel para começo de audio
+    //Variável para começo de audio
     bool audioIniciadoAqui = false;
 
     //Teste de audio
@@ -82,17 +82,17 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
         audioIniciadoAqui = true;
     }
 
-    //Váriaveis de audio
+    //Variáveis de audio
     Sound somAcerto = LoadSound("audio/correct.mp3");
     Sound somErro = LoadSound("audio/false.mp3");
     Music musicaFundo = LoadMusicStream("audio/music.mp3");
     SetMusicVolume(musicaFundo, 0.08f); 
     PlayMusicStream(musicaFundo);      
 
-    //Váriavel da fonte
+    //Variável da fonte
     Font fonteCopa = LoadFont("extras/PressStart2P-Regular.ttf"); 
     
-    //Váriaveis de imagem para o cursor
+    //Variáveis de imagem para o cursor
     HideCursor(); 
     Image imagemBola = LoadImage("imagens/bola_cursor.png"); 
     ImageResize(&imagemBola, 40, 40); 
@@ -100,10 +100,10 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
     
     SetTargetFPS(60);
 
-    //Váriavel de estado
+    //Variável de estado
     EstadoQuiz estado = TELA_PERGUNTA;
 
-    //Váriaveis para cores
+    //Variáveis para cores
     Color verdeCampo = (Color){ 34, 139, 34, 255 };
     Color amareloBrasil = (Color){ 255, 215, 0, 255 };
     Color azulBrasil = (Color){ 0, 39, 118, 255 };
@@ -127,13 +127,13 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
     //Estrutra do jogo
     while(!voltarMenu){
 
-        // Se clicar no X da janela, fecha o projeto inteiro
+        //Se clicar no X da janela, fecha o projeto inteiro
         if(WindowShouldClose()){
             fecharProjeto = true;
             break;
         }
 
-        // Se apertar ESC, volta para o menu principal
+        //Se apertar ESC, volta para o menu principal
         if(IsKeyPressed(KEY_ESCAPE)){
             voltarMenu = true;
             break;
@@ -219,13 +219,13 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
             }
         }
 
-        // ==========================================
-        // Lógica de Desenho
-        // ==========================================
+        //==========================================//
+        //============ Lógica de Desenho ===========//
+        //==========================================//
         BeginDrawing();
-        ClearBackground(verdeCampo);
+        ClearBackground(verdeCampo);//Fundo tela
 
-        //Váriavel para desenho de fundo em loop
+        //Variável para desenho de fundo em loop
         float offsetBg = tempo * 40.0f; 
         for (int i = -1000; i < 2000; i += 80){
             DrawLineEx((Vector2){ i + offsetBg, 0 }, (Vector2){ i - 1000 + offsetBg, 1500 }, 20.0f, Fade(WHITE, 0.05f));
@@ -302,10 +302,10 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
             }
         }else if(estado == TELA_FEEDBACK){
             
-            //Váriavel de acerto de pergunta
+            //Variável de acerto de pergunta
             bool acertou = (opcao_selecionada == banco[sorteadas[pergunta_atual]].correta);
 
-            //Váriavel de cor do acerto da pergunta
+            //Variável de cor do acerto da pergunta
             Color corDestaque = acertou ? GREEN : RED; 
             
             //Retângulo para resultados
@@ -337,7 +337,7 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
                 DrawTextEx(fonteCopa, textoCerta, (Vector2){ 500 - (widthCerta / 2), 360 }, 12, 1, Fade(WHITE, 0.7f));
             }
 
-            //Váriavel de checagem do mouse
+            //Variável de checagem do mouse
             bool mouseEmCima = CheckCollisionPointRec(mousePoint, btnContinuar);
             int offsetAnimacao = 0; Color corFundoBtn = amareloBrasil;
 
@@ -387,7 +387,7 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
             int widthAcumulado = MeasureTextEx(fonteCopa, msgAcumulado, 12, 1).x;
             DrawTextEx(fonteCopa, msgAcumulado, (Vector2){ 500 - (widthAcumulado / 2), 360 }, 12, 1, Fade(WHITE, 0.8f));
 
-            //Váriavel de checagem com o mouse no botão tentar, cor do fundo
+            //Variável de checagem com o mouse no botão tentar, cor do fundo
             bool hoverTentar = CheckCollisionPointRec(mousePoint, btnTentar);
             int animTentar = 0; Color corFundoTentar = amareloBrasil;
             if(hoverTentar){
@@ -402,7 +402,7 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
             int wt = MeasureTextEx(fonteCopa, "TENTAR DE NOVO", 12, 1).x;
             DrawTextEx(fonteCopa, "TENTAR DE NOVO", (Vector2){ rectTentar.x + (rectTentar.width / 2) - (wt / 2), rectTentar.y + 22 }, 12, 1, azulBrasil);
 
-            //Váriavel de checagem com o mouse no botão menu, cor do fundo
+            //Variável de checagem com o mouse no botão menu, cor do fundo
             bool hoverMenu = CheckCollisionPointRec(mousePoint, btnMenu);
             int animMenu = 0; Color corFundoMenu = amareloBrasil;
             if(hoverMenu) {
@@ -432,12 +432,12 @@ void jogarQuiz(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int 
     UnloadFont(fonteCopa);
     UnloadImage(imagemBola); 
 
-    // Fecha apenas a janela do minigame antes de voltar para o menu
+    //Fecha apenas a janela do minigame antes de voltar para o menu
     if(IsWindowReady()){
         CloseWindow();
     }
 
-    // Se a saída foi pelo X, encerra o projeto por completo
+    //Se a saída foi pelo X, encerra o projeto por completo
     if(fecharProjeto){
         exit(0);
     }

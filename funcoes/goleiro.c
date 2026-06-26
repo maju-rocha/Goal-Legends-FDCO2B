@@ -36,16 +36,16 @@ void jogarGoleiro(){
     const int screenHeight = 800;
     InitWindow(screenWidth, screenHeight, "Minigame: Jogo do Goleiro");
 
-    bool audioFoiIniciadoAqui = false;
+    bool audioFoiIniciadoAqui = false;//Variável de som
 
     if(!IsAudioDeviceReady()){
         InitAudioDevice();
         audioFoiIniciadoAqui = true;
     }//if
 
-    SetExitKey(KEY_NULL);
+    SetExitKey(KEY_NULL);//Clicar no X para sair
     
-    //Váriaveis das imagens
+    //Variáveis das imagens
     Texture2D imagemCampo = LoadTexture("imagens/imagem_campogoleiro.png");
     Texture2D imagemAtacante = LoadTexture("imagens/imagem_atacante.png");
     Texture2D imagemGoleiro = LoadTexture("imagens/imagem_goleiro.png");
@@ -56,7 +56,7 @@ void jogarGoleiro(){
     Texture2D imagemCabecaAtacante = LoadTexture("imagens/imagem_atacantecabeca.png");
     Texture2D imagemBola2026 = LoadTexture("imagens/imagem_bola2026.png");
 
-    //Váriaveis de audio
+    //Variáveis de audio
     Sound somDefesa = LoadSound ("audio/som_defesagoleiro.mp3");
     SetSoundVolume(somDefesa, 0.05f);
     Sound somToque = LoadSound ("audio/som_toqueatacante.mp3");
@@ -64,15 +64,15 @@ void jogarGoleiro(){
     Sound somMusica = LoadSound ("audio/som_musicagoleiro.mp3");
     SetSoundVolume(somMusica, 0.03f);
     
-    //Váriavel da fonte
+    //Variável da fonte
     Font fonteCopa = LoadFont("extras/PressStart2P-Regular.ttf");
     
-    //Váriaveis goleiro.c
+    //Variáveis de teste
     bool jogarNovamente = true;
     bool fecharPrograma = false;
     bool mostrarExplicacao = true;
 
-    srand(time(NULL));//inicia aleatoriedade para as direções da bola após defesa
+    srand(time(NULL));//Inicia aleatoriedade para as direções da bola após defesa
 
     //=======================================================//
     //========== Estrutura e Desenho da explicação ==========//
@@ -83,39 +83,37 @@ void jogarGoleiro(){
         if(WindowShouldClose()){
             fecharPrograma = true;
             break;
-        }//if
+        }//if teste fechar tela introdução
 
         if(IsKeyPressed(KEY_ESCAPE)){
             jogarNovamente = false;
             break;
-        }//if
+        }//if teste tecla de saida ESC
+        
+        Color fundoexplicacao = (Color){98, 88, 237, 255};//Variável de cor
+        
+        BeginDrawing();//Começo do gráfico
+        ClearBackground(fundoexplicacao);//Cor do fundo
 
-        Color fundoexplicacao = (Color){98, 88, 237, 255};
-
-        BeginDrawing();
-        ClearBackground(fundoexplicacao);
-
+        //Textos da introdução
         DrawTextOutLine("MINIGAME: GOLEIRO", 280, 100, 40, WHITE, BLACK);
-
         DrawTextOutLine("Defenda os chutes pressionando as setas do teclado | <- | -> |", 100, 220, 27, WHITE, BLACK);
-
         DrawTextOutLine("Voce tem 3 vidas", 100, 260, 27, WHITE, BLACK);
-
         DrawTextOutLine("Se receber um gol perde uma vida", 100, 300, 27, WHITE, BLACK);
-
         DrawTextOutLine("A cada 30 segundos percorridos = 1 pacote.", 100, 340, 27, WHITE, BLACK);
-
         DrawTextOutLine("Pressione qualquer tecla para comecar", 100, 450, 27, YELLOW, BLACK);
 
+        //Fim da tela de introdução
         EndDrawing();
 
         if(GetKeyPressed() != 0){
             mostrarExplicacao = false;
 
-        }//if
+        }//if teste de qualquer tecla para sair da tela de introdução
     
     }//while
 
+    
     while (jogarNovamente){
         
         PlaySound(somMusica);//Musica do jogo
@@ -155,7 +153,7 @@ void jogarGoleiro(){
         Rectangle golHitbox = {(screenWidth - 800) / 2, screenHeight - 100, 800, 100}; //Posição e tamanho do gol
 
 
-
+        //Estrutura do jogo
         while (!fimdejogo){
             //Verifica saida do jogo fechando a aba da janela
             if (WindowShouldClose()) {
@@ -186,7 +184,7 @@ void jogarGoleiro(){
             //Hitbox da bola
             Rectangle boxRec = { boxPosition.x -25, boxPosition.y -25, 50, 50 };
             
-            //Váriaveis de colisão
+            //Variáveis de colisão
             bool collisionGoleiro = false;
             bool collisionGol = false;
             
@@ -211,7 +209,7 @@ void jogarGoleiro(){
                 boxSpeed.x = (rand() % 11) - 5;//Muda a angulação da bola
 
                 
-                //Spawna de 0 a 2 atacantes
+                //Spawn de 0 a 2 atacantes
                 qtdAtacantes = rand() % 3;
                 
                 //Spawn randomizado dos atacantes
@@ -243,14 +241,14 @@ void jogarGoleiro(){
             //Resultado da colisão da bola com o gol
             if(collisionGol){
 
-                vidas--;//Decrementa se bola acerta o gol
+                vidas--;//Decrementa uma vida se bola acerta o gol
 
                 boxPosition = (Vector2){500, 27};//Reseta a posição da bola
 
                 boxSpeed.y = (rand() % 5 + 7) * multiplicadorDificuldade;//Aumenta a velocidade de 5 a 11 de acordo com o mutiplicador de dificuldade
                 boxSpeed.x = (rand() % 11) - 5 + 0.9f;//Ângulo randomizado
 
-                //Verifica se a bola está parada
+                //Verifica se a bola está parada, caso esteja aumenta a velocidade
                 if(boxSpeed.x == 0){
                     boxSpeed.x = 1;
                 }//if
@@ -258,11 +256,10 @@ void jogarGoleiro(){
                 //Verifica a quantidade de vidas
                 if(vidas <= 0){
                     fimdejogo = true;
-                }
-
+                }//if
             }//if
             
-            //Váriavel de tempo atualiza a cada segundo (60 fps)
+            //Variável de tempo atualiza a cada segundo (60 fps)
             tempoJogo += GetFrameTime();
             
             //Condição de aumento de dificuldade
@@ -276,12 +273,12 @@ void jogarGoleiro(){
             if(tempoJogo >= proximoPacote){
                 pacotes_fechados++;
                 salvarPacotes();
-                proximoPacote += 30.0f;
-            }
+                proximoPacote += 30.0f;//Condição de ganho de pacote (30 segundos)
+            }//if
                             
             //Teclas para o goleiro
-            if(IsKeyDown(KEY_RIGHT)) obstacleRec.x += velocidadeGoleiro;
-            if(IsKeyDown(KEY_LEFT)) obstacleRec.x -= velocidadeGoleiro;
+            if(IsKeyDown(KEY_RIGHT)) obstacleRec.x += velocidadeGoleiro;//Direita
+            if(IsKeyDown(KEY_LEFT)) obstacleRec.x -= velocidadeGoleiro;//Esquerda
 
             //Retângulo da luva do goleiro
             Rectangle luvaRec = {obstacleRec.x - 5, obstacleRec.y - 30, obstacleRec.width + 10, obstacleRec.height};
@@ -296,6 +293,7 @@ void jogarGoleiro(){
             //=============== Parte Gráfica do Jogo =================//
             //=======================================================//
 
+            //Começo da parte gráfico do jogo
             BeginDrawing();
             
             //Desenha o campo
@@ -361,9 +359,9 @@ void jogarGoleiro(){
             //Desenha os atacantes
             for(int i = 0; i < qtdAtacantes; i++){
                 if(!atacantes[i].usado){
-                    Rectangle cabAtRec = {atacantes[i].rec.x -2, atacantes[i].rec.y - 10, atacantes[i].rec.width + 10, atacantes[i].rec.height + 35};
-                    DrawTexturePro(imagemAtacante,(Rectangle){0, 0, imagemAtacante.width, imagemAtacante.height}, atacantes[i].rec, (Vector2){0, 0}, 0, WHITE);
-                    DrawTexturePro(imagemCabecaAtacante,(Rectangle){0, 0, imagemCabecaAtacante.width, imagemCabecaAtacante.height}, cabAtRec,(Vector2){0, 0},0,WHITE);
+                    Rectangle cabAtRec = {atacantes[i].rec.x -2, atacantes[i].rec.y - 10, atacantes[i].rec.width + 10, atacantes[i].rec.height + 35};//Retângulo da cabeça(sem hitbox) dos atacantes
+                    DrawTexturePro(imagemAtacante,(Rectangle){0, 0, imagemAtacante.width, imagemAtacante.height}, atacantes[i].rec, (Vector2){0, 0}, 0, WHITE);//Desenho do corpo (hitbox) dos atacantes
+                    DrawTexturePro(imagemCabecaAtacante,(Rectangle){0, 0, imagemCabecaAtacante.width, imagemCabecaAtacante.height}, cabAtRec,(Vector2){0, 0},0,WHITE);//Desenho da cabeça dos atacantes
 
                 }//if
             }//for
@@ -419,22 +417,25 @@ void jogarGoleiro(){
             //========= Estrutura e Desenho do Fim de Jogo ==========//
             //=======================================================//
 
+            //Condição para tela de fim de jogo
             if(fimdejogo){
 
-                bool reiniciarJogo = false;
+                bool reiniciarJogo = false;//Variável de reinicio de jogo
 
+                //Estrutura de fim de jogo
                 while(true){
 
                     if(WindowShouldClose()){
                         fecharPrograma = true;
                         break;
-                    }//if
+                    }//if fechar no X da aba
 
                     if(IsKeyPressed(KEY_ESCAPE)){
                         reiniciarJogo = false;
                         break;
-                    }//if
+                    }//if tecla ESC de saida
 
+                    //Mouse
                     Vector2 mouse = GetMousePosition();
 
                     //Janela Fim de Jogo
@@ -444,25 +445,27 @@ void jogarGoleiro(){
                     Rectangle btnReiniciarFim = {janelaFim.x + 100, janelaFim.y + 120, 200, 50};
                     Rectangle btnMenuFim = {janelaFim.x + 100, janelaFim.y + 190, 200, 50};
 
-                    bool clicouReiniciar = IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(mouse, btnReiniciarFim);
+                    bool clicouReiniciar = IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(mouse, btnReiniciarFim);//Variável do botão reiniciar
 
-                    bool clicouMenu = IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(mouse, btnMenuFim);
+                    bool clicouMenu = IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(mouse, btnMenuFim);//Variável do botão menu
 
                     if(clicouMenu){
                         reiniciarJogo = false;
                         break;
-                    }//if
+                    }//if botão menu volta para o menu
 
                     if(clicouReiniciar){
                         reiniciarJogo = true;
                         break;
-                    }//if
+                    }//if botão reinicia o jogo voltando para tela do goleiro
 
+                    //Começo do desenho de fim de jogo
                     BeginDrawing();
 
                     //Fundo Fim de Jogo
                     DrawRectangle(0, 0, screenWidth, screenHeight, Fade(corfimdejogo, 0.6f));
 
+                    //Janela de fim de jogo
                     DrawRectangleRec(janelaFim, DARKBLUE);
                     DrawRectangleLinesEx(janelaFim, 3, BLACK);
 
@@ -484,17 +487,17 @@ void jogarGoleiro(){
 
                 if(fecharPrograma){
                     break;
-                }//if
+                }//if fechar no X da aba
 
                 if(reiniciarJogo){
                     jogarNovamente = true;
                 }else{
                     jogarNovamente = false;
-                }//if
+                }//if teste de reinicio de jogo apertando o botão reiniciar
 
-            }//if fimdejogo
+            }//if fim de jogo
 
-    }//while (fimdejogo)
+    }//while (fim de jogo)
     
     //Liberações de memória do jogo
     UnloadTexture(imagemCampo);
@@ -514,12 +517,11 @@ void jogarGoleiro(){
         CloseAudioDevice();
     }//if
     
-    //Fecha a janela do jogo
-    CloseWindow();
+    CloseWindow();//Fecha a janela do jogo
 
     if(fecharPrograma){
         exit(0);
-    }//if
+    }//if encerra por completo fechando no X da aba
    
     return;
 }

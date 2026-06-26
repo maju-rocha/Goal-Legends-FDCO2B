@@ -5,23 +5,26 @@
 
 void pesquisarFigurinha(Figurinha *vetor, int total){
     
-    char codigo[10];//variavel para armazenar o código da figurinha a ser pesquisada
-    int encontrada = 0;//variavel para indicar se a figurinha foi encontrada ou não
+    char codigo[10];//Variável para armazenar o código da figurinha a ser pesquisada
+    int encontrada = 0;//Variável para indicar se a figurinha foi encontrada ou não
 
+    //Texto terminal
     printf("Digite o código da figurinha que deseja pesquisar (ex: MEX2): \n");
     fgets(codigo, sizeof(codigo), stdin);
     codigo[strcspn(codigo,"\n")] = '\0'; 
 
     for (int i = 0; i < total; i++){
 
-        char codigo_busca[15];//variavel auxiliar para armazenar o código da figurinha sem espaços extras
+        char codigo_busca[15];//Variável auxiliar armazenar o código da figurinha sem espaços
 
-        strcpy(codigo_busca, vetor[i].codigo);
+        strcpy(codigo_busca, vetor[i].codigo);//Copia o código digitado para a nova variável de busca
 
-        for(int k = strlen(codigo_busca) - 1; k >= 0 && codigo_busca[k] == ' '; k--){//remove os espaços em branco do final do código
+        //Remove os espaços em branco do final do código, le caractecter da esquerda até encontrar o 0 ou espaço em branco
+        for(int k = strlen(codigo_busca) - 1; k >= 0 && codigo_busca[k] == ' '; k--){
             codigo_busca[k] = '\0'; 
         }//for
 
+        //Compara os códigos, caso ache mostra o conteudo
         if (strcmp(codigo_busca, codigo) == 0){
             printf("\n FIGURINHA ENCONTRADA!\n");
             
@@ -36,7 +39,8 @@ void pesquisarFigurinha(Figurinha *vetor, int total){
         }//if
     }//for
 
+    //Caso não encontre digita texto no terminal
     if (!encontrada){
         printf("\n Figurinha com o codigo '%s' nao foi encontrada.\n", codigo);
     }//if
-}//função para pesquisar figurinha
+}

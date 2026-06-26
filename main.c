@@ -58,7 +58,7 @@ int main(void){
 
     fclose(arquivo);
 
-    carregarPacotes(album, &total_album, mochila, &total_mochila);
+    carregarPacotes();
     carregarRepetida();
 
     menuPrincipal(figurinhas, album, mochila, total, &total_album, &total_mochila);
