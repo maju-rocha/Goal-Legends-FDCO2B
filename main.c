@@ -57,7 +57,9 @@ int main(void){
 
     //Carrega os pacotes e figurinhas repetidas
     carregarPacotes();
-    carregarRepetida(); 
+    carregarRepetida();
+
+    printf("%d",pacotes_fechados);
 
     menuPrincipal(figurinhas, album, mochila, total, &total_album, &total_mochila);//Abre o menu
 
