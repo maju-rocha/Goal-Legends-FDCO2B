@@ -2,33 +2,17 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-<<<<<<< HEAD
-#include "figurinhas.h"
-=======
 #include <raylib.h>
 #include "biblioteca.h"
 #include "carregarPacotes.h"
 #include "carregarRepetida.h"
+#include "carregarAlbum.h"
+#include "carregarMochila.h"
 #include "menu.h"
 #include "global.h"
->>>>>>> 72b0edcd72447ee01e892bfc2f53793b7d04e0e1
 
-int main(){
+int main(void){
 
-<<<<<<< HEAD
-    char linha[300];//variavel com todos os bytes de uma linha
-    int total = 0;//variavel para contabilizar a quantidade
-
-
-    Figurinha *figurinhas = malloc (981 * sizeof(Figurinha));//Cria vetor dinamico para as figurinhas
-
-    if (figurinhas == NULL){//testa se o malloc funcionou
-        printf("Erro de alocacao.\n");
-        return 1;
-    }
-
-    FILE *arquivo = fopen("figurinhas2026.csv","r");//cria e abre o arquivo para leitura de figurinhas
-=======
     srand((int)time(NULL));//Inicializa a aleatoriedade
 
     //Variáveis
@@ -39,7 +23,7 @@ int main(){
 
     //Inicia vetores dinamicos
     Figurinha *figurinhas = malloc(1100 * sizeof(Figurinha));
-    Figurinha *album = malloc(1100 * sizeof(Figurinha));\
+    Figurinha *album = malloc(1100 * sizeof(Figurinha));
     Figurinha *mochila = malloc(1100 * sizeof(Figurinha));
 
     if(figurinhas == NULL || album == NULL || mochila == NULL){
@@ -52,10 +36,10 @@ int main(){
         return 1;
     }//if teste
 
-    FILE *arquivo = fopen("extras/figurinhas2026copy.csv", "r");;//Abre em modo de leitura o arquivo figurinhas202copy.csv
+    FILE *arquivo = fopen("extras/figurinhas2026copy.csv", "r");//Abre em modo de leitura o arquivo figurinhas2026copy.csv
 
     if(arquivo == NULL){
-        printf("Erro ao abrir o arquivo figurinhas2026.csv.\n");
+        printf("Erro ao abrir o arquivo figurinhas2026copy.csv.\n");
 
         free(figurinhas);
         free(album);
@@ -64,20 +48,28 @@ int main(){
         return 1; 
     }//if teste
 
-    fgets(linha, sizeof(linha), arquivo); 
+    fgets(linha, sizeof(linha), arquivo);//Pula a primeira linha do CSV
 
-    while(total < 1100 && fscanf(arquivo, " %9[^,],%49[^,],%49[^,],%49[^,],%49[^\n]", figurinhas[total].codigo, figurinhas[total].titulo, figurinhas[total].secao, figurinhas[total].grupo,figurinhas[total].tipo) == 5){
+    while(total < 1100 && fscanf(arquivo, " %9[^,],%49[^,],%49[^,],%49[^,],%49[^\n]", 
+        figurinhas[total].codigo, 
+        figurinhas[total].titulo, 
+        figurinhas[total].secao, 
+        figurinhas[total].grupo,
+        figurinhas[total].tipo) == 5){
 
         total++;
-    }
 
-    fclose(arquivo);//Fecha Pacotes
+    }//while
 
-    //Carrega os pacotes e figurinhas repetidas
+    fclose(arquivo);//Fecha o arquivo das figurinhas
+
+    //Carrega os dados salvos
     carregarPacotes();
     carregarRepetida();
+    carregarAlbum(album, &total_album);
+    carregarMochila(mochila, &total_mochila);
 
-    printf("%d",pacotes_fechados);
+    printf("%d", pacotes_fechados);
 
     menuPrincipal(figurinhas, album, mochila, total, &total_album, &total_mochila);//Abre o menu
 
@@ -85,26 +77,6 @@ int main(){
     free(figurinhas);
     free(album);
     free(mochila);
->>>>>>> 72b0edcd72447ee01e892bfc2f53793b7d04e0e1
     
-    if (arquivo == NULL){//testa se o arquivo abriu
-        printf("Erro ao abrir o arquivo.\n");
-        return 1;
-    }
-
-    fgets(linha, sizeof(linha), arquivo);//ignora a primeira linha do arquivo figurinhas2026.csv
-
-    while (fscanf(arquivo," %9[^,],%49[^,],%49[^,],%49[^,],%49[^\n]",figurinhas[total].codigo,figurinhas[total].titulo,figurinhas[total].secao,figurinhas[total].grupo,figurinhas[total].tipo) == 5){
-       
-        total++;//
-    }//le uma linha, se conseguiu ler os 5 espaços (codigo,titulo,secao,grupo e tipo) incrementa no total e assim vai pelo arquivo inteiro
-
-    fclose(arquivo);//fecha arquivo
-
-    srand(time(NULL));//libera aleatoriedade para funcao abrirPacote
-
-    abrirPacote(figurinhas, total);//chama funcao abrirPacote
-
-    free(figurinhas);//Libera a memória do vetor figurinhas
     return 0;
 }
