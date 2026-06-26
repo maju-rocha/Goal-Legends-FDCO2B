@@ -259,7 +259,7 @@ static void montarCodigoComPrefixoImagem(char *destino, const char *prefixo, con
     strcat(destino, sufixo);
 }
 
-//Organiza vetores de pesquisa, guardando tentativas sem duplicar caminhos.
+//organiza vetores de pesquisa, guardando tentativas sem duplicar caminhos.
 static void adicionarPastaImagem(char pastas[][100], int *totalPastas, const char *pasta){
     if (pasta[0] == '\0') { return; }
     for (int i = 0; i < *totalPastas; i++) { if (strcmp(pastas[i], pasta) == 0) { return; } }
@@ -283,7 +283,7 @@ static int tentarCaminhoImagemFigurinha(char *caminho, const char *pasta, const 
     return 0;
 }
 
-//Gera várias combinações e vai tentando abrir as fotos até encontrar a certa
+//gera várias combinações e vai tentando abrir as fotos até encontrar a certa (ex: Catar vs Qatar).
 static int montarCaminhoImagemFigurinha(char *caminho, const char *secao, const char *codigo){
     char pastaOriginal[100];
     char pastaUnderline[100];
