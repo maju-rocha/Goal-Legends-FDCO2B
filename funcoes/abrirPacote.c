@@ -22,7 +22,7 @@
 #define COPA_OURO_BRILHO (Color){255, 240, 150, 255}
 #define COPA_CINZA_CARD  (Color){22, 28, 48, 255}
 
-#define QUANTIDADE_MAXIMA_PARTICULA 60
+#define QUANTIDADE_MAXIMA_PARTICULA 60 // Quantidade máxima de partículas no fundo da tela
 #define MAX_CARTAS_SORTEADAS 700 // Suporta até 100 pacotes simultâneos no Modo Turbo
 
 //=======================================================//
@@ -52,7 +52,7 @@ typedef struct{
     char statusMensagem[50];
     char codigoFotoCarregada[10];
 
-    bool particulasInicializadas;
+    bool particulasInicializadas;//bool é tipo de dado que armazena verdadeiro ou falso
     Texture2D texturaCartaAtual;
     Figurinha pacoteSorteado[MAX_CARTAS_SORTEADAS];
     Particula particulas[QUANTIDADE_MAXIMA_PARTICULA];
@@ -78,31 +78,31 @@ void numeroParaTexto(int numero, char *destino){
     int i = 0;
     int j = 0;
 
-    if(numero == 0){
+    if(numero == 0){// Se o número for zero, apenas coloca '0' no destino
         destino[0] = '0';
         destino[1] = '\0';
         return;
     }
 
-    if(numero < 0){
+    if(numero < 0){// Se o número for negativo, coloca o sinal de menos no destino
         destino[j] = '-';
         j++;
         numero = numero * -1;
     }
 
-    while(numero > 0){
+    while(numero > 0){// Converte o número para texto invertido
         invertido[i] = (numero % 10) + '0';
         numero = numero / 10;
         i++;
     }
 
-    while(i > 0){
+    while(i > 0){// Inverte o texto para o destino
         i--;
         destino[j] = invertido[i];
         j++;
     }
 
-    destino[j] = '\0';
+    destino[j] = '\0';// Adiciona o terminador de string
 }
 
 //Funcao para transformar numero em texto com dois digitos, exemplo: 1 vira 01
@@ -139,7 +139,7 @@ static void sortearFigurinhasDoPacote(Figurinha *figurinhas, Figurinha *mochila,
         tela.totalCartasSorteioAtual = MAX_CARTAS_SORTEADAS;
     }
 
-    for(int f = 0; f < tela.totalCartasSorteioAtual; f++){
+    for(int f = 0; f < tela.totalCartasSorteioAtual; f++){//função para sortear as figurinhas do pacote baseado na quantidade de pacotes
         Figurinha sorteada = figurinhas[rand() % total];
         limparFigurinha(&sorteada);
         tela.pacoteSorteado[f] = sorteada;
@@ -173,7 +173,7 @@ static void sortearFigurinhasDoPacote(Figurinha *figurinhas, Figurinha *mochila,
 //==================== Particulas Fundo =================//
 //=======================================================//
 
-static void spawnParticulas(){
+static void spawnParticulas(){// Função para inicializar as partículas do fundo da tela
     for(int i = 0; i < QUANTIDADE_MAXIMA_PARTICULA; i++){
         tela.particulas[i].posicao = (Vector2){(float)GetRandomValue(0, 1000), (float)GetRandomValue(0, 800)};
         tela.particulas[i].velocidade = (Vector2){(float)GetRandomValue(-8, 8) / 10.0f, (float)GetRandomValue(-15, -5) / 10.0f};
@@ -191,7 +191,7 @@ static void spawnParticulas(){
     tela.particulasInicializadas = true;
 }
 
-static void efeitoParticulas(Vector2 mousePos, float tempoGlobal){
+static void efeitoParticulas(Vector2 mousePos, float tempoGlobal){// Função para atualizar e desenhar as partículas do fundo da tela
     if(!tela.particulasInicializadas) spawnParticulas();
 
     for(int i = 0; i < QUANTIDADE_MAXIMA_PARTICULA; i++){
@@ -218,10 +218,10 @@ static void efeitoParticulas(Vector2 mousePos, float tempoGlobal){
 //=================== Textura da Carta ==================//
 //=======================================================//
 
-static void carregarTexturaCarta(Figurinha fig){
+static void carregarTexturaCarta(Figurinha fig){ //static é usado para limitar a visibilidade da função ao arquivo atual
     if(strcmp(tela.codigoFotoCarregada, fig.codigo) == 0) return;
 
-    if(tela.texturaCartaAtual.id > 0){
+    if(tela.texturaCartaAtual.id > 0){// Se já houver uma textura carregada, descarrega antes de carregar a nova
         UnloadTexture(tela.texturaCartaAtual);
         tela.texturaCartaAtual.id = 0;
     }
@@ -237,7 +237,7 @@ static void carregarTexturaCarta(Figurinha fig){
     strcat(caminhoFoto, fig.codigo);
     strcat(caminhoFoto, ".png");
 
-    if(FileExists(caminhoFoto)){
+    if(FileExists(caminhoFoto)){// Verifica se o arquivo existe antes de tentar carregar
         Image img = LoadImage(caminhoFoto);
         if (img.data != NULL) {
             ImageResize(&img, 210, 290);
@@ -250,14 +250,14 @@ static void carregarTexturaCarta(Figurinha fig){
             tela.texturaCartaAtual.id = 0;
             tela.codigoFotoCarregada[0] = '\0';
         }
-    }else{
+    }else{// Se o arquivo não existir, loga um erro e mantém a textura atual como nula
         TraceLog(LOG_ERROR, "!!! IMAGEM NAO ENCONTRADA: %s !!!", caminhoFoto);
         tela.texturaCartaAtual.id = 0;
         tela.codigoFotoCarregada[0] = '\0';
     }
 }
 
-static void sombraTela(){
+static void sombraTela(){// Função para desenhar uma sombra no topo e na base da tela
     DrawRectangleGradientV(0, 0, 1000, 120, Fade(BLACK, 0.7f), Fade(BLACK, 0.0f));
     DrawRectangleGradientV(0, 680, 1000, 120, Fade(BLACK, 0.0f), Fade(BLACK, 0.8f));
 }
@@ -266,13 +266,14 @@ static void sombraTela(){
 //================== Tela Abrir Pacote ==================//
 //=======================================================//
 
+// Função principal para abrir pacotes e gerenciar a tela de abertura
 void abrirPacote(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, int total, int *total_mochila, int *total_album, Font fonteCopa, Color azulBrasil, Color amareloBrasil, EstadoMenu *estadoAtual){
     (void)amareloBrasil;
 
     Vector2 mousePoint = GetMousePosition();
     float tempoGlobal = (float)GetTime();
 
-    if(!tela.gifCarregado){
+    if(!tela.gifCarregado){// Carrega o GIF de fundo apenas uma vez
         tela.animFrames = 0;
         tela.gifImage = LoadImageAnim("imagens/animacao.gif", &tela.animFrames);
         tela.gifTextura = LoadTextureFromImage(tela.gifImage);
@@ -281,7 +282,7 @@ void abrirPacote(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, in
         tela.gifCarregado = true;
     }
 
-    DrawRectangleGradientV(0, 0, 1000, 800, COPA_AZUL_ESCURO, azulBrasil);
+    DrawRectangleGradientV(0, 0, 1000, 800, COPA_AZUL_ESCURO, azulBrasil);// Desenha o fundo com gradiente azul
     efeitoParticulas(mousePoint, tempoGlobal);
     sombraTela();
 
@@ -289,10 +290,10 @@ void abrirPacote(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, in
     //================ Fase 0: Escolher Pacotes =============//
     //=======================================================//
 
-    if(tela.fase == 0){
-        if(tela.quantidadeDesejada < 1) tela.quantidadeDesejada = 1;
-        if(tela.quantidadeDesejada > pacotes_fechados && pacotes_fechados > 0) tela.quantidadeDesejada = pacotes_fechados;
-        if(pacotes_fechados == 0) tela.quantidadeDesejada = 0;
+    if(tela.fase == 0){//Escolher a quantidade de pacotes a abrir
+        if(tela.quantidadeDesejada < 1) tela.quantidadeDesejada = 1;// Garante que a quantidade mínima seja 1
+        if(tela.quantidadeDesejada > pacotes_fechados && pacotes_fechados > 0) tela.quantidadeDesejada = pacotes_fechados;// Garante que a quantidade máxima não exceda os pacotes disponíveis
+        if(pacotes_fechados == 0) tela.quantidadeDesejada = 0;// Se não houver pacotes disponíveis, a quantidade desejada é 0
 
         DrawRectangle(180, 160, 640, 440, Fade(COPA_AZUL_MEDIO, 0.85f));
         DrawRectangleLinesEx((Rectangle){180, 160, 640, 440}, 2.0f, Fade(COPA_OURO_PURO, 0.5f));
@@ -317,9 +318,9 @@ void abrirPacote(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, in
         Rectangle btnMais  = {550, 320, 60, 60};
         Rectangle btnMax   = {630, 320, 80, 60};
 
-        bool seMenos = CheckCollisionPointRec(mousePoint, btnMenos);
-        bool seMais  = CheckCollisionPointRec(mousePoint, btnMais);
-        bool seMax   = CheckCollisionPointRec(mousePoint, btnMax);
+        bool seMenos = CheckCollisionPointRec(mousePoint, btnMenos);// Verifica se o mouse está sobre o botão Menos
+        bool seMais  = CheckCollisionPointRec(mousePoint, btnMais);// Verifica se o mouse está sobre o botão Mais
+        bool seMax   = CheckCollisionPointRec(mousePoint, btnMax);// Verifica se o mouse está sobre o botão Max
 
         // Botão Menos
         DrawRectangleRec(btnMenos, seMenos ? Fade(COPA_VERMELHO, 0.2f) : Fade(COPA_AZUL_ESCURO, 0.6f));
@@ -359,8 +360,8 @@ void abrirPacote(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, in
         DrawRectangleLinesEx(btnAbrirN, seAbrirN ? 2.0f : 1.0f, COPA_OURO_PURO);
         DrawTextEx(fonteCopa, textoAbrirN, (Vector2){btnAbrirN.x + 20, btnAbrirN.y + 12}, 14, 1, seAbrirN ? COPA_OURO_PURO : WHITE);
 
-        if(seAbrirN && IsMouseButtonReleased(MOUSE_LEFT_BUTTON)){
-            if(pacotes_fechados > 0 && tela.quantidadeDesejada > 0){
+        if(seAbrirN && IsMouseButtonReleased(MOUSE_LEFT_BUTTON)){// Se o botão Abrir Normal for clicado
+            if(pacotes_fechados > 0 && tela.quantidadeDesejada > 0){// Verifica se há pacotes disponíveis e se a quantidade desejada é maior que 0
                 tela.modoTurbo = false;
                 pacotes_fechados--;
                 salvarPacotes();
@@ -369,7 +370,7 @@ void abrirPacote(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, in
                 tela.cartaAtualIndice = 0;
                 tela.fase = 1;
                 strcpy(tela.statusMensagem, "");
-            }else{
+            }else{// Se não houver pacotes suficientes, exibe uma mensagem de erro
                 strcpy(tela.statusMensagem, "PACOTES INSUFICIENTES!");
             }
         }
@@ -380,16 +381,18 @@ void abrirPacote(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, in
         Rectangle btnAbrirT = {500 - (largT / 2) - 20, 465, largT + 40, 14 + 24};
         bool seAbrirT = CheckCollisionPointRec(mousePoint, btnAbrirT);
 
+        //interrogação no código serve para indicar que a variável seAbrirT é usada apenas dentro deste bloco de código e não será utilizada em outros lugares, 
+        //evitando avisos de compilação sobre variáveis não utilizadas.
         DrawRectangleRec(btnAbrirT, seAbrirT ? Fade(COPA_VERDE_NEON, 0.2f) : Fade(COPA_AZUL_ESCURO, 0.6f));
         DrawRectangleLinesEx(btnAbrirT, seAbrirT ? 2.0f : 1.0f, seAbrirT ? COPA_VERDE_NEON : COPA_OURO_PURO);
         DrawTextEx(fonteCopa, textoAbrirT, (Vector2){btnAbrirT.x + 20, btnAbrirT.y + 12}, 14, 1, seAbrirT ? COPA_VERDE_NEON : WHITE);
 
-        if(seAbrirT && IsMouseButtonReleased(MOUSE_LEFT_BUTTON)){
-            if(pacotes_fechados > 0 && tela.quantidadeDesejada > 0){
+        if(seAbrirT && IsMouseButtonReleased(MOUSE_LEFT_BUTTON)){// Se o botão Abrir Turbo for clicado
+            if(pacotes_fechados > 0 && tela.quantidadeDesejada > 0){// Verifica se há pacotes disponíveis e se a quantidade desejada é maior que 0
                 tela.modoTurbo = true;
                 int pacotesParaAbrir = tela.quantidadeDesejada;
                 
-                pacotes_fechados -= pacotesParaAbrir;
+                pacotes_fechados -= pacotesParaAbrir;// Subtrai a quantidade de pacotes desejada do total de pacotes fechados
                 salvarPacotes();
                 sortearFigurinhasDoPacote(figurinhas, mochila, album, total, total_mochila, total_album, pacotesParaAbrir);
 
@@ -397,7 +400,7 @@ void abrirPacote(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, in
                 tela.cartaAtualIndice = 0;
                 tela.fase = 1;
                 strcpy(tela.statusMensagem, "");
-            }else{
+            }else{// Se não houver pacotes suficientes, exibe uma mensagem de erro
                 strcpy(tela.statusMensagem, "PACOTES INSUFICIENTES!");
             }
         }
@@ -412,13 +415,13 @@ void abrirPacote(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, in
         DrawRectangleLinesEx(btnVoltar, 1.0f, seVoltar ? COPA_VERMELHO : Fade(WHITE, 0.2f));
         DrawTextEx(fonteCopa, textoVoltar, (Vector2){btnVoltar.x + 20, btnVoltar.y + 10}, 12, 1, seVoltar ? COPA_VERMELHO : Fade(WHITE, 0.6f));
 
-        if(seVoltar && IsMouseButtonReleased(MOUSE_LEFT_BUTTON)){
+        if(seVoltar && IsMouseButtonReleased(MOUSE_LEFT_BUTTON)){// Se o botão Voltar for clicado, descarrega recursos e retorna ao menu principal
             descarregarRecursosAbertura();
             tela.quantidadeDesejada = 1;
             *estadoAtual = MENU_PRINCIPAL;
         }
 
-        if(strlen(tela.statusMensagem) > 0){
+        if(strlen(tela.statusMensagem) > 0){// Se houver uma mensagem de status, exibe-a na tela
             DrawTextEx(fonteCopa, tela.statusMensagem, (Vector2){500 - MeasureTextEx(fonteCopa, tela.statusMensagem, 14, 1).x / 2, 120}, 14, 1, COPA_VERMELHO);
         }
 
@@ -426,7 +429,7 @@ void abrirPacote(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, in
     //================ Fase 1: Pacote Fechado ===============//
     //=======================================================//
 
-    }else if(tela.fase == 1){
+    }else if(tela.fase == 1){// Exibe o pacote fechado antes de abrir
 
         float brilho = (sinf(tempoGlobal * 5.0f) + 1.0f) / 2.0f;
         Rectangle pacoteRec = {380, 130, 240, 450};
@@ -442,15 +445,15 @@ void abrirPacote(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, in
         DrawTextEx(fonteCopa, "FIFA OFICIAL", (Vector2){500 - MeasureTextEx(fonteCopa, "FIFA OFICIAL", 12, 1).x / 2, 200}, 12, 1, COPA_OURO_PURO);
         DrawTextEx(fonteCopa, "PACOTE\nFIGURINHA", (Vector2){500 - MeasureTextEx(fonteCopa, "PACOTE\nFIGURINHA", 22, 1).x / 2, 320}, 22, 1, WHITE);
 
-        if (tela.modoTurbo) {
+        if (tela.modoTurbo) {// Se o modo turbo estiver ativado, exibe uma mensagem de aviso
             DrawTextEx(fonteCopa, "!!! MODO TURBO ATIVADO !!!", (Vector2){500 - MeasureTextEx(fonteCopa, "!!! MODO TURBO ATIVADO !!!", 12, 1).x / 2, 400}, 12, 1, COPA_VERDE_NEON);
         }
 
-        char apertar[50];
+        char apertar[50];// Mensagem para apertar a tecla ESPACO
         strcpy(apertar, "APERTE [ ESPACO ] PARA ABRIR");
         DrawTextEx(fonteCopa, apertar, (Vector2){500 - MeasureTextEx(fonteCopa, apertar, 14, 1).x / 2, 620}, 14, 1, Fade(COPA_VERDE_NEON, 0.6f + (brilho * 0.4f)));
 
-        if(IsKeyPressed(KEY_SPACE)){
+        if(IsKeyPressed(KEY_SPACE)){// Se a tecla ESPACO for pressionada, muda para a fase de animação do GIF
             tela.fase = 2;
             tela.contadorFrames = 0;
         }
@@ -459,18 +462,18 @@ void abrirPacote(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, in
     //================== Fase 2: Animacao GIF ===============//
     //=======================================================//
 
-    }else if(tela.fase == 2){
+    }else if(tela.fase == 2){// Exibe a animação do GIF antes de mostrar a figurinha
 
-        tela.frameMomento++;
+        tela.frameMomento++; // Incrementa o contador de frames para controlar a velocidade da animação
 
-        if(tela.frameMomento >= 6){
+        if(tela.frameMomento >= 6){ // A cada 6 frames, atualiza a textura do GIF para o próximo frame
             tela.contadorFrames++;
 
-            if(tela.contadorFrames >= tela.animFrames){
+            if(tela.contadorFrames >= tela.animFrames){ // Se todos os frames do GIF foram exibidos, passa para a fase de exibição das figurinhas
                 tela.fase = 3;
                 tela.contadorFrames = 0;
                 tela.codigoFotoCarregada[0] = '\0';
-            }else{
+            }else{ // Atualiza a textura do GIF com o próximo frame
                 UpdateTexture(tela.gifTextura, ((unsigned char *)tela.gifImage.data) + (tela.gifImage.width * tela.gifImage.height * 4 * tela.contadorFrames));
             }
             tela.frameMomento = 0;
@@ -489,14 +492,14 @@ void abrirPacote(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, in
     //=============== Fase 3: Carrossel Cartas ==============//
     //=======================================================//
 
-    }else if(tela.fase == 3){
+    }else if(tela.fase == 3){// Exibe as figurinhas sorteadas em um carrossel
 
-        Figurinha fig = tela.pacoteSorteado[tela.cartaAtualIndice];
-        carregarTexturaCarta(fig);
+        Figurinha fig = tela.pacoteSorteado[tela.cartaAtualIndice];// Pega a figurinha atual do pacote sorteado
+        carregarTexturaCarta(fig);// Carrega a textura da figurinha atual
 
         Rectangle valoresFigurinha = {365, 100, 270, 520};
 
-        float inclinacaoHorizontalMouse = ((mousePoint.x - 500) / 500.0f) * 15.0f;
+        float inclinacaoHorizontalMouse = ((mousePoint.x - 500) / 500.0f) * 15.0f;// Calcula a inclinação horizontal da figurinha com base na posição do mouse
         float inclinacaoVerticalMouse = ((mousePoint.y - 360) / 360.0f) * 12.0f;
 
         valoresFigurinha.x += inclinacaoHorizontalMouse;
@@ -508,27 +511,27 @@ void abrirPacote(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, in
         bool ehEspecial = (strcmp(fig.tipo, "Especial") == 0 || strcmp(fig.tipo, "especial") == 0);
         Color corBorda = COPA_VERDE_NEON;
 
-        if(tela.statusCartas[tela.cartaAtualIndice] == 1){
-            if(ehEspecial){
+        if(tela.statusCartas[tela.cartaAtualIndice] == 1){// Se a figurinha é nova
+            if(ehEspecial){// Se a figurinha é especial, faz o efeito de brilho
                 float brilhoEspecial = (sinf(tempoGlobal * 3.0f) + 1.0f) * 0.5f;
                 corBorda = ColorLerp(COPA_OURO_PURO, COPA_OURO_BRILHO, brilhoEspecial);
                 DrawRectangleLinesEx((Rectangle){valoresFigurinha.x - 2, valoresFigurinha.y - 2, valoresFigurinha.width + 4, valoresFigurinha.height + 4}, 2.0f, corBorda);
-            }else{
+            }else{// Se a figurinha é normal, faz o efeito de brilho verde neon
                 corBorda = Fade(COPA_VERDE_NEON, 0.7f);
                 DrawRectangleLinesEx(valoresFigurinha, 2.0f, corBorda);
             }
-        }else{
+        }else{// Se a figurinha é repetida, faz o efeito de brilho branco
             corBorda = Fade(WHITE, 0.2f);
             DrawRectangleLinesEx(valoresFigurinha, 2.0f, corBorda);
         }
 
-        if(tela.texturaCartaAtual.id > 0){
+        if(tela.texturaCartaAtual.id > 0){// Se a textura da carta foi carregada com sucesso
             DrawTexture(tela.texturaCartaAtual, valoresFigurinha.x + 30, valoresFigurinha.y + 60, WHITE);
             DrawRectangleLinesEx((Rectangle){valoresFigurinha.x + 29, valoresFigurinha.y + 59, 212, 292}, 1.5f, Fade(WHITE, 0.1f));
 
             float reflexoX = valoresFigurinha.x + 30 + ((mousePoint.x / 1000.0f) * 210.0f);
             DrawLineEx((Vector2){reflexoX, valoresFigurinha.y + 60}, (Vector2){reflexoX - 30, valoresFigurinha.y + 350}, 3.0f, Fade(WHITE, 0.15f));
-        }else{
+        }else{// Se a textura da carta não foi carregada, desenha um retângulo de erro
             DrawRectangle(valoresFigurinha.x + 30, valoresFigurinha.y + 60, 210, 290, COPA_AZUL_ESCURO);
             DrawRectangleLinesEx((Rectangle){valoresFigurinha.x + 30, valoresFigurinha.y + 60, 210, 290}, 1.0f, Fade(WHITE, 0.04f));
         }
@@ -545,51 +548,53 @@ void abrirPacote(Figurinha *figurinhas, Figurinha *mochila, Figurinha *album, in
         DrawTextEx(fonteCopa, fig.tipo, (Vector2){(valoresFigurinha.x + 135) - MeasureTextEx(fonteCopa, fig.tipo, 11, 1).x / 2, valoresFigurinha.y + 418}, 11, 1, corTextoTipo);
 
         //Mensagem de figurinha nova ou repetida
-        if(tela.statusCartas[tela.cartaAtualIndice] == 1){
+        if(tela.statusCartas[tela.cartaAtualIndice] == 1){// Se a figurinha é nova faz a mensagem de figurinha nova
             DrawRectangle(valoresFigurinha.x + 15, valoresFigurinha.y + 445, 240, 60, Fade(COPA_VERDE_NEON, 0.15f));
             DrawRectangleLinesEx((Rectangle){valoresFigurinha.x + 15, valoresFigurinha.y + 445, 240, 60}, 1.0f, COPA_VERDE_NEON);
             DrawTextEx(fonteCopa, "NOVA FIGURINHA!", (Vector2){(valoresFigurinha.x + 135) - MeasureTextEx(fonteCopa, "NOVA FIGURINHA!", 12, 1).x / 2, valoresFigurinha.y + 458}, 12, 1, COPA_VERDE_NEON);
             DrawTextEx(fonteCopa, "ADICIONADA AO ALBUM", (Vector2){(valoresFigurinha.x + 135) - MeasureTextEx(fonteCopa, "ADICIONADA AO ALBUM", 10, 1).x / 2, valoresFigurinha.y + 480}, 10, 1, WHITE);
-        }else{
+        }else{// Se a figurinha é repetida faz a mensagem de figurinha repetida
             DrawRectangle(valoresFigurinha.x + 15, valoresFigurinha.y + 445, 240, 60, Fade(COPA_AZUL_MEDIO, 0.6f));
             DrawRectangleLinesEx((Rectangle){valoresFigurinha.x + 15, valoresFigurinha.y + 445, 240, 60}, 1.0f, Fade(WHITE, 0.3f));
             DrawTextEx(fonteCopa, "REPETIDA", (Vector2){(valoresFigurinha.x + 135) - MeasureTextEx(fonteCopa, "REPETIDA", 12, 1).x / 2, valoresFigurinha.y + 458}, 12, 1, Fade(WHITE, 0.7f));
             DrawTextEx(fonteCopa, "ENVIADA PARA A MOCHILA", (Vector2){(valoresFigurinha.x + 135) - MeasureTextEx(fonteCopa, "ENVIADA PARA A MOCHILA", 10, 1).x / 2, valoresFigurinha.y + 480}, 10, 1, Fade(WHITE, 0.5f));
         }
 
-        if(tela.cartaAtualIndice > 0){
+        if(tela.cartaAtualIndice > 0){// Se não for a primeira carta, desenha o botão de voltar
             DrawTextEx(fonteCopa, "<", (Vector2){290, 350}, 26, 1, Fade(WHITE, 0.3f));
         }
 
         if(tela.cartaAtualIndice < tela.totalCartasSorteioAtual - 1){
             DrawTextEx(fonteCopa, ">", (Vector2){690, 350}, 26, 1, Fade(WHITE, 0.3f));
-        }
+        }// Se não for a última carta, desenha o botão de avançar
 
-        char indicador[50];
+        char indicador[50];// Indicador de qual figurinha está sendo mostrada
         sprintf(indicador, "FIGURINHA: %d / %d", tela.cartaAtualIndice + 1, tela.totalCartasSorteioAtual);
         DrawTextEx(fonteCopa, indicador, (Vector2){500 - MeasureTextEx(fonteCopa, indicador, 13, 1).x / 2, 640}, 13, 1, Fade(WHITE, 0.5f));
 
         if(IsKeyPressed(KEY_RIGHT) && tela.cartaAtualIndice < tela.totalCartasSorteioAtual - 1){
             tela.cartaAtualIndice++;
-        }
+
+        }// Avança para a próxima carta se a tecla direita for pressionada e não for a última carta
+        
         if(IsKeyPressed(KEY_LEFT) && tela.cartaAtualIndice > 0){
             tela.cartaAtualIndice--;
-        }
+        }// Volta para a carta anterior se a tecla esquerda for pressionada e não for a primeira carta
 
-        float efeitoEnter = (sinf(tempoGlobal * 6.0f) + 1.0f) / 2.0f;
+        float efeitoEnter = (sinf(tempoGlobal * 6.0f) + 1.0f) / 2.0f;// Efeito de pulsação para a mensagem de continuar
         DrawTextEx(fonteCopa, "APERTE [ ENTER ] PARA CONTINUAR", (Vector2){500 - MeasureTextEx(fonteCopa, "APERTE [ ENTER ] PARA CONTINUAR", 13, 1).x / 2, 675}, 13, 1, Fade(COPA_OURO_PURO, 0.5f + efeitoEnter * 0.5f));
 
-        if(IsKeyPressed(KEY_ENTER)){
+        if(IsKeyPressed(KEY_ENTER)){// Se a tecla ENTER for pressionada, verifica o modo de abertura e atualiza o estado do jogo
             if (tela.modoTurbo == false) {
                 // Modo Normal: Abre de 1 em 1 pacotinho até a quantidade zerar
                 tela.quantidadeDesejada--;
-                if(tela.quantidadeDesejada > 0 && pacotes_fechados > 0){
+                if(tela.quantidadeDesejada > 0 && pacotes_fechados > 0){// Se ainda houver pacotes para abrir, continua abrindo
                     pacotes_fechados--;
                     salvarPacotes();
                     sortearFigurinhasDoPacote(figurinhas, mochila, album, total, total_mochila, total_album, 1);
                     tela.cartaAtualIndice = 0;
                     tela.fase = 1;
-                }else{
+                }else{// Se não houver mais pacotes para abrir, finaliza a abertura
                     descarregarRecursosAbertura();
                     tela.fase = 0;
                     tela.quantidadeDesejada = 1;
