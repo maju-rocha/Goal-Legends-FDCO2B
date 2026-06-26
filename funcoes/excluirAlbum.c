@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "biblioteca.h"
+#include "salvarAlbum.h"
 #include "excluirAlbum.h"
 
 void excluirAlbum(Figurinha *figurinhas, Figurinha *album, int *total_album){
@@ -35,7 +37,7 @@ void excluirAlbum(Figurinha *figurinhas, Figurinha *album, int *total_album){
 
             }//for
 
-            (*total_album)--;//decrementa o total de figurinhas do album
+            salvarAlbum(album, *total_album);
 
             printf("Novo total: %d\n", *total_album);
 
