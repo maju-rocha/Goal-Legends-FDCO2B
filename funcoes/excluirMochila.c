@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "excluirMochila.h"
+#include "biblioteca.h"
+#include "salvarMochila.h"
 
 void excluirMochila(Figurinha *figurinhas, Figurinha *mochila, int *total_mochila){
     
@@ -18,7 +19,7 @@ void excluirMochila(Figurinha *figurinhas, Figurinha *mochila, int *total_mochil
             for (int j = i; j < *total_mochila - 1; j++){
                 mochila[j] = mochila[j + 1];
             }
-            (*total_mochila)--; //decrementa o total de figurinhas da mochila
+            salvarMochila(mochila, *total_mochila);
 
             FILE *arquivo = fopen("extras/mochila.csv", "w");
 

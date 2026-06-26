@@ -37,7 +37,13 @@ OBJS = main.o \
        carregarPacotes.o \
        salvarRepetida.o \
        trocar.o \
-       albumgrafico.o 
+       albumgrafico.o \
+       salvarAlbum.o \
+       salvarMochila.o \
+       carregarAlbum.o \
+       carregarMochila.o \
+       carregarRepetida.o \
+
 
 # ==========================================
 # 3. REGRAS DE COMPILAÇÃO

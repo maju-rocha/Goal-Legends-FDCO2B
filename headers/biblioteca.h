@@ -24,4 +24,6 @@ typedef enum{
     MENU_FIM
 }Menu_FimdeJogo;
 
+
+
 #endif

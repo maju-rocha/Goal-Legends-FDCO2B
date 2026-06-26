@@ -31,59 +31,251 @@ typedef struct{
 
 }ParticulaCopa;
 
-//Funcao para limpar espacos antes e depois do texto
-void limparEspacos(char *texto){
+//Funcoes para montar o caminho da imagem tentando varios nomes de pasta e codigo
+static void removerEspacosInternosImagem(char *texto) {
+    int j = 0;
 
-    int inicio = 0;
-    int fim = strlen(texto) - 1;
-
-    while(texto[inicio] == ' ' || texto[inicio] == '\t'){
-        inicio++;
-    }//while
-
-    while(fim >= inicio && (texto[fim] == ' ' || texto[fim] == '\t' || texto[fim] == '\n' || texto[fim] == '\r')){
-        texto[fim] = '\0';
-        fim--;
-    }//while
-
-    if(inicio > 0){
-
-        int j = 0;
-
-        for(int i = inicio; texto[i] != '\0'; i++){
+    for (int i = 0; texto[i] != '\0'; i++) {
+        if (texto[i] != ' ' && texto[i] != '\t') {
             texto[j] = texto[i];
             j++;
-        }//for
+        }
+    }
 
-        texto[j] = '\0';
+    texto[j] = '\0';
+}
 
-    }//if
-
-}//void
-
-//Funcao para limpar todos os campos da figurinha
-void limparFigurinha(Figurinha *f){
-
-    limparEspacos((*f).codigo);
-    limparEspacos((*f).titulo);
-    limparEspacos((*f).secao);
-    limparEspacos((*f).grupo);
-    limparEspacos((*f).tipo);
-
-}//void
-
-//Funcao para trocar espacos por underline no nome da pasta
-void trocarEspacoPorUnderline(char *texto){
-
-    for(int i = 0; texto[i] != '\0'; i++){
-
-        if(texto[i] == ' '){
+static void trocarEspacoPorUnderlineImagem(char *texto) {
+    for (int i = 0; texto[i] != '\0'; i++) {
+        if (texto[i] == ' ') {
             texto[i] = '_';
-        }//if
+        }
+    }
+}
 
+static void copiarMaiusculoImagem(char *destino, const char *origem) {
+    int i = 0;
+
+    while (origem[i] != '\0') {
+        char c = origem[i];
+
+        if (c >= 'a' && c <= 'z') {
+            c = c - 32;
+        }
+
+        destino[i] = c;
+        i++;
+    }
+
+    destino[i] = '\0';
+}
+
+static void copiarMinusculoImagem(char *destino, const char *origem) {
+    int i = 0;
+
+    while (origem[i] != '\0') {
+        char c = origem[i];
+
+        if (c >= 'A' && c <= 'Z') {
+            c = c + 32;
+        }
+
+        destino[i] = c;
+        i++;
+    }
+
+    destino[i] = '\0';
+}
+
+static int comecaComImagem(const char *texto, const char *prefixo) {
+    int i = 0;
+
+    while (prefixo[i] != '\0') {
+        if (texto[i] != prefixo[i]) {
+            return 0;
+        }
+
+        i++;
+    }
+
+    return 1;
+}
+
+static void pegarSufixoNumericoImagem(const char *codigo, char *sufixo) {
+    int i = 0;
+
+    while (codigo[i] != '\0' && (codigo[i] < '0' || codigo[i] > '9')) {
+        i++;
+    }
+
+    strcpy(sufixo, codigo + i);
+}
+
+static void montarCodigoComPrefixoImagem(char *destino, const char *prefixo, const char *sufixo) {
+    strcpy(destino, prefixo);
+    strcat(destino, sufixo);
+}
+
+static void adicionarPastaImagem(char pastas[][100], int *totalPastas, const char *pasta) {
+    if (pasta[0] == '\0') {
+        return;
+    }
+
+    for (int i = 0; i < *totalPastas; i++) {
+        if (strcmp(pastas[i], pasta) == 0) {
+            return;
+        }
+    }
+
+    if (*totalPastas < 40) {
+        strcpy(pastas[*totalPastas], pasta);
+        (*totalPastas)++;
+    }
+}
+
+static void adicionarCodigoImagem(char codigos[][30], int *totalCodigos, const char *codigo) {
+    if (codigo[0] == '\0') {
+        return;
+    }
+
+    for (int i = 0; i < *totalCodigos; i++) {
+        if (strcmp(codigos[i], codigo) == 0) {
+            return;
+        }
+    }
+
+    if (*totalCodigos < 40) {
+        strcpy(codigos[*totalCodigos], codigo);
+        (*totalCodigos)++;
+    }
+}
+
+static int tentarCaminhoImagemFigurinha(char *caminho, const char *pasta, const char *codigo) {
+    strcpy(caminho, "imagens/imagens_figurinhas/");
+    strcat(caminho, pasta);
+    strcat(caminho, "/");
+    strcat(caminho, codigo);
+    strcat(caminho, ".png");
+
+    if (FileExists(caminho)) {
+        return 1;
+    }
+
+    return 0;
+}
+
+int montarCaminhoImagemFigurinha(char *caminho, char *secao, char *codigo) {
+    char pastaOriginal[100];
+    char pastaUnderline[100];
+    char pastaMaiuscula[100];
+    char codigoOriginal[30];
+    char codigoSemEspaco[30];
+    char pastas[40][100];
+    char codigos[40][30];
+    int totalPastas = 0;
+    int totalCodigos = 0;
+
+    strcpy(pastaOriginal, secao);
+    strcpy(codigoOriginal, codigo);
+
+    limparEspacos(pastaOriginal);
+    limparEspacos(codigoOriginal);
+
+    strcpy(pastaUnderline, pastaOriginal);
+    trocarEspacoPorUnderlineImagem(pastaUnderline);
+    copiarMaiusculoImagem(pastaMaiuscula, pastaUnderline);
+
+    strcpy(codigoSemEspaco, codigoOriginal);
+    removerEspacosInternosImagem(codigoSemEspaco);
+
+    adicionarCodigoImagem(codigos, &totalCodigos, codigoOriginal);
+    adicionarCodigoImagem(codigos, &totalCodigos, codigoSemEspaco);
+
+    adicionarPastaImagem(pastas, &totalPastas, pastaOriginal);
+    adicionarPastaImagem(pastas, &totalPastas, pastaUnderline);
+
+
+    int ehCongo = 0;
+    int ehEstadosUnidos = 0;
+    int ehQatar = 0;
+    int ehSuica = 0;
+    int ehFifa = 0;
+
+    if(strcmp(pastaUnderline, "Congo_DR") == 0 ){
+        ehCongo = 1;
+    }
+
+    if(strcmp(pastaUnderline, "Estados_Unidos") == 0){
+        ehEstadosUnidos = 1;
+    }
+
+    if( strcmp(pastaUnderline, "Catar") == 0 ){
+        ehQatar = 1;
+    }
+
+    if(strcmp(pastaUnderline, "Suíça") == 0 ){
+        ehSuica = 1;
+    }
+
+    if(strcmp(pastaMaiuscula, "FIFA_WORLD_CUP_2026") == 0){
+        ehFifa = 1;
+    }
+
+    if(ehCongo){
+        adicionarPastaImagem(pastas, &totalPastas, "Congo_DR");
+    }
+
+    if(ehEstadosUnidos){
+        adicionarPastaImagem(pastas, &totalPastas, "EUA");
+    }
+
+    if(ehQatar){
+        adicionarPastaImagem(pastas, &totalPastas, "Catar");
+    }
+
+    if(ehSuica){
+        adicionarPastaImagem(pastas, &totalPastas, "Suiça");
+    }
+
+    if(ehFifa){
+        adicionarPastaImagem(pastas, &totalPastas, "FIFA_World_Cup_2026");
+    }
+
+    for (int i = 0; i < totalPastas; i++) {
+        for (int j = 0; j < totalCodigos; j++) {
+            if (tentarCaminhoImagemFigurinha(caminho, pastas[i], codigos[j])) {
+                return 1;
+            }
+        }
+    }
+
+    return 0;
+}
+
+
+//Funcao para comparar codigo do album tambem ignorando espacos internos
+int estaNoAlbumFlexivel(Figurinha *album, int total_album, char *codigo){
+
+    char codigoBusca[30];
+    char codigoAlbum[30];
+
+    strcpy(codigoBusca, codigo);
+    limparEspacos(codigoBusca);
+    removerEspacosInternosImagem(codigoBusca);
+
+    for(int i = 0; i < total_album; i++){
+        strcpy(codigoAlbum, album[i].codigo);
+        limparEspacos(codigoAlbum);
+        removerEspacosInternosImagem(codigoAlbum);
+
+        if(strcmp(codigoAlbum, codigoBusca) == 0){
+            return 1;
+        }//if
     }//for
 
-}//void
+    return 0;
+
+}//int
 
 //Funcao para desenhar o fundo com um leve movimento de parallax
 void DesenharFundoParallax(Texture2D textura, Vector2 posicaoMouse, float transparenciaParticula){
@@ -152,7 +344,7 @@ void albumGrafico(Figurinha *figurinhas, int total_figurinhas, Figurinha *album,
     }//for
 
     SetConfigFlags(FLAG_MSAA_4X_HINT);
-    InitWindow(1000, 800, "FIFA WORLD CUP 2026 - SUPREME COLLECTOR ALBUM");
+    InitWindow(1000, 800, "FIFA WORLD CUP 2026 - ALBUM");
     SetExitKey(KEY_NULL);
     SetTargetFPS(60);
 
@@ -193,29 +385,23 @@ void albumGrafico(Figurinha *figurinhas, int total_figurinhas, Figurinha *album,
                 strcpy(codigosFigurinha[totalMostradas], figurinhas[i].codigo);
                 strcpy(tiposFigurinha[totalMostradas], figurinhas[i].tipo);
 
-                if(estaNoAlbum(album, total_album, figurinhas[i].codigo)){
+                if(estaNoAlbum(album, total_album, figurinhas[i].codigo) || estaNoAlbumFlexivel(album, total_album, figurinhas[i].codigo)){
 
-                    char pasta[100];
+                    if(montarCaminhoImagemFigurinha(caminho, figurinhas[i].secao, figurinhas[i].codigo)){
 
-                    strcpy(pasta, figurinhas[i].secao);
-                    trocarEspacoPorUnderline(pasta);
+                        imagens[totalMostradas] = LoadTexture(caminho);
 
-                    //Monta o caminho da imagem da figurinha
-                    strcpy(caminho, "imagens/imagens_figurinhas/");
-                    strcat(caminho, pasta);
-                    strcat(caminho, "/");
-                    strcat(caminho, figurinhas[i].codigo);
-                    strcat(caminho, ".png");
+                        if(imagens[totalMostradas].id != 0){
 
-                    imagens[totalMostradas] = LoadTexture(caminho);
+                            SetTextureFilter(imagens[totalMostradas], TEXTURE_FILTER_BILINEAR);
 
-                    if(imagens[totalMostradas].id != 0){
+                            temImagem[totalMostradas] = 1;
+                            contadorFigurinhasColadas++;
 
-                        SetTextureFilter(imagens[totalMostradas], TEXTURE_FILTER_BILINEAR);
+                        }//if
 
-                        temImagem[totalMostradas] = 1;
-                        contadorFigurinhasColadas++;
-
+                    }else{
+                        TraceLog(LOG_WARNING, "IMAGEM NAO ENCONTRADA: secao=%s codigo=%s", figurinhas[i].secao, figurinhas[i].codigo);
                     }//if
 
                 }//if
