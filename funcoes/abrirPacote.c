@@ -85,7 +85,7 @@ void numeroParaTexto(int numero, char *destino){
     if (numero < 0) { destino[j] = '-'; j++; numero *= -1; }
     while (numero > 0) { invertido[i] = (numero % 10) + '0'; numero /= 10; i++; }
     while (i > 0) { i--; destino[j] = invertido[i]; j++; }
-    destino[j] = '\0';
+    destino[j] = '\0'; 
 }
 
 void numeroParaTextoComDoisDigitos(int numero, char *destino) { 

@@ -10,7 +10,7 @@
 #include "salvarPacotes.h"
 
 
-typedef struct{
+typedef struct{ 
     char pergunta[200];
     char opcoes[4][100];
     int correta; 
