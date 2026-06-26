@@ -1,28 +1,7 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-main: main.o figurinhas.o
-	@echo "Gerando arquivo executável..."
-	gcc main.o figurinhas.o -o main
+#==========================================
+# DETECÇÃO AUTOMÁTICA DE SISTEMA
+#==========================================
 
-main.o: main.c figurinhas.h
-	@echo "Compilando main.c..."
-	gcc -c main.c
-
-figurinhas.o: figurinhas.c figurinhas.h
-	@echo "Compilando figurinhas.c..."
-	gcc -c figurinhas.c
-
-clean:
-	@echo "Apagando objetos e executável..."
-	rm -f *.o main
-
-run: main
-	./main
-=======
-=======
-# ==========================================
-# 1. DETECÇÃO AUTOMÁTICA DE SISTEMA
-# ==========================================
 ifeq ($(OS),Windows_NT)
     TARGET = main.exe
     LIBS = -L./extras/libwin -LC:/w64devkit/w64devkit/x86_64-w64-mingw32/lib \
@@ -35,10 +14,10 @@ else
     RM = rm -f
 endif
 
-# ==========================================
-# 2. CONFIGURAÇÕES DE COMPILAÇÃO
-# ==========================================
->>>>>>> 16c582dd713c6b6c580db3e690781347b7bb83d1
+#==========================================
+# CONFIGURAÇÕES DE COMPILAÇÃO
+#==========================================
+
 CC = gcc
 CFLAGS = -Iheaders -Iraylib/src
 
@@ -55,7 +34,7 @@ OBJS = main.o \
        quiz.o \
        goleiro.o \
        penalti.o \
-	   global.o \
+       global.o \
        salvarPacotes.o \
        carregarPacotes.o \
        salvarRepetida.o \
@@ -66,12 +45,12 @@ OBJS = main.o \
        carregarAlbum.o \
        carregarMochila.o \
        carregarRepetida.o \
-       inserir.o 
+       inserir.o
 
+#==========================================
+# REGRAS DE COMPILAÇÃO
+#==========================================
 
-# ==========================================
-# 3. REGRAS DE COMPILAÇÃO
-# ==========================================
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
@@ -85,21 +64,17 @@ $(TARGET): $(OBJS)
 	@echo "Compilando: $<"
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Compila o novo main.c (o da raiz)
+# Compila o main.c da raiz
 main.o: main.c
 	$(CC) $(CFLAGS) -c main.c -o main.o
 
-# ==========================================
-# 4. LIMPEZA
-# ==========================================
+#==========================================
+# LIMPEZA
+#==========================================
+
 clean:
-<<<<<<< HEAD
-	rm -f *.o main
->>>>>>> 09d87b5cd5bc06cc3679a6acb1f17c3b1f916654
-=======
 	@echo "Limpando arquivos temporarios..."
 	$(RM) *.o $(TARGET)
 
 run: $(TARGET)
 	./$(TARGET)
->>>>>>> 16c582dd713c6b6c580db3e690781347b7bb83d1
