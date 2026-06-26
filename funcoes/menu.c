@@ -20,6 +20,21 @@
 #include "penalti.h"
 #include "inserir.h"
 
+//Funcao para esperar o usuario apertar ENTER antes de voltar ao menu grafico
+static void esperarEnterMenu(){
+
+    int c;
+
+    printf("\n=========================================\nPressione ENTER para voltar ao menu grafico...");
+
+    c = getchar();
+
+    if(c != '\n' && c != EOF){
+        while((c = getchar()) != '\n' && c != EOF);
+    }//if
+
+}//void
+
 void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, int total, int *total_album, int *total_mochila){// Função principal do menu do jogo
 
     //==========================================//
@@ -66,7 +81,7 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
 
     for(int i = 0; i < 8; i++){// Define a posicao e tamanho de cada botao
         botoesPrincipal[i] = (Rectangle){250, 190 + (i * 62), 500, 48};
-    }
+    }//for
 
     //Textos dos Submenus
     const char *textosInventario[] = {"1. Ver Album", "2. Ver Mochila", "3. Voltar ao Menu"};
@@ -77,7 +92,7 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
 
     for(int i = 0; i < 4; i++){// Define a posição e tamanho de cada botão dos submenus
         botoesSubmenu[i] = (Rectangle){250, 300 + (i * 80), 500, 55};
-    }
+    }//for
 
     Color verdeCampo = (Color){34, 139, 34, 255};
     Color amareloBrasil = (Color){255, 215, 0, 255};
@@ -92,7 +107,7 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
         //Mantém a música tocando em todas as telas de menu
         if(!IsMusicStreamPlaying(somMenu)){
             PlayMusicStream(somMenu); 
-        }
+        }//if
 
         UpdateMusicStream(somMenu); // Atualiza o stream de música para manter a reprodução contínua
 
@@ -124,9 +139,9 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
                             acaoTerminal = 11; //Trocar
                         }else if(i == 7){
                             telaAtual = MENU_MINIGAMES;
-                        }
-                    }
-                }
+                        }//if
+                    }//if
+                }//for
             }else if(telaAtual == MENU_INVENTARIO){ // Se estiver no menu de inventário, verifica os cliques nos botões do submenu
                 for(int i = 0; i < 3; i++){
                     if(CheckCollisionPointRec(mousePoint, botoesSubmenu[i])){ // Verifica se o mouse está sobre algum dos botões do submenu
@@ -136,9 +151,9 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
                             acaoTerminal = 3; //Ver Mochila
                         }else if(i == 2){
                             telaAtual = MENU_PRINCIPAL;
-                        }
-                    }
-                }
+                        }//if
+                    }//if
+                }//for
             }else if(telaAtual == MENU_EXCLUIR){
                 for(int i = 0; i < 3; i++){
                     if(CheckCollisionPointRec(mousePoint, botoesSubmenu[i])){
@@ -148,9 +163,9 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
                             acaoTerminal = 5; //Excluir Mochila
                         }else if(i == 2){
                             telaAtual = MENU_PRINCIPAL;
-                        }
-                    }
-                }
+                        }//if
+                    }//if
+                }//for
             }else if(telaAtual == MENU_MINIGAMES){
                 for(int i = 0; i < 4; i++){
                     if(CheckCollisionPointRec(mousePoint, botoesSubmenu[i])){
@@ -162,11 +177,11 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
                             acaoTerminal = 10; //Penalti
                         }else if(i == 3){
                             telaAtual = MENU_PRINCIPAL;
-                        }
-                    }
-                }
-            }
-        }
+                        }//if
+                    }//if
+                }//for
+            }//if
+        }//if
 
         //==========================================//
         //================= Desenho ================//
@@ -201,8 +216,8 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
                     }else{ // Se o mouse estiver sobre o botão, mas não estiver clicando, aplica um efeito de animação diferente
                         offsetAnimacao = -6;
                         DrawRectangle(botoesPrincipal[i].x + 4, botoesPrincipal[i].y + 4, botoesPrincipal[i].width, botoesPrincipal[i].height, Fade(BLACK, 0.4f));
-                    }
-                }
+                    }//if
+                }//if
 
                 // Define o retângulo animado do botão com base na posição original e no deslocamento da animação
                 Rectangle btnAnimado = {botoesPrincipal[i].x, botoesPrincipal[i].y + offsetAnimacao, botoesPrincipal[i].width, botoesPrincipal[i].height};
@@ -216,7 +231,7 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
                 }else{// Se o mouse não estiver sobre o botão, mantém a cor padrão do botão e da borda
                     corBotao = azulBrasil;
                     corBorda = bordabotao;
-                }
+                }//if
 
                 DrawRectangleRec(btnAnimado, corBotao);
                 DrawRectangleLinesEx(btnAnimado, 2.0f, corBorda);
@@ -227,12 +242,12 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
                     sprintf(textoBotao, "1. Abrir Pacote (%d disp.)", pacotes_fechados);
                 }else{// Para os outros botões, exibe o texto padrão do menu principal
                     strcpy(textoBotao, textosPrincipal[i]);
-                }
+                }//if
 
                 int textoTamanho = MeasureTextEx(fonteCopa, textoBotao, 14, 2).x;
 
                 DrawTextEx(fonteCopa, textoBotao, (Vector2){btnAnimado.x + (btnAnimado.width / 2) - (textoTamanho / 2), btnAnimado.y + 18}, 14, 2, WHITE);
-            }
+            }//for
         }else{
             //Submenus (Inventário, Exclusão, Minigames)
             const char *titulo;
@@ -253,7 +268,7 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
                 subtitulo = "Escolha seu desafio:";
                 textosBotoes = textosMinigames;
                 numBotoes = 4;
-            }
+            }//if
 
             int tituloTamanho = MeasureTextEx(fonteCopa, titulo, 28, 2).x;// Calcula a largura do título para centralizá-lo na tela
 
@@ -274,14 +289,14 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
                         offsetAnimacao = 2;
                     }else{
                         offsetAnimacao = -6;
-                    }
+                    }//if
                 }else{
                     offsetAnimacao = 0;
-                }
+                }//if
 
                 if(mouseEmCima && !IsMouseButtonDown(MOUSE_LEFT_BUTTON)){// Se o mouse estiver sobre o botão, mas não estiver clicando, desenha uma sombra para indicar que está selecionado
                     DrawRectangle(botoesSubmenu[i].x + 4, botoesSubmenu[i].y + 4, botoesSubmenu[i].width, botoesSubmenu[i].height, Fade(BLACK, 0.4f));
-                }
+                }//if
 
                 Rectangle btnAnimado = {botoesSubmenu[i].x, botoesSubmenu[i].y + offsetAnimacao, botoesSubmenu[i].width, botoesSubmenu[i].height};
 
@@ -294,7 +309,7 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
                 }else{
                     corBotao = azulBrasil;
                     corBorda = DARKGRAY;
-                }
+                }//if
 
                 DrawRectangleRec(btnAnimado, corBotao);
                 DrawRectangleLinesEx(btnAnimado, 2, corBorda);
@@ -302,8 +317,8 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
                 int textoTamanho = MeasureTextEx(fonteCopa, textosBotoes[i], 16, 2).x;
 
                 DrawTextEx(fonteCopa, textosBotoes[i], (Vector2){btnAnimado.x + (btnAnimado.width / 2) - (textoTamanho / 2), btnAnimado.y + 20}, 16, 2, WHITE);
-            }
-        }
+            }//for
+        }//if
 
         //Texto Fechamento
         const char *base = "Feche a janela (X) ou aperte ESC para sair";
@@ -322,12 +337,12 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
         //==========================================//
 
         if(acaoTerminal != 0){ //Se uma ação foi selecionada no terminal, processa a ação correspondente
-            //Desliga a música
 
             if(IsMusicStreamPlaying(somMenu)){
                 StopMusicStream(somMenu);
-            }
+            }//if
 
+            //Fecha a janela grafica para a opcao continuar pelo terminal
             UnloadTexture(cursorBola);
             UnloadFont(fonteCopa);
             CloseWindow();
@@ -339,6 +354,7 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
                 printf("\n=========================================\nTotal album: %d\n", *total_album);
                 listarFigurinhasAlbum(album, *total_album);
                 albumGrafico(figurinhas, total, album, *total_album);
+
             }else if(acaoTerminal == 3){ //Ver Mochila
                 printf("\n=========================================\nTotal mochila: %d\n", *total_mochila);
                 listarFigurinhasMochila(mochila, *total_mochila);
@@ -347,7 +363,7 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
                 excluirAlbum(figurinhas, album, total_album);
 
             }else if(acaoTerminal == 5){ //Excluir Mochila
-               excluirMochila(mochila, total_mochila);
+                excluirMochila(mochila, total_mochila);
 
             }else if(acaoTerminal == 6){ //Pesquisar
                 pesquisarFigurinha(figurinhas, total);
@@ -360,7 +376,7 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
 
                     if(scanf("%d", &opcao_alterar) != 1){ //Se a entrada não for um número válido, limpa o buffer de entrada e solicita novamente
                         opcao_alterar = 0;
-                    }
+                    }//if
 
                     while(getchar() != '\n');
 
@@ -368,7 +384,7 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
                         alterarFigurinha(figurinhas, total);
                     }else if(opcao_alterar == 2){ //Se o usuário escolher resetar a lista de figurinhas, chama a função correspondente
                         resetarLista(figurinhas, total);
-                    }
+                    }//if
 
                 }while(opcao_alterar != 3);
 
@@ -389,17 +405,11 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
             }else if(acaoTerminal == 10){ //Penalti
                 voltarDiretoMenuGrafico = true;
                 jogarPenalti(figurinhas, mochila, album, total, total_mochila, total_album, &pacotes_fechados);
-            }
+            }//if
 
-            //Menu terminal
+            //Pausa somente nas opcoes que usam terminal
             if(!voltarDiretoMenuGrafico){
-                printf("\n=========================================\nPressione ENTER para voltar ao menu grafico...");
-
-                //Limpa o buffer de entrada
-                int c;
-
-                while((c = getchar()) != '\n' && c != EOF);//Exclui o texto digitado anteriormente e le todos os caracteres até o final da string
-                getchar();
+                esperarEnterMenu();
             }//if
 
             telaAtual = MENU_PRINCIPAL;
@@ -415,8 +425,8 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
             UnloadImage(imgBolaTemp);
 
             SetTargetFPS(60);
-        }
-    }
+        }//if
+    }//while
 
     //Libera Memória
     UnloadMusicStream(somMenu);
@@ -426,7 +436,4 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
     UnloadFont(fonteCopa);
     CloseWindow();
 
-    free(figurinhas);
-    free(album);
-    free(mochila);
-}
+}//void
