@@ -1,44 +1,37 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "excluirMochila.h"
+#include "biblioteca.h"
+#include "salvarMochila.h"
 
-void excluirMochila(Figurinha *figurinhas, Figurinha *mochila, int *total_mochila){
-    
-    char codigo[10];//variavel para armazenar o código da figurinha a ser excluida
+void excluirMochila(Figurinha *mochila, int *total_mochila){
 
+    char codigo[10];//Variável para armazenar o código da figurinha digitado
+
+    //Fgets para o código do usuário
     printf("Digite o código da figurinha que deseja excluir da mochila: \n");
     fgets(codigo, sizeof(codigo), stdin);
-    codigo[strcspn(codigo,"\n")]='\0';
-    setbuf(stdin, NULL);
+    codigo[strcspn(codigo, "\n")] = '\0';
 
-    for (int i = 0; i < *total_mochila; i++) {
+    for(int i = 0; i < *total_mochila; i++){
+
         if(strcmp(codigo, mochila[i].codigo) == 0){
-            //encontra a figurinha com o código correspondente e a exclui do vetor mochila
-            for (int j = i; j < *total_mochila - 1; j++){
+
+            //Move todas as figurinhas depois de excluir uma posição para trás
+            for(int j = i; j < *total_mochila - 1; j++){
                 mochila[j] = mochila[j + 1];
-            }
-            (*total_mochila)--; //decrementa o total de figurinhas da mochila
+            }//for
 
-            FILE *arquivo = fopen("extras/mochila.csv", "w");
+            (*total_mochila)--;//Diminui o total da mochila
 
-            if(arquivo != NULL){
+            salvarMochila(mochila, *total_mochila);//Chama a função para salvar no mochila.bin
 
-                for(int k = 0; k < *total_mochila; k++){
-                    
-                    //reescreve o arquivo mochila.csv com as figurinhas restantes após a exclusão
-                    fprintf(arquivo, "%s,%s,%s,%s,%s\n", mochila[k].codigo, mochila[k].titulo, mochila[k].secao, mochila[k].grupo, mochila[k].tipo);
-                }
-
-                fclose(arquivo);//fecha o arquivo mochila.csv
-
-            }
-
-            printf("\nFigurinha excluida com sucesso.\n");
+            printf("\nFigurinha excluida com sucesso.\n");//Texto terminal
             return;
+
         }//if
     }//for
 
-    printf("Figurinha com o código %s não encontrada.\n", codigo);
+    printf("Figurinha com o código %s não encontrada.\n", codigo);//Texto terminal
 
-}//função para excluir uma figurinha do vetor mochila
+}//void

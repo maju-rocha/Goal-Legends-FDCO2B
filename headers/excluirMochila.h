@@ -3,6 +3,6 @@
 
 #include "biblioteca.h"
 
-void excluirMochila(Figurinha *figurinhas, Figurinha *mochila, int *total_mochila);
+void excluirMochila(Figurinha *mochila, int *total_mochila);
 
 #endif

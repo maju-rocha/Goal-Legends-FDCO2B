@@ -1,4 +1,3 @@
-codigo, titulo                      , secao              , grupo  , tipo
 FWC00 , Logotipo da Panini          , FIFA World Cup 2026,        , Especial
 FWC1  , Emblema Oficial (Parte 1)   , FIFA World Cup 2026,        , Especial
 FWC2  , Emblema Oficial (Parte 2)   , FIFA World Cup 2026,        , Especial
@@ -20,7 +19,7 @@ FWC17 , Italia 2006                 , FIFA World Cup 2026,        , Especial
 FWC18 , Alemanha 2014               , FIFA World Cup 2026,        , Especial
 FWC19 , Argentina 2022              , FIFA World Cup 2026,        , Especial
 MEX1  , Escudo                      , Mexico             , Grupo A, Especial
-MEX2  , Luis Malagon                , Mexico             , Grupo A, Comum
+MEX2  , a                           , a                  , Grupo A, a
 MEX3  , Johan Vasquez               , Mexico             , Grupo A, Comum
 MEX4  , Jorge Sanchez               , Mexico             , Grupo A, Comum
 MEX5  , Cesar Montes                , Mexico             , Grupo A, Comum
@@ -198,7 +197,7 @@ BRA16 , Joao Pedro                  , Brasil             , Grupo C, Comum
 BRA17 , Matheus Cunha               , Brasil             , Grupo C, Comum
 BRA18 , Gabriel Martinelli          , Brasil             , Grupo C, Comum
 BRA19 , Raphinha                    , Brasil             , Grupo C, Comum
-BRA20 , Estevao                     , Brasil             , Grupo C, Comum
+BRA20 , Muriel Godoi                , Brasil             , Grupo C, Especial
 MAR1  , Escudo                      , Marrocos           , Grupo C, Especial
 MAR2  , Yassine Bounou              , Marrocos           , Grupo C, Comum
 MAR3  , Munir El Kajoui             , Marrocos           , Grupo C, Comum
@@ -978,4 +977,3 @@ PAN16 , Ismael Diaz                 , Panama             , Grupo L, Comum
 PAN17 , Jose Fajardo                , Panama             , Grupo L, Comum
 PAN18 , Cecilio Waterman            , Panama             , Grupo L, Comum
 PAN19 , Jose Luiz Rodriguez         , Panama             , Grupo L, Comum
-PAN20 , Alberto Quintero            , Panama             , Grupo L, Comum
