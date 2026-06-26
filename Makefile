@@ -1,25 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-main: main.o figurinhas.o
-	@echo "Gerando arquivo executável..."
-	gcc main.o figurinhas.o -o main
-
-main.o: main.c figurinhas.h
-	@echo "Compilando main.c..."
-	gcc -c main.c
-
-figurinhas.o: figurinhas.c figurinhas.h
-	@echo "Compilando figurinhas.c..."
-	gcc -c figurinhas.c
-
-clean:
-	@echo "Apagando objetos e executável..."
-	rm -f *.o main
-
-run: main
-	./main
-=======
-=======
 # ==========================================
 # 1. DETECÇÃO AUTOMÁTICA DE SISTEMA
 # ==========================================
@@ -38,7 +16,6 @@ endif
 # ==========================================
 # 2. CONFIGURAÇÕES DE COMPILAÇÃO
 # ==========================================
->>>>>>> 16c582dd713c6b6c580db3e690781347b7bb83d1
 CC = gcc
 CFLAGS = -Iheaders -Iraylib/src
 
@@ -93,13 +70,8 @@ main.o: main.c
 # 4. LIMPEZA
 # ==========================================
 clean:
-<<<<<<< HEAD
-	rm -f *.o main
->>>>>>> 09d87b5cd5bc06cc3679a6acb1f17c3b1f916654
-=======
 	@echo "Limpando arquivos temporarios..."
 	$(RM) *.o $(TARGET)
 
 run: $(TARGET)
 	./$(TARGET)
->>>>>>> 16c582dd713c6b6c580db3e690781347b7bb83d1
