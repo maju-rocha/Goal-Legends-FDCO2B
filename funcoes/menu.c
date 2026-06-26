@@ -18,6 +18,7 @@
 #include "quiz.h"
 #include "goleiro.h"
 #include "penalti.h"
+#include "inserir.h"
 
 void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, int total, int *total_album, int *total_mochila){// Função principal do menu do jogo
     
@@ -52,19 +53,20 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
 
     //Textos do Menu Principal
     const char *textosPrincipal[] = {
-        "1. Abrir Pacote",
-        "2. Ver Inventario",
-        "3. Excluir do Inventario",
-        "4. Pesquisar Figurinha",
-        "5. Alterar Figurinha",
-        "6. Trocar Figurinhas",
-        "7. Area de Minigames"
+    "1. Abrir Pacote",
+    "2. Ver Inventario",
+    "3. Excluir do Inventario",
+    "4. Pesquisar Figurinha",
+    "5. Alterar Figurinha",
+    "6. Inserir Figurinha",
+    "7. Trocar Figurinhas",
+    "8. Area de Minigames"
     };
 
-    Rectangle botoesPrincipal[7];// Define os retângulos para os botões do menu principal
+    Rectangle botoesPrincipal[8];// Define os retangulos para os botoes do menu principal
 
-    for(int i = 0; i < 7; i++){// Define a posição e tamanho de cada botão
-        botoesPrincipal[i] = (Rectangle){250, 220 + (i * 70), 500, 50};
+    for(int i = 0; i < 8; i++){// Define a posicao e tamanho de cada botao
+        botoesPrincipal[i] = (Rectangle){250, 190 + (i * 62), 500, 48};
     }
 
     //Textos dos Submenus
@@ -105,10 +107,10 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
 
         if(IsMouseButtonReleased(MOUSE_LEFT_BUTTON)){ // Verifica se o botão esquerdo do mouse foi liberado
             if(telaAtual == MENU_PRINCIPAL){ // Se estiver no menu principal, verifica os cliques nos botões principais
-                for(int i = 0; i < 7; i++){ // Itera sobre os 7 botões do menu principal
+                for(int i = 0; i < 8; i++){ // Itera sobre os 7 botões do menu principal
                     if(CheckCollisionPointRec(mousePoint, botoesPrincipal[i])){
                         if(i == 0){
-                            telaAtual = ESTADO_ABRIR_PACOTE; //Ativa a tela gráfica nova
+                            telaAtual = ESTADO_ABRIR_PACOTE; //Ativa a tela grafica nova
                         }else if(i == 1){
                             telaAtual = MENU_INVENTARIO;
                         }else if(i == 2){
@@ -118,8 +120,10 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
                         }else if(i == 4){
                             acaoTerminal = 7;  //Alterar
                         }else if(i == 5){
-                            acaoTerminal = 11; //Trocar
+                            acaoTerminal = 12; //Inserir
                         }else if(i == 6){
+                            acaoTerminal = 11; //Trocar
+                        }else if(i == 7){
                             telaAtual = MENU_MINIGAMES;
                         }
                     }
@@ -366,7 +370,8 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
                     }
 
                 }while(opcao_alterar != 3);
-
+            }else if(acaoTerminal == 12){ //Inserir
+                inserirFigurinha(figurinhas, &total);
             }else if(acaoTerminal == 11){ //Trocar
                 trocarFigurinha(mochila, total_mochila);
             }else if(acaoTerminal == 8){ //Quiz
