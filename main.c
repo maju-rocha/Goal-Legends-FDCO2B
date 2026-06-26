@@ -6,6 +6,8 @@
 #include "biblioteca.h"
 #include "carregarPacotes.h"
 #include "carregarRepetida.h"
+#include "carregarAlbum.h"
+#include "carregarMochila.h"
 #include "menu.h"
 #include "global.h"
 
@@ -21,7 +23,7 @@ int main(void){
 
     //Inicia vetores dinamicos
     Figurinha *figurinhas = malloc(1100 * sizeof(Figurinha));
-    Figurinha *album = malloc(1100 * sizeof(Figurinha));\
+    Figurinha *album = malloc(1100 * sizeof(Figurinha));
     Figurinha *mochila = malloc(1100 * sizeof(Figurinha));
 
     if(figurinhas == NULL || album == NULL || mochila == NULL){
@@ -34,10 +36,10 @@ int main(void){
         return 1;
     }//if teste
 
-    FILE *arquivo = fopen("extras/figurinhas2026copy.csv", "r");;//Abre em modo de leitura o arquivo figurinhas202copy.csv
+    FILE *arquivo = fopen("extras/figurinhas2026copy.csv", "r");//Abre em modo de leitura o arquivo figurinhas2026copy.csv
 
     if(arquivo == NULL){
-        printf("Erro ao abrir o arquivo figurinhas2026.csv.\n");
+        printf("Erro ao abrir o arquivo figurinhas2026copy.csv.\n");
 
         free(figurinhas);
         free(album);
@@ -46,18 +48,28 @@ int main(void){
         return 1; 
     }//if teste
 
-    fgets(linha, sizeof(linha), arquivo); 
+    fgets(linha, sizeof(linha), arquivo);//Pula a primeira linha do CSV
 
-    while(total < 1100 && fscanf(arquivo, " %9[^,],%49[^,],%49[^,],%49[^,],%49[^\n]", figurinhas[total].codigo, figurinhas[total].titulo, figurinhas[total].secao, figurinhas[total].grupo,figurinhas[total].tipo) == 5){
+    while(total < 1100 && fscanf(arquivo, " %9[^,],%49[^,],%49[^,],%49[^,],%49[^\n]", 
+        figurinhas[total].codigo, 
+        figurinhas[total].titulo, 
+        figurinhas[total].secao, 
+        figurinhas[total].grupo,
+        figurinhas[total].tipo) == 5){
 
         total++;
-    }
 
-    fclose(arquivo);//Fecha Pacotes
+    }//while
 
-    //Carrega os pacotes e figurinhas repetidas
+    fclose(arquivo);//Fecha o arquivo das figurinhas
+
+    //Carrega os dados salvos
     carregarPacotes();
-    carregarRepetida(); 
+    carregarRepetida();
+    carregarAlbum(album, &total_album);
+    carregarMochila(mochila, &total_mochila);
+
+    printf("%d", pacotes_fechados);
 
     menuPrincipal(figurinhas, album, mochila, total, &total_album, &total_mochila);//Abre o menu
 

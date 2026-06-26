@@ -3,7 +3,7 @@
 #include "salvarRepetida.h"
 
 void salvarRepetida(){
-    FILE *f = fopen("extras/repetidas.txt", "w");//Salva a quantidade de repetidas no arquivo repetidas.txt
+    FILE *f = fopen("extras/repetidas.bin", "wb");//Salva a quantidade de repetidas no arquivo repetidas.bin
 
     if(f == NULL){
         return;   

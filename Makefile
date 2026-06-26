@@ -1,6 +1,7 @@
-# ==========================================
-# 1. DETECÇÃO AUTOMÁTICA DE SISTEMA
-# ==========================================
+#==========================================
+# DETECÇÃO AUTOMÁTICA DE SISTEMA
+#==========================================
+
 ifeq ($(OS),Windows_NT)
     TARGET = main.exe
     LIBS = -L./extras/libwin -LC:/w64devkit/w64devkit/x86_64-w64-mingw32/lib \
@@ -13,9 +14,10 @@ else
     RM = rm -f
 endif
 
-# ==========================================
-# 2. CONFIGURAÇÕES DE COMPILAÇÃO
-# ==========================================
+#==========================================
+# CONFIGURAÇÕES DE COMPILAÇÃO
+#==========================================
+
 CC = gcc
 CFLAGS = -Iheaders -Iraylib/src
 
@@ -32,7 +34,7 @@ OBJS = main.o \
        quiz.o \
        goleiro.o \
        penalti.o \
-	   global.o \
+       global.o \
        salvarPacotes.o \
        carregarPacotes.o \
        salvarRepetida.o \
@@ -43,12 +45,12 @@ OBJS = main.o \
        carregarAlbum.o \
        carregarMochila.o \
        carregarRepetida.o \
-       inserir.o 
+       inserir.o
 
+#==========================================
+# REGRAS DE COMPILAÇÃO
+#==========================================
 
-# ==========================================
-# 3. REGRAS DE COMPILAÇÃO
-# ==========================================
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
@@ -62,13 +64,14 @@ $(TARGET): $(OBJS)
 	@echo "Compilando: $<"
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Compila o novo main.c (o da raiz)
+# Compila o main.c da raiz
 main.o: main.c
 	$(CC) $(CFLAGS) -c main.c -o main.o
 
-# ==========================================
-# 4. LIMPEZA
-# ==========================================
+#==========================================
+# LIMPEZA
+#==========================================
+
 clean:
 	@echo "Limpando arquivos temporarios..."
 	$(RM) *.o $(TARGET)

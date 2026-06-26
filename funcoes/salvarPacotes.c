@@ -6,13 +6,14 @@
 
 void salvarPacotes(){
 
-    FILE *arquivo_salvar_pacotes = fopen("extras/pacotes.bin", "wb");//Escreve no arquivo pacotes.bin
+    FILE *arquivo_salvar_pacotes = fopen("extras/pacotes.bin", "wb");//Salva em binário
 
     if(arquivo_salvar_pacotes == NULL){
         return;
     }//if teste
 
-    fwrite(&pacotes_fechados, sizeof(int), 1, arquivo_salvar_pacotes);//Salva a quantidade de pacotes no arquivo
+    fwrite(&pacotes_fechados, sizeof(int), 1, arquivo_salvar_pacotes);//Salva a quantidade de pacotes em binário
 
     fclose(arquivo_salvar_pacotes);//Fecha arquivo
-}
+
+}//void
