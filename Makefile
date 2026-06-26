@@ -43,6 +43,7 @@ OBJS = main.o \
        carregarAlbum.o \
        carregarMochila.o \
        carregarRepetida.o \
+       inserir.o 
 
 
 # ==========================================

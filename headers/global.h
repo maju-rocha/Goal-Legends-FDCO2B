@@ -3,18 +3,12 @@
 
 #include "biblioteca.h"
 
-//=======================================================//
-//=================== Variaveis Globais =================//
-//=======================================================//
-
+//Variáveis globais
 extern int pacotes_fechados;
 extern int figurinha_repetida;
 extern Menu_FimdeJogo estadoAtual;
 
-//=======================================================//
-//================== Funcoes Globais ====================//
-//=======================================================//
-
+//Funções globais
 void limparEspacos(char *texto);
 void limparFigurinha(Figurinha *f);
 void trocarEspacoPorUnderline(char *texto);

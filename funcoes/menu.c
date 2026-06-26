@@ -18,6 +18,7 @@
 #include "quiz.h"
 #include "goleiro.h"
 #include "penalti.h"
+#include "inserir.h"
 
 void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, int total, int *total_album, int *total_mochila){// Função principal do menu do jogo
     
@@ -52,19 +53,20 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
 
     //Textos do Menu Principal
     const char *textosPrincipal[] = {
-        "1. Abrir Pacote",
-        "2. Ver Inventario",
-        "3. Excluir do Inventario",
-        "4. Pesquisar Figurinha",
-        "5. Alterar Figurinha",
-        "6. Trocar Figurinhas",
-        "7. Area de Minigames"
+    "1. Abrir Pacote",
+    "2. Ver Inventario",
+    "3. Excluir do Inventario",
+    "4. Pesquisar Figurinha",
+    "5. Alterar Figurinha",
+    "6. Inserir Figurinha",
+    "7. Trocar Figurinhas",
+    "8. Area de Minigames"
     };
 
-    Rectangle botoesPrincipal[7];// Define os retângulos para os botões do menu principal
+    Rectangle botoesPrincipal[8];// Define os retangulos para os botoes do menu principal
 
-    for(int i = 0; i < 7; i++){// Define a posição e tamanho de cada botão
-        botoesPrincipal[i] = (Rectangle){250, 220 + (i * 70), 500, 50};
+    for(int i = 0; i < 8; i++){// Define a posicao e tamanho de cada botao
+        botoesPrincipal[i] = (Rectangle){250, 190 + (i * 62), 500, 48};
     }
 
     //Textos dos Submenus
@@ -105,10 +107,10 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
 
         if(IsMouseButtonReleased(MOUSE_LEFT_BUTTON)){ // Verifica se o botão esquerdo do mouse foi liberado
             if(telaAtual == MENU_PRINCIPAL){ // Se estiver no menu principal, verifica os cliques nos botões principais
-                for(int i = 0; i < 7; i++){ // Itera sobre os 7 botões do menu principal
+                for(int i = 0; i < 8; i++){ // Itera sobre os 7 botões do menu principal
                     if(CheckCollisionPointRec(mousePoint, botoesPrincipal[i])){
                         if(i == 0){
-                            telaAtual = ESTADO_ABRIR_PACOTE; //Ativa a tela gráfica nova
+                            telaAtual = ESTADO_ABRIR_PACOTE; //Ativa a tela grafica nova
                         }else if(i == 1){
                             telaAtual = MENU_INVENTARIO;
                         }else if(i == 2){
@@ -118,8 +120,10 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
                         }else if(i == 4){
                             acaoTerminal = 7;  //Alterar
                         }else if(i == 5){
-                            acaoTerminal = 11; //Trocar
+                            acaoTerminal = 12; //Inserir
                         }else if(i == 6){
+                            acaoTerminal = 11; //Trocar
+                        }else if(i == 7){
                             telaAtual = MENU_MINIGAMES;
                         }
                     }
@@ -316,7 +320,7 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
         //==========================================//
         //============= Reaparecer Menu ============//
         //==========================================//
-        if(acaoTerminal != 0){// Se uma ação foi selecionada no terminal, processa a ação correspondente
+        if(acaoTerminal != 0){ //Se uma ação foi selecionada no terminal, processa a ação correspondente
             //Desliga a música
             
             if(IsMusicStreamPlaying(somMenu)){
@@ -327,7 +331,7 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
             UnloadFont(fonteCopa);
             CloseWindow();
 
-            bool voltarDiretoMenuGrafico = false; // Variável para controlar se deve voltar diretamente para o menu gráfico após a ação do terminal
+            bool voltarDiretoMenuGrafico = false; //Variável para controlar se deve voltar diretamente para o menu gráfico após a ação do terminal
             
             if(acaoTerminal == 2){ //Ver Album
                 voltarDiretoMenuGrafico = true;
@@ -342,7 +346,7 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
                 excluirAlbum(figurinhas, album, total_album);
                 
             }else if(acaoTerminal == 5){ //Excluir Mochila
-                excluirMochila(figurinhas, mochila, total_mochila);
+               excluirMochila(mochila, total_mochila);
                 
             }else if(acaoTerminal == 6){ //Pesquisar
                 pesquisarFigurinha(figurinhas, total);
@@ -350,25 +354,26 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
             }else if(acaoTerminal == 7){ //Alterar
                 int opcao_alterar;
 
-                do{ // Loop para o menu de alteração, continua até que o usuário escolha voltar ao menu principal
+                do{ //Loop para o menu de alteração, continua até que o usuário escolha voltar ao menu principal
                     printf("\n--- MENU DE ALTERACAO ---\n1 - Alterar figurinha do album\n2 - Resetar a lista de figurinhas\n3 - Voltar ao menu principal\nEscolha: ");
 
-                    if(scanf("%d", &opcao_alterar) != 1){ // Se a entrada não for um número válido, limpa o buffer de entrada e solicita novamente
+                    if(scanf("%d", &opcao_alterar) != 1){ //Se a entrada não for um número válido, limpa o buffer de entrada e solicita novamente
                         opcao_alterar = 0;
                     }
 
                     while(getchar() != '\n');
 
-                    if(opcao_alterar == 1){ // Se o usuário escolher alterar uma figurinha, chama a função correspondente
+                    if(opcao_alterar == 1){ //Se o usuário escolher alterar uma figurinha, chama a função correspondente
                         alterarFigurinha(figurinhas, total);
-                    }else if(opcao_alterar == 2){ // Se o usuário escolher resetar a lista de figurinhas, chama a função correspondente
+                    }else if(opcao_alterar == 2){ //Se o usuário escolher resetar a lista de figurinhas, chama a função correspondente
                         resetarLista(figurinhas, total);
                     }
 
                 }while(opcao_alterar != 3);
-
+            }else if(acaoTerminal == 12){ //Inserir
+                inserirFigurinha(figurinhas, &total);
             }else if(acaoTerminal == 11){ //Trocar
-                trocarFigurinha(figurinhas, mochila, album, total_mochila, total_album);
+                trocarFigurinha(mochila, total_mochila);
             }else if(acaoTerminal == 8){ //Quiz
                 voltarDiretoMenuGrafico = true;
                 jogarQuiz(figurinhas, mochila, album, total, total_mochila, total_album);
@@ -380,13 +385,14 @@ void menuPrincipal(Figurinha *figurinhas, Figurinha *album, Figurinha *mochila, 
                 jogarPenalti(figurinhas, mochila, album, total, total_mochila, total_album, &pacotes_fechados);
             }
 
-            //Menu de travamento pós terminal
+            //Menu terminal
             if(!voltarDiretoMenuGrafico){
                 printf("\n=========================================\nPressione ENTER para voltar ao menu grafico...");
 
-            int c; // Limpa o buffer de entrada para evitar que caracteres indesejados interfiram na leitura do ENTER
+            //Limpa o buffer de entrada
+                int c;
 
-                while((c = getchar()) != '\n' && c != EOF);
+                while((c = getchar()) != '\n' && c != EOF);//Exclui o texto digitado anteriormente e le todos os caracteres até o final da string
                 getchar();
             }//if
 

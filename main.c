@@ -11,17 +11,19 @@
 
 int main(void){
 
-    srand((int)time(NULL));
+    srand((int)time(NULL));//Inicializa a aleatoriedade
 
+    //Variáveis
     char linha[300];
     int total = 0;
     int total_album = 0;
     int total_mochila = 0;
-        
-    Figurinha *figurinhas = malloc(981 * sizeof(Figurinha));
-    Figurinha *album = malloc(981 * sizeof(Figurinha));
-    Figurinha *mochila = malloc(981 * sizeof(Figurinha));
-    
+
+    //Inicia vetores dinamicos
+    Figurinha *figurinhas = malloc(1100 * sizeof(Figurinha));
+    Figurinha *album = malloc(1100 * sizeof(Figurinha));\
+    Figurinha *mochila = malloc(1100 * sizeof(Figurinha));
+
     if(figurinhas == NULL || album == NULL || mochila == NULL){
         printf("Erro de alocacao.\n"); 
 
@@ -30,9 +32,9 @@ int main(void){
         free(mochila);
 
         return 1;
-    }
+    }//if teste
 
-    FILE *arquivo = fopen("extras/figurinhas2026.csv", "r");
+    FILE *arquivo = fopen("extras/figurinhas2026copy.csv", "r");;//Abre em modo de leitura o arquivo figurinhas202copy.csv
 
     if(arquivo == NULL){
         printf("Erro ao abrir o arquivo figurinhas2026.csv.\n");
@@ -42,27 +44,24 @@ int main(void){
         free(mochila);
 
         return 1; 
-    }
+    }//if teste
 
     fgets(linha, sizeof(linha), arquivo); 
 
-    while(total < 981 && fscanf(arquivo, " %9[^,],%49[^,],%49[^,],%49[^,],%49[^\n]",
-        figurinhas[total].codigo,
-        figurinhas[total].titulo,
-        figurinhas[total].secao,
-        figurinhas[total].grupo,
-        figurinhas[total].tipo) == 5){
+    while(total < 1100 && fscanf(arquivo, " %9[^,],%49[^,],%49[^,],%49[^,],%49[^\n]", figurinhas[total].codigo, figurinhas[total].titulo, figurinhas[total].secao, figurinhas[total].grupo,figurinhas[total].tipo) == 5){
 
         total++;
     }
 
-    fclose(arquivo);
+    fclose(arquivo);//Fecha Pacotes
 
-    carregarPacotes(album, &total_album, mochila, &total_mochila);
-    carregarRepetida();
+    //Carrega os pacotes e figurinhas repetidas
+    carregarPacotes();
+    carregarRepetida(); 
 
-    menuPrincipal(figurinhas, album, mochila, total, &total_album, &total_mochila);
+    menuPrincipal(figurinhas, album, mochila, total, &total_album, &total_mochila);//Abre o menu
 
+    //Libera memória dos vetores dinâmicos
     free(figurinhas);
     free(album);
     free(mochila);
